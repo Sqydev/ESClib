@@ -1,22 +1,77 @@
 #include "../../include/tuiutils.h"
 
 #include <stdio.h>
-#include <unistd.h>
 
 void AltBuffModeSwitchTest() {
-	printf("Normal mode\n\n");
-
-	usleep(1000000);
-
-	SwitchAlternateBuffMode();
-
-	printf("Alt Mode\n\n");
-
-	usleep(1000000);
+	printf("\nEnter to switch, Any other to end: ");
+	fflush(stdout);
 
 	SwitchAlternateBuffMode();
+	
+	while(1) {
+		char Input = ' ';
+
+		scanf("%c", &Input);
+
+		if(Input == '\n') { SwitchAlternateBuffMode(); continue; }
+		else { break; }
+	}
+}
+
+void ClearTest() {
+	printf("\n1 to clear screen, 2 to clear line, 3 to clear char, Any other to end\n");
+	fflush(stdout);
+
+	printf("SpAm:)");
+	printf("\n");
+	printf("SpAm:)");
+	printf("\n");
+	printf("SpAm:)");
+	printf("\n");
+	printf("SpAm:)");
+	printf("\n");
+	printf("SpAm:)");
+	printf("\n");
+	printf("SpAm:)");
+	
+
+	while(1) {
+		char Input = ' ';
+
+		scanf("%c", &Input);
+
+		if(Input == '1') {
+			ClearScreen();
+			continue;
+		}
+		else if(Input == '2') {
+			ClearLine();
+			continue;
+		}
+		else if(Input == '1') {
+			ClearChar();
+			continue;
+		}
+		else if(Input == '\n') {
+			continue;
+		}
+		else {
+			break;
+		}
+	}
 }
 
 int main() {
-	AltBuffModeSwitchTest();
+	int Input = 0;
+
+	printf("1. Mode Switch Test\n");
+	printf("2. Clear Test\n");
+
+	printf("Input: ");
+	scanf("%d", &Input);
+
+	if(Input == 1) { AltBuffModeSwitchTest(); }
+	else if(Input == 2) { ClearTest(); }
+	
+	return 0;
 }
