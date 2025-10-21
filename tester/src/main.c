@@ -6,14 +6,14 @@ void AltBuffModeSwitchTest() {
 	printf("\nEnter to switch, Any other to end: ");
 	fflush(stdout);
 
-	SwitchAlternateBuffMode();
+	TuiSwitchBuffMode();
 	
 	while(1) {
 		char Input = ' ';
 
 		scanf("%c", &Input);
 
-		if(Input == '\n') { SwitchAlternateBuffMode(); continue; }
+		if(Input == '\n') { TuiSwitchBuffMode(); continue; }
 		else { break; }
 	}
 }
@@ -41,15 +41,15 @@ void ClearTest() {
 		scanf("%c", &Input);
 
 		if(Input == '1') {
-			ClearScreen();
+			TuiClearScreen();
 			continue;
 		}
 		else if(Input == '2') {
-			ClearLine();
+			TuiClearLine();
 			continue;
 		}
 		else if(Input == '1') {
-			ClearChar();
+			TuiClearChar();
 			continue;
 		}
 		else if(Input == '\n') {
