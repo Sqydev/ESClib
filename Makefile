@@ -1,5 +1,5 @@
 # Paths
-SRC_DIR := src
+SRC_DIR := src/utils
 OBJ_DIR := obj
 LIB_DIR_LINUX := lib/linux
 LIB_DIR_WINDOWS := lib/windows
@@ -20,7 +20,7 @@ LDFLAGS :=
 WIN_CC := x86_64-w64-mingw32-gcc
 
 # SRC files and obj files
-SRCS := $(wildcard $(SRC_DIR)/*.c)
+SRCS := $(shell find $(SRC_DIR) -name '*.c')
 OBJS := $(patsubst $(SRC_DIR)/%.c,$(OBJ_DIR)/%.o,$(SRCS))
 
 # =====================================================
