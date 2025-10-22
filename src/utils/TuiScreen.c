@@ -1,5 +1,5 @@
-#include "../include/tuiutils.h"
-#include "PrivateErrorProtocols.h"
+#include "../../include/tuiutils.h"
+#include "../PrivateErrorProtocols.h"
 
 #include <stdio.h>
 #include <stdbool.h>
