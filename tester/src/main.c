@@ -40,6 +40,8 @@ void ClearTest() {
 
 		scanf("%c", &Input);
 
+		TuiCursorMoveDirectional(1, 0,0,0);
+
 		if(Input == '1') {
 			TuiClearScreen();
 			continue;

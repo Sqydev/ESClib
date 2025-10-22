@@ -21,5 +21,10 @@ void TuiCursorMoveDirectional(int up, int down, int left, int right);
 void TuiCursorMove(int x, int y);
 
 
+// Input
+
+void EnableRawMode();
+
+void DisableRawMode();
 
 #endif
