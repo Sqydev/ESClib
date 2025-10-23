@@ -1,5 +1,4 @@
 #include "../../include/tuiutils.h"
-#include "../PrivateErrorProtocols.h"
 
 #include <stdio.h>
 

@@ -1,8 +1,11 @@
 #include "../../include/tuiutils.h"
-#include "../PrivateErrorProtocols.h"
 
+// =================== Universal libs ====================
 #include <stdlib.h>
-// TODO: MAKE IT MULTIPLATFORM
+
+// =================== Linux / macOS =====================
+#if defined(__APPLE__) || defined(__linux__)
+
 #include <termios.h>
 #include <unistd.h>
 #include <fcntl.h>
@@ -59,3 +62,33 @@ void DisableRawMode() {
 	// Remove O_NONBLOCK bit (bitwise AND with flag negation)
 	fcntl(STDIN_FILENO, F_SETFL, flags & ~O_NONBLOCK);
 }
+
+
+// ===================== Windows =======================
+#elif defined(_WIN32) || defined(_WIN64)
+// No comment's for windows, you can deducate what does what from the code after reading unix comments
+
+#include <windows.h>
+
+static DWORD orig_mode;
+
+void EnableRawMode() {
+    HANDLE hIn = GetStdHandle(STD_INPUT_HANDLE);
+    GetConsoleMode(hIn, &orig_mode);
+
+    DWORD raw = orig_mode;
+    raw &= ~(ENABLE_ECHO_INPUT | ENABLE_LINE_INPUT);
+    raw |= ENABLE_PROCESSED_INPUT;
+
+    SetConsoleMode(hIn, raw);
+    atexit(DisableRawMode);
+}
+
+void DisableRawMode() {
+    HANDLE hIn = GetStdHandle(STD_INPUT_HANDLE);
+    SetConsoleMode(hIn, orig_mode);
+}
+
+#endif
+
+// =================== Universal =====================
