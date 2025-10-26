@@ -9,6 +9,7 @@
 #include <termios.h>
 #include <unistd.h>
 #include <fcntl.h>
+#include <stdio.h>
 
 // Enable raw input mode or whatever this is
 // Soo, it's something new so there WILL be comments
@@ -64,6 +65,24 @@ void DisableRawMode() {
 }
 
 
+
+int GetKey() {
+	int gotchar = getchar();
+	// NOTHING
+	if (gotchar == EOF) return -1;
+
+	if(gotchar == '\033') {
+		int afterthing = getchar();
+		if(afterthing == '[' || afterthing == 'O') {
+			// Here switch for all the esc sequences
+		}
+		return KEY_ESC;
+	}
+
+	return gotchar;
+}
+
+
 // ===================== Windows =======================
 #elif defined(_WIN32) || defined(_WIN64)
 // No comment's for windows, you can deducate what does what from the code after reading unix comments
@@ -87,6 +106,15 @@ void EnableRawMode() {
 void DisableRawMode() {
     HANDLE hIn = GetStdHandle(STD_INPUT_HANDLE);
     SetConsoleMode(hIn, orig_mode);
+}
+
+int GetKey() {
+	if (!_kbhit()) return -1;
+	int gotchar = _getch();
+
+	if(gotchar == '0' || gotchar == '224') {
+		// Here switch for all the esc sequences
+	}
 }
 
 #endif
