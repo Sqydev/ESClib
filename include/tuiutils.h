@@ -39,7 +39,7 @@ int GetKey();
 // =====================
 // BASIC / CONTROL KEYS
 // =====================
-#define KEY_NULL           0
+#define KEY_NULL           -1
 #define KEY_ESC            27
 #define KEY_ENTER          13
 #define KEY_TAB            9
