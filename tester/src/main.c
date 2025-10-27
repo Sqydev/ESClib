@@ -1,4 +1,4 @@
-#include "../../include/tuiutils.h"
+#include "../../include/esclib.h"
 
 #include <stdio.h>
 
@@ -64,15 +64,20 @@ void ClearTest() {
 }
 
 void GetKeyTest() {
-	printf("Got input(ctrl+c to esc): ");
-	
 	EnableRawMode();
+
+	printf("Input from lib(ctrl+c to esc):\n");
 
 	while(1) {
 		int gototototor = GetKey();
 
 		if(gototototor != KEY_NULL) {
-			printf("| %c <- From lib ", gototototor);
+			TuiClearLine();
+			printf("| %c <- From lib |", gototototor);
+		}
+		if(gototototor == KEY_TAB) {
+			TuiClearLine();
+			printf("TAB!");
 		}
 	}
 }

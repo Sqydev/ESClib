@@ -75,6 +75,14 @@ int GetKey();
 #define KEY_F10            1020
 #define KEY_F11            1021
 #define KEY_F12            1022
+#define KEY_F13            1023
+#define KEY_F14            1024
+#define KEY_F15            1025
+#define KEY_F16            1026
+#define KEY_F17            1027
+#define KEY_F18            1028
+#define KEY_F19            1029
+#define KEY_F20            1030
 
 // =====================
 // ALPHABET KEYS
