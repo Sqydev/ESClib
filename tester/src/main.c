@@ -6,18 +6,20 @@
 #define Superfps (1000000 / 60) 
 
 void AltBuffModeSwitchTest() {
-	printf("\nEnter to switch, Any other to end: ");
+	int gotkey = -1;
+
+	EnableRawMode();
+
+	printf("\nEnter to switch, Esc to end: ");
 	fflush(stdout);
 
 	TuiSwitchBuffMode();
 	
 	while(1) {
-		char Input = ' ';
+		gotkey = GetKey();
 
-		scanf("%c", &Input);
-
-		if(Input == '\n') { TuiSwitchBuffMode(); continue; }
-		else { break; }
+		if(gotkey == KEY_ENTER) { TuiSwitchBuffMode(); continue; }
+		if(gotkey == KEY_ESC) { break; }
 
 		usleep(Superfps);
 	}
@@ -26,7 +28,7 @@ void AltBuffModeSwitchTest() {
 void ClearTest() {
 	int gotkey = -1;
 
-	printf("\n1 to clear screen, 2 to clear line, 3 to clear char, 4 to spam, Any other to escape\n");
+	printf("\n1 to clear screen, 2 to clear line, 3 to clear char, 4 to spam, Esc to escape\n");
 	fflush(stdout);
 
 	EnableRawMode();
@@ -53,14 +55,14 @@ void ClearTest() {
             printf("SpAm:)");
 			gotkey = -1;
 			continue;
-        } else if(gotkey != KEY_NULL && gotkey != KEY_ENTER) {
-			printf("%d", gotkey);
+        } 
+		if(gotkey == KEY_ESC) {
 			break;
 		}
 
 		gotkey = -1;
 
-		usleep(Superfps);
+			usleep(Superfps);
 	}
 }
 
@@ -69,7 +71,7 @@ void GetKeyTest() {
 
 	EnableRawMode();
 
-	printf("Input from lib(ctrl+c to esc):\n");
+	printf("Input from lib(esc to esc):\n");
 
 	while(1) {
 		gototototor = GetKey();
@@ -81,6 +83,9 @@ void GetKeyTest() {
 		if(gototototor == KEY_TAB) {
 			TuiClearLine();
 			printf("TAB!");
+		}
+		if(gototototor == KEY_ESC) {
+			break;
 		}
 
 		gototototor = -1;
