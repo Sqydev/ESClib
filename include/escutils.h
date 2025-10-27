@@ -36,14 +36,33 @@ int GetKey();
 
 // KEYS(by chatgbt becouse I'm not crazy enough to write this myself)
 
+
+// =====================
+// Not universal
+// =====================
+
+#if defined(__linux__) || defined(__APPLE__)
+
+#define KEY_ENTER          10
+#define KEY_BACKSPACE      127
+
+#elif defined(_WIN32) || defined(_WIN64)
+
+#define KEY_ENTER          13
+#define KEY_BACKSPACE      8
+
+#endif
+
+// =====================
+// Universal
+// =====================
+
 // =====================
 // BASIC / CONTROL KEYS
 // =====================
 #define KEY_NULL           -1
 #define KEY_ESC            27
-#define KEY_ENTER          13
 #define KEY_TAB            9
-#define KEY_BACKSPACE      8
 #define KEY_SPACE          32
 
 // =====================

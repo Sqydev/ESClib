@@ -26,7 +26,7 @@ void AltBuffModeSwitchTest() {
 void ClearTest() {
 	int gotkey = -1;
 
-	printf("\n1 to clear screen, 2 to clear line, 3 to clear char, 4 to spam\n");
+	printf("\n1 to clear screen, 2 to clear line, 3 to clear char, 4 to spam, Any other to escape\n");
 	fflush(stdout);
 
 	EnableRawMode();
@@ -36,16 +36,27 @@ void ClearTest() {
 
         if (gotkey == KEY_1) {
             TuiClearScreen();
+			gotkey = -1;
+			continue;
         }
         else if (gotkey == KEY_2) {
             TuiClearLine();
+			gotkey = -1;
+			continue;
         }
         else if (gotkey == KEY_3) {
             TuiClearChar();
+			gotkey = -1;
+			continue;
         }
         else if (gotkey == KEY_4) {
             printf("SpAm:)");
-        }
+			gotkey = -1;
+			continue;
+        } else if(gotkey != KEY_NULL && gotkey != KEY_ENTER) {
+			printf("%d", gotkey);
+			break;
+		}
 
 		gotkey = -1;
 
