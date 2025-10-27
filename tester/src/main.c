@@ -1,6 +1,9 @@
-#include "../../include/esclib.h"
+#include "../../include/escutils.h"
 
+#include <unistd.h>
 #include <stdio.h>
+
+#define Superfps (1000000 / 60) 
 
 void AltBuffModeSwitchTest() {
 	printf("\nEnter to switch, Any other to end: ");
@@ -15,61 +18,50 @@ void AltBuffModeSwitchTest() {
 
 		if(Input == '\n') { TuiSwitchBuffMode(); continue; }
 		else { break; }
+
+		usleep(Superfps);
 	}
 }
 
 void ClearTest() {
-	printf("\n1 to clear screen, 2 to clear line, 3 to clear char, Any other to end\n");
+	int gotkey = -1;
+
+	printf("\n1 to clear screen, 2 to clear line, 3 to clear char, 4 to spam\n");
 	fflush(stdout);
 
-	printf("SpAm:)");
-	printf("\n");
-	printf("SpAm:)");
-	printf("\n");
-	printf("SpAm:)");
-	printf("\n");
-	printf("SpAm:)");
-	printf("\n");
-	printf("SpAm:)");
-	printf("\n");
-	printf("SpAm:)");
-	
+	EnableRawMode();
 
 	while(1) {
-		char Input = ' ';
+        gotkey = GetKey();
 
-		scanf("%c", &Input);
+        if (gotkey == KEY_1) {
+            TuiClearScreen();
+        }
+        else if (gotkey == KEY_2) {
+            TuiClearLine();
+        }
+        else if (gotkey == KEY_3) {
+            TuiClearChar();
+        }
+        else if (gotkey == KEY_4) {
+            printf("SpAm:)");
+        }
 
-		TuiCursorMoveDirectional(1, 0,0,0);
+		gotkey = -1;
 
-		if(Input == '1') {
-			TuiClearScreen();
-			continue;
-		}
-		else if(Input == '2') {
-			TuiClearLine();
-			continue;
-		}
-		else if(Input == '1') {
-			TuiClearChar();
-			continue;
-		}
-		else if(Input == '\n') {
-			continue;
-		}
-		else {
-			break;
-		}
+		usleep(Superfps);
 	}
 }
 
 void GetKeyTest() {
+	int gototototor = -1;
+
 	EnableRawMode();
 
 	printf("Input from lib(ctrl+c to esc):\n");
 
 	while(1) {
-		int gototototor = GetKey();
+		gototototor = GetKey();
 
 		if(gototototor != KEY_NULL) {
 			TuiClearLine();
@@ -79,6 +71,10 @@ void GetKeyTest() {
 			TuiClearLine();
 			printf("TAB!");
 		}
+
+		gototototor = -1;
+
+		usleep(Superfps);
 	}
 }
 
