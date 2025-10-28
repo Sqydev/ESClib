@@ -1,4 +1,4 @@
-#include "../../include/escutils.h"
+#include "../../include/esclib.h"
 
 #include <unistd.h>
 #include <stdio.h>
@@ -14,11 +14,12 @@ void AltBuffModeSwitchTest() {
 	fflush(stdout);
 
 	TuiSwitchBuffMode();
+	TuiClearScreen();
 	
 	while(1) {
 		gotkey = GetKey();
 
-		if(gotkey == KEY_ENTER) { TuiSwitchBuffMode(); continue; }
+		if(gotkey == KEY_ENTER) { TuiSwitchBuffMode(); TuiClearScreen(); continue; }
 		if(gotkey == KEY_ESC) { break; }
 
 		usleep(Superfps);
@@ -62,7 +63,7 @@ void ClearTest() {
 
 		gotkey = -1;
 
-			usleep(Superfps);
+		usleep(Superfps);
 	}
 }
 
@@ -94,12 +95,45 @@ void GetKeyTest() {
 	}
 }
 
+void FunnyCrsTest() {
+	int gotkey = -1;
+
+	EnableRawMode();
+	
+	printf("WSAD or Arrows to move!(Esc to esc)");
+
+	while(1) {
+		gotkey = GetKey();
+
+		if(gotkey == KEY_W || gotkey == KEY_UP) {
+			TuiCursorMoveDirectional(1, 0, 0, 0);
+		}
+		if(gotkey == KEY_S || gotkey == KEY_DOWN) {
+			TuiCursorMoveDirectional(0, 1, 0, 0);
+		}
+		if(gotkey == KEY_A || gotkey == KEY_LEFT) {
+			TuiCursorMoveDirectional(0, 0, 1, 0);
+		}
+		if(gotkey == KEY_D || gotkey == KEY_RIGHT) {
+			TuiCursorMoveDirectional(0, 0, 0, 1);
+		}
+		if(gotkey == KEY_ESC) {
+			break;
+		}
+
+		gotkey = -1;
+
+		usleep(Superfps);
+	}
+}
+
 int main() {
 	int Input = 0;
 
 	printf("1. Mode Switch Test\n");
 	printf("2. Clear Test\n");
 	printf("3. GetKey Test\n");
+	printf("4. Funnyahh cursor movement trick test\n");
 
 	printf("Input: ");
 	scanf("%d", &Input);
@@ -107,6 +141,7 @@ int main() {
 	if(Input == 1) { AltBuffModeSwitchTest(); }
 	else if(Input == 2) { ClearTest(); }
 	else if(Input == 3) { GetKeyTest(); }
+	else if(Input == 4) { FunnyCrsTest(); }
 	
 	return 0;
 }

@@ -1,7 +1,8 @@
-#include "../../include/escutils.h"
+#include "../../include/esclib.h"
 
 // =================== Universal libs ====================
 #include <stdlib.h>
+#include <stdbool.h>
 
 // =================== Linux / macOS =====================
 #if defined(__APPLE__) || defined(__linux__)
@@ -63,8 +64,6 @@ void DisableRawMode() {
 	// Remove O_NONBLOCK bit (bitwise AND with flag negation)
 	fcntl(STDIN_FILENO, F_SETFL, flags & ~O_NONBLOCK);
 }
-
-
 
 int GetKey() {
 	int gotchar = getchar();
@@ -186,9 +185,101 @@ int GetKey() {
 
 	if(gotchar == '0' || gotchar == '224') {
 		// Here switch for all the esc sequences
+		int afterthing = getchar();
+		if(afterthing == '[' || afterthing == 'O') {
+			// Here switch for all the esc sequences
+			int finalthing = getchar();
+			switch(finalthing) {
+				case 'A': return KEY_UP;
+     	       	case 'B': return KEY_DOWN;
+    	        case 'C': return KEY_RIGHT;
+    	        case 'D': return KEY_LEFT;
+    	        case 'H': return KEY_HOME;
+    	        case 'F': return KEY_END;
+
+            	case '1': {
+                	int afterfinal = getchar();
+					switch(afterfinal) {
+                		case '~': return KEY_HOME;
+						case 'P': return KEY_F1;
+						case 'Q': return KEY_F2;
+						case 'R': return KEY_F3;
+						case 'S': return KEY_F4;
+						default: break;
+					}
+                	break;
+            	}
+    	        case '2': {
+                	int afterfinal = getchar();
+     	           	switch(afterfinal) {
+						case '~': return KEY_INSERT;
+						case 'P': return KEY_F5;
+                		case 'Q': return KEY_F6;
+						case 'R': return KEY_F7;
+						case 'S': return KEY_F8;
+						default: break;
+					}
+					break;
+      	     	}
+      	      	case '3': {
+                	int afterfinal = getchar();
+					switch(afterfinal) {
+						case '~': return KEY_DELETE;
+						case 'P': return KEY_F9;
+						case 'Q': return KEY_F10;
+                		case 'R': return KEY_F11;
+						case 'S': return KEY_F12;
+						default: break;
+					}
+      	          	break;
+     	       	}
+      	      	case '5': {
+                	int afterfinal = getchar();
+					switch(afterfinal) {
+						case '~': return KEY_PAGE_UP;
+						case 'P': return KEY_F13;
+						case 'Q': return KEY_F14;
+                		case 'R': return KEY_F15;
+						case 'S': return KEY_F16;
+						default: break;
+					}
+      	          	break;
+            	}
+            	case '6': {
+                	int afterfinal = getchar();
+					switch(afterfinal) {
+						case '~': return KEY_PAGE_DOWN;
+						case 'P': return KEY_F17;
+						case 'Q': return KEY_F18;
+                		case 'R': return KEY_F19;
+						case 'S': return KEY_F20;
+						default: break;
+					}
+      	          	break;
+            	}
+
+            	default:
+            	    break;
+				}
+		}
+		return KEY_ESC;
 	}
+	return gotchar;
 }
 
 #endif
 
 // =================== Universal =====================
+
+bool RawModeActive = false;
+
+void SwitchRawMode() {
+	if(!RawModeActive) {
+		EnableRawMode();
+		RawModeActive = true;
+	}
+	else {
+		EnableRawMode();
+		RawModeActive = false;
+	}
+}
