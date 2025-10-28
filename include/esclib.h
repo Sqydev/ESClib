@@ -1,11 +1,19 @@
 #ifndef ESCLIB_H
 #define ESCLIB_H
 
+#include <stdbool.h>
+
 typedef struct color{
 	unsigned char red;
 	unsigned char green;
 	unsigned char blue;
 } color;
+
+// extern - msg to compiler that  that var exists
+extern int TargetFps;
+extern color DefaultColor;
+extern color CurrentColor;
+extern bool AlternateBuffModeActive;
 
 // Screen
 

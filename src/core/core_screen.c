@@ -26,6 +26,8 @@ void FillScreen(color Color) {
             putchar(' ');
         putchar('\n');
 	}
+
+	printf("\033[48;2;%d;%d;%dm", CurrentColor.red, CurrentColor.green, CurrentColor.blue);
 }
 
 // ===================== Windows =======================
@@ -55,21 +57,13 @@ void FillScreen(color Color) {
             putchar(' ');
         putchar('\n');
     }
+
+	printf("\033[48;2;%d;%d;%dm", CurrentColor.red, CurrentColor.green, CurrentColor.blue);
 }
 
 #endif
 
 bool AlternateBuffModeActive = false;
-
-// TODO: WHEN DOING LIB WHEN INITING MAKE IT SO IT SETS DEAFOULT COLOR AND THEN IN FILLSCREEN YOU CAN MAKE IT FULLY WORK
-// TODO: WHEN DOING LIB WHEN INITING MAKE IT SO IT SETS DEAFOULT COLOR AND THEN IN FILLSCREEN YOU CAN MAKE IT FULLY WORK
-// TODO: WHEN DOING LIB WHEN INITING MAKE IT SO IT SETS DEAFOULT COLOR AND THEN IN FILLSCREEN YOU CAN MAKE IT FULLY WORK
-// TODO: WHEN DOING LIB WHEN INITING MAKE IT SO IT SETS DEAFOULT COLOR AND THEN IN FILLSCREEN YOU CAN MAKE IT FULLY WORK
-// TODO: WHEN DOING LIB WHEN INITING MAKE IT SO IT SETS DEAFOULT COLOR AND THEN IN FILLSCREEN YOU CAN MAKE IT FULLY WORK
-// TODO: WHEN DOING LIB WHEN INITING MAKE IT SO IT SETS DEAFOULT COLOR AND THEN IN FILLSCREEN YOU CAN MAKE IT FULLY WORK
-void InitTui(int fps) {
-
-}
 
 void ChaingeBg(color Color) {
 	printf("\033[48;2;%d;%d;%dm", Color.red, Color.green, Color.blue);
