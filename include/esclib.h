@@ -1,13 +1,28 @@
-#ifndef TUIUTILS_H
-#define TUIUTILS_H
+#ifndef ESCLIB_H
+#define ESCLIB_H
+
+typedef struct color{
+	int red;
+	int green;
+	int blue;
+	int alfa;
+} color;
 
 // Screen
+
+void ClearAndFillScreen(color Color);
+
+void FillScreen(color Color);
 
 void TuiClearScreen();
 
 void TuiClearLine();
 
 void TuiClearChar();
+
+void TuiEnableBuffMode();
+
+void TuiDisableBuffMode();
 
 void TuiSwitchBuffMode();
 
@@ -27,8 +42,9 @@ void EnableRawMode();
 
 void DisableRawMode();
 
-int GetKey();
+void SwitchRawMode();
 
+int GetKey();
 
 
 // Macros
@@ -36,13 +52,25 @@ int GetKey();
 
 // KEYS(by chatgbt becouse I'm not crazy enough to write this myself)
 
+// PLATFORM SPEC
+
+#if defined (__linux__) || defined (__APPLE__)
+
+#define KEY_ENTER          10
+
+#elif defined (_WIN32) || defined(_WIN64)
+
+#define KEY_ENTER          13
+
+#endif
+
+// UNIVERSAL
 
 // =====================
 // BASIC / CONTROL KEYS
 // =====================
 #define KEY_NULL           -1
 #define KEY_ESC            27
-#define KEY_ENTER          13
 #define KEY_BACKSPACE      127
 #define KEY_TAB            9
 #define KEY_SPACE          32
