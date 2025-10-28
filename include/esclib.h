@@ -2,13 +2,14 @@
 #define ESCLIB_H
 
 typedef struct color{
-	int red;
-	int green;
-	int blue;
-	int alfa;
+	unsigned char red;
+	unsigned char green;
+	unsigned char blue;
 } color;
 
 // Screen
+
+void ChaingeBg(color Color);
 
 void ClearAndFillScreen(color Color);
 

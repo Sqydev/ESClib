@@ -127,6 +127,28 @@ void FunnyCrsTest() {
 	}
 }
 
+void ClearandFillTest() {
+	int gotkey = -1;
+
+	EnableRawMode();
+
+	ClearAndFillScreen((color){255, 100, 4});
+
+	printf("Esc to esc");
+
+	while(1) {
+		gotkey = GetKey();
+		
+		if(gotkey == KEY_ESC) {
+			break;
+		}
+
+		gotkey = -1;
+
+		usleep(Superfps);
+	}
+}
+
 int main() {
 	int Input = 0;
 
@@ -134,6 +156,7 @@ int main() {
 	printf("2. Clear Test\n");
 	printf("3. GetKey Test\n");
 	printf("4. Funnyahh cursor movement trick test\n");
+	printf("5. ClearandFill test\n");
 
 	printf("Input: ");
 	scanf("%d", &Input);
@@ -142,6 +165,7 @@ int main() {
 	else if(Input == 2) { ClearTest(); }
 	else if(Input == 3) { GetKeyTest(); }
 	else if(Input == 4) { FunnyCrsTest(); }
+	else if(Input == 5) { ClearandFillTest(); }
 	
 	return 0;
 }
