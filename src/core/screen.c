@@ -62,6 +62,10 @@ void FillScreen(color Color) {
 
 bool AlternateBuffModeActive = false;
 
+void InitTui(int fps) {
+
+}
+
 void ChaingeBg(color Color) {
 	printf("\033[48;2;%d;%d;%dm", Color.red, Color.green, Color.blue);
 }

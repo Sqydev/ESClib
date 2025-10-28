@@ -9,6 +9,8 @@ typedef struct color{
 
 // Screen
 
+void InitTui(int fps);
+
 void ChaingeBg(color Color);
 
 void ClearAndFillScreen(color Color);
