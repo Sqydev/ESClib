@@ -6,6 +6,7 @@
 
 
 // =================== Linux / macOS =====================
+// TODO: WHEN DOING LIB WHEN INITING MAKE IT SO IT SETS DEAFOULT COLOR AND THEN IN FILLSCREEN YOU CAN MAKE IT FULLY WORK
 #if defined(__APPLE__) || defined(__linux__)
 
 #include <unistd.h>
