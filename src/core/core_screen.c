@@ -3,6 +3,7 @@
 // =================== Universal libs ====================
 #include <stdio.h>
 #include <stdbool.h>
+#include <stdlib.h>
 
 
 // =================== Linux / macOS =====================
@@ -92,6 +93,8 @@ void TuiClearChar() {
 void TuiEnableBuffMode() {
 	printf("\033[?1049h");
 	fflush(stdout);
+
+	atexit(TuiDisableBuffMode);
 }
 
 void TuiDisableBuffMode() {
