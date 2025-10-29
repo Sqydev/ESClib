@@ -29,6 +29,7 @@ SMFHEREggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggg
 - NO external dependencies
 - FREE and OPEN SOURCE
 - Suport for Linux AND Windows(can be used with macos)
+- Syntax and writing style highly inspired by **raylib**(Even readme)
 
 ## Instalation & Usage
 
