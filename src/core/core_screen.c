@@ -37,7 +37,7 @@ void FillScreen(color Color) {
 #include <windows.h>
 
 
-// TODO: Chatgbt port, litteraly FillScreen for linux ctrl+c ctrl+v to chatgbt. Why? cuz fuck you. I'll do it myself someday.
+// TODO: Chatgbt port, litteraly FillScreen for linux ctrl+c ctrl+v to chatgbt. Why? cuz fuck microsoft. I'll do it myself someday.
 void FillScreen(color Color) {
 	HANDLE hOut = GetStdHandle(STD_OUTPUT_HANDLE);
     
@@ -66,49 +66,49 @@ void FillScreen(color Color) {
 
 bool AlternateBuffModeActive = false;
 
-void ChaingeBg(color Color) {
+void SetBackgroundColor(color Color) {
 	printf("\033[48;2;%d;%d;%dm", Color.red, Color.green, Color.blue);
 }
 
-void ClearAndFillScreen(color Color) {
-	TuiClearScreen();
+void ClearBackground(color Color) {
+	ClearScreen();
 	FillScreen(Color);
 }
 
-void TuiClearScreen() {
+void ClearScreen(void) {
 	printf("\033[2J\033[H");
 	fflush(stdout);
 }
 
-void TuiClearLine() {
+void ClearLine(void) {
 	printf("\r\033[2K");
 	fflush(stdout);
 }
 
-void TuiClearChar() {
+void ClearChar(void) {
 	printf("\033[D\033[K");
 	fflush(stdout);
 }
 
-void TuiEnableBuffMode() {
+void EnableBufferMode(void) {
 	printf("\033[?1049h");
 	fflush(stdout);
 
-	atexit(TuiDisableBuffMode);
+	atexit(DisableBufferMode);
 }
 
-void TuiDisableBuffMode() {
+void DisableBufferMode(void) {
 	printf("\033[?1049l");
 	fflush(stdout);
 }
 
-void TuiSwitchBuffMode() {
+void ToggleBufferMode(void) {
 	if(!AlternateBuffModeActive) {
-		TuiEnableBuffMode();
+		EnableBufferMode();
 		AlternateBuffModeActive = true;
 	}
 	else {
-		TuiDisableBuffMode();
+		DisableBufferMode();
 		AlternateBuffModeActive = false;
 	}
 }

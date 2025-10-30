@@ -10,11 +10,11 @@ void InitTui(int fps) {
 
 	CurrentColor = DefaultColor;
 
-	TuiEnableBuffMode();
+	EnableBufferMode();
 
 	EnableRawMode();
 
-	TuiClearScreen();
+	ClearScreen();
 
 	FillScreen(CurrentColor);
 }
