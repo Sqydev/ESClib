@@ -3,11 +3,12 @@
 
 #include <stdbool.h>
 
-typedef struct color{
+typedef struct color {
 	unsigned char red;
 	unsigned char green;
 	unsigned char blue;
 } color;
+
 
 // extern - msg to compiler that  that var exists
 extern int TargetFps;
@@ -15,47 +16,37 @@ extern color DefaultColor;
 extern color CurrentColor;
 extern bool AlternateBuffModeActive;
 
-// Screen
 
+// Screen
 void InitTui(int fps);
 
-void ChaingeBg(color Color);
-
-void ClearAndFillScreen(color Color);
-
+void SetBackgroundColor(color Color);
 void FillScreen(color Color);
+void ClearBackground(color Color);
 
-void TuiClearScreen();
+void ClearScreen(void);
+void ClearLine(void);
+void ClearChar(void);
 
-void TuiClearLine();
-
-void TuiClearChar();
-
-void TuiEnableBuffMode();
-
-void TuiDisableBuffMode();
-
-void TuiSwitchBuffMode();
+void ToggleBufferMode(void);
+void EnableBufferMode(void);
+void DisableBufferMode(void);
 
 
 // Cursor
+void SetCursorPosition(int x, int y);
 
-void TuiCursorPosSet(int x, int y);
+void MoveCursorDirectional(int up, int down, int left, int right);
 
-void TuiCursorMoveDirectional(int up, int down, int left, int right);
-
-void TuiCursorMove(int x, int y);
+void MoveCursor(int x, int y);
 
 
 // Input
+void ToggleRawMode(void);
+void EnableRawMode(void);
+void DisableRawMode(void);
 
-void EnableRawMode();
-
-void DisableRawMode();
-
-void SwitchRawMode();
-
-int GetKey();
+int GetKey(void);
 
 
 // Macros

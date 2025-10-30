@@ -13,13 +13,13 @@ void AltBuffModeSwitchTest() {
 	printf("\nEnter to switch, Esc to end: ");
 	fflush(stdout);
 
-	TuiSwitchBuffMode();
-	TuiClearScreen();
+	ToggleBufferMode();
+	ClearScreen();
 	
 	while(1) {
 		gotkey = GetKey();
 
-		if(gotkey == KEY_ENTER) { TuiSwitchBuffMode(); TuiClearScreen(); continue; }
+		if(gotkey == KEY_ENTER) { ToggleBufferMode(); ClearScreen(); continue; }
 		if(gotkey == KEY_ESC) { break; }
 
 		usleep(Superfps);
@@ -38,17 +38,17 @@ void ClearTest() {
         gotkey = GetKey();
 
         if (gotkey == KEY_1) {
-            TuiClearScreen();
+            ClearScreen();
 			gotkey = -1;
 			continue;
         }
         else if (gotkey == KEY_2) {
-            TuiClearLine();
+            ClearLine();
 			gotkey = -1;
 			continue;
         }
         else if (gotkey == KEY_3) {
-            TuiClearChar();
+            ClearChar();
 			gotkey = -1;
 			continue;
         }
@@ -78,11 +78,11 @@ void GetKeyTest() {
 		gototototor = GetKey();
 
 		if(gototototor != KEY_NULL) {
-			TuiClearLine();
+			ClearLine();
 			printf("| %c <- From lib |", gototototor);
 		}
 		if(gototototor == KEY_TAB) {
-			TuiClearLine();
+			ClearLine();
 			printf("TAB!");
 		}
 		if(gototototor == KEY_ESC) {
@@ -106,16 +106,16 @@ void FunnyCrsTest() {
 		gotkey = GetKey();
 
 		if(gotkey == KEY_W || gotkey == KEY_UP) {
-			TuiCursorMoveDirectional(1, 0, 0, 0);
+			MoveCursorDirectional(1, 0, 0, 0);
 		}
 		if(gotkey == KEY_S || gotkey == KEY_DOWN) {
-			TuiCursorMoveDirectional(0, 1, 0, 0);
+			MoveCursorDirectional(0, 1, 0, 0);
 		}
 		if(gotkey == KEY_A || gotkey == KEY_LEFT) {
-			TuiCursorMoveDirectional(0, 0, 1, 0);
+			MoveCursorDirectional(0, 0, 1, 0);
 		}
 		if(gotkey == KEY_D || gotkey == KEY_RIGHT) {
-			TuiCursorMoveDirectional(0, 0, 0, 1);
+			MoveCursorDirectional(0, 0, 0, 1);
 		}
 		if(gotkey == KEY_ESC) {
 			break;
@@ -132,7 +132,7 @@ void ClearandFillTest() {
 
 	EnableRawMode();
 
-	ClearAndFillScreen((color){255, 100, 4});
+	ClearBackground((color){255, 100, 4});
 
 	printf("Esc to esc");
 

@@ -18,7 +18,7 @@
 // Struct to store previose term-i-o settings(usefull in DisableRawMode)
 static struct termios orig_termios;
 
-void EnableRawMode() {
+void EnableRawMode(void) {
 	// This is our workspace
 	struct termios raw;
 
@@ -55,7 +55,7 @@ void EnableRawMode() {
 }
 
 // Disable it
-void DisableRawMode() {
+void DisableRawMode(void) {
 	// Restore original terminal settings
 	tcsetattr(STDIN_FILENO, TCSANOW, &orig_termios);
 
@@ -65,7 +65,7 @@ void DisableRawMode() {
 	fcntl(STDIN_FILENO, F_SETFL, flags & ~O_NONBLOCK);
 }
 
-int GetKey() {
+int GetKey(void) {
 	int gotchar = getchar();
 	// NOTHING
 	if (gotchar == EOF) return -1;
@@ -162,7 +162,7 @@ int GetKey() {
 
 static DWORD orig_mode;
 
-void EnableRawMode() {
+void EnableRawMode(void) {
     HANDLE hIn = GetStdHandle(STD_INPUT_HANDLE);
     GetConsoleMode(hIn, &orig_mode);
 
@@ -174,12 +174,12 @@ void EnableRawMode() {
     atexit(DisableRawMode);
 }
 
-void DisableRawMode() {
+void DisableRawMode(void) {
     HANDLE hIn = GetStdHandle(STD_INPUT_HANDLE);
     SetConsoleMode(hIn, orig_mode);
 }
 
-int GetKey() {
+int GetKey(void) {
 	if (!_kbhit()) return -1;
 	int gotchar = _getch();
 
@@ -273,7 +273,7 @@ int GetKey() {
 
 bool RawModeActive = false;
 
-void SwitchRawMode() {
+void ToggleRawMode(void) {
 	if(!RawModeActive) {
 		EnableRawMode();
 		RawModeActive = true;
