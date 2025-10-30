@@ -145,6 +145,7 @@ int GetKey(void) {
             	}
 
             	default:
+					return KEY_NULL;
             	    break;
 				}
 		}
@@ -183,12 +184,12 @@ int GetKey(void) {
 	if (!_kbhit()) return -1;
 	int gotchar = _getch();
 
-	if(gotchar == '0' || gotchar == '224') {
+	if(gotchar == 0 || gotchar == 224) {
 		// Here switch for all the esc sequences
-		int afterthing = getchar();
+		int afterthing = _getch();
 		if(afterthing == '[' || afterthing == 'O') {
 			// Here switch for all the esc sequences
-			int finalthing = getchar();
+			int finalthing = _getch();
 			switch(finalthing) {
 				case 'A': return KEY_UP;
      	       	case 'B': return KEY_DOWN;
@@ -198,7 +199,7 @@ int GetKey(void) {
     	        case 'F': return KEY_END;
 
             	case '1': {
-                	int afterfinal = getchar();
+                	int afterfinal = _getch();
 					switch(afterfinal) {
                 		case '~': return KEY_HOME;
 						case 'P': return KEY_F1;
@@ -210,7 +211,7 @@ int GetKey(void) {
                 	break;
             	}
     	        case '2': {
-                	int afterfinal = getchar();
+                	int afterfinal = _getch();
      	           	switch(afterfinal) {
 						case '~': return KEY_INSERT;
 						case 'P': return KEY_F5;
@@ -222,7 +223,7 @@ int GetKey(void) {
 					break;
       	     	}
       	      	case '3': {
-                	int afterfinal = getchar();
+                	int afterfinal = _getch();
 					switch(afterfinal) {
 						case '~': return KEY_DELETE;
 						case 'P': return KEY_F9;
@@ -234,7 +235,7 @@ int GetKey(void) {
       	          	break;
      	       	}
       	      	case '5': {
-                	int afterfinal = getchar();
+                	int afterfinal = _getch();
 					switch(afterfinal) {
 						case '~': return KEY_PAGE_UP;
 						case 'P': return KEY_F13;
@@ -246,7 +247,7 @@ int GetKey(void) {
       	          	break;
             	}
             	case '6': {
-                	int afterfinal = getchar();
+                	int afterfinal = _getch();
 					switch(afterfinal) {
 						case '~': return KEY_PAGE_DOWN;
 						case 'P': return KEY_F17;
@@ -259,6 +260,7 @@ int GetKey(void) {
             	}
 
             	default:
+					return KEY_NULL;
             	    break;
 				}
 		}

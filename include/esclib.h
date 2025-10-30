@@ -59,10 +59,12 @@ int GetKey(void);
 #if defined (__linux__) || defined (__APPLE__)
 
 #define KEY_ENTER          10
+#define KEY_BACKSPACE      127
 
 #elif defined (_WIN32) || defined(_WIN64)
 
 #define KEY_ENTER          13
+#define KEY_BACKSPACE       8
 
 #endif
 
@@ -73,7 +75,6 @@ int GetKey(void);
 // =====================
 #define KEY_NULL           -1
 #define KEY_ESC            27
-#define KEY_BACKSPACE      127
 #define KEY_TAB            9
 #define KEY_SPACE          32
 
