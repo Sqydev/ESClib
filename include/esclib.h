@@ -10,15 +10,8 @@ typedef struct color {
 } color;
 
 
-// extern - msg to compiler that  that var exists
-extern int TargetFps;
-extern color DefaultColor;
-extern color CurrentColor;
-extern bool AlternateBuffModeActive;
-
-
 // Screen
-void InitTui(int fps);
+void InitTui(unsigned int fps);
 
 void SetBackgroundColor(color Color);
 void FillScreen(color Color);
