@@ -4,10 +4,13 @@
 #include <stdbool.h>
 #include <stdlib.h>
 
+// Setup
 #if defined(__APPLE__) || defined(__linux__)
 
 #include <unistd.h>
 #include <sys/ioctl.h>
+#include <termios.h>
+#include <fcntl.h>
 
 #elif defined(_WIN32) || defined(_WIN64)
 
@@ -20,7 +23,19 @@ typedef struct CoreData {
 	struct {
 		color backgroundColor;
 		bool alternateBuffModeActive;
+		bool rawModeActive;
 	} Window;
+	struct {
+		#if defined(__APPLE__) || defined(__linux__)
+
+			struct termios settings;
+
+		#elif defined(_WIN32) || defined(_WIN64)
+
+			DWORD settings;
+
+		#endif
+	} Terminal;
 	struct {
 		unsigned int targetFPS;
 	} Time;
@@ -161,5 +176,281 @@ void ToggleBufferMode(void) {
 	else {
 		DisableBufferMode();
 		CORE.Window.alternateBuffModeActive = false;
+	}
+}
+
+void EnableRawMode(void) {
+	#if defined(__APPLE__) || defined(__linux__)
+
+
+		// This is our workspace
+		struct termios raw;
+
+		// Get current term settings
+		tcgetattr(STDIN_FILENO, &CORE.Terminal.settings);
+		raw = CORE.Terminal.settings;
+
+		// Turn off echo && canon
+		// Echo: Automaticly show wrote chars, so now if you type something it won't be auto shown
+		// Cannon: Waiting until \n
+		raw.c_lflag &= ~(ICANON | ECHO);
+
+		// Turn off CR/LF mapping
+		// CR: \r -> \n
+		// LR: \n -> \r
+		// So I'LL decite when to move cursor:)
+		raw.c_iflag &= ~(ICRNL | INLCR);
+
+		// Make it so read() returns when there is any byte(and waits 0 ms or s idk)
+		raw.c_cc[VMIN] = 1;
+		raw.c_cc[VTIME] = 0;
+
+		// Apply new settings
+		tcsetattr(STDIN_FILENO, TCSANOW, &raw);
+
+		// Get current flags
+		int flags = fcntl(STDIN_FILENO, F_GETFL, 0);
+	
+		// Set flags to current flags + O_NONBLOCK(So no waiting for \n to return)
+		fcntl(STDIN_FILENO, F_SETFL, flags | O_NONBLOCK);
+
+		// Make sure we restore the terminal when program exits
+		atexit(DisableRawMode);
+
+
+	#elif defined(_WIN32) || defined(_WIN64)
+
+
+    	HANDLE hIn = GetStdHandle(STD_INPUT_HANDLE);
+    	GetConsoleMode(hIn, &CORE.Terminal.settings);
+
+    	DWORD raw = CORE.Terminal.settings;
+    	raw &= ~(ENABLE_ECHO_INPUT | ENABLE_LINE_INPUT);
+    	raw |= ENABLE_PROCESSED_INPUT;
+
+    	SetConsoleMode(hIn, raw);
+    	atexit(DisableRawMode);
+
+
+	#endif
+}
+
+void DisableRawMode(void) {
+	#if defined(__APPLE__) || defined(__linux__)
+
+
+		// Restore original terminal settings
+		tcsetattr(STDIN_FILENO, TCSANOW, &CORE.Terminal.settings);
+
+		// Get current flags
+		int flags = fcntl(STDIN_FILENO, F_GETFL, 0);
+		// Remove O_NONBLOCK bit (bitwise AND with flag negation)
+		fcntl(STDIN_FILENO, F_SETFL, flags & ~O_NONBLOCK);
+
+
+	#elif defined(_WIN32) || defined(_WIN64)
+
+
+    	HANDLE hIn = GetStdHandle(STD_INPUT_HANDLE);
+    	SetConsoleMode(hIn, CORE.Terminal.settings);
+
+
+	#endif
+}
+
+int GetKey(void) {
+	#if defined(__APPLE__) || defined(__linux__)
+
+
+		int gotchar = getchar();
+		// NOTHING
+		if (gotchar == EOF) return -1;
+	
+		if(gotchar == '\033') {
+			int afterthing = getchar();
+			if(afterthing == '[' || afterthing == 'O') {
+				// Here switch for all the esc sequences
+				int finalthing = getchar();
+				switch(finalthing) {
+					case 'A': return KEY_UP;
+	     	       	case 'B': return KEY_DOWN;
+	    	        case 'C': return KEY_RIGHT;
+	    	        case 'D': return KEY_LEFT;
+	    	        case 'H': return KEY_HOME;
+	    	        case 'F': return KEY_END;
+	
+	            	case '1': {
+	                	int afterfinal = getchar();
+						switch(afterfinal) {
+	                		case '~': return KEY_HOME;
+							case 'P': return KEY_F1;
+							case 'Q': return KEY_F2;
+							case 'R': return KEY_F3;
+							case 'S': return KEY_F4;
+							default: break;
+						}
+	                	break;
+	            	}
+	    	        case '2': {
+	                	int afterfinal = getchar();
+ 	    	           	switch(afterfinal) {
+							case '~': return KEY_INSERT;
+							case 'P': return KEY_F5;
+	                		case 'Q': return KEY_F6;
+							case 'R': return KEY_F7;
+							case 'S': return KEY_F8;
+							default: break;
+						}
+						break;
+	      	     	}
+	      	      	case '3': {
+	                	int afterfinal = getchar();
+						switch(afterfinal) {
+							case '~': return KEY_DELETE;
+							case 'P': return KEY_F9;
+							case 'Q': return KEY_F10;
+	                		case 'R': return KEY_F11;
+							case 'S': return KEY_F12;
+							default: break;
+						}
+	      	          	break;
+	     	       	}
+	      	      	case '5': {
+	                	int afterfinal = getchar();
+						switch(afterfinal) {
+							case '~': return KEY_PAGE_UP;
+							case 'P': return KEY_F13;
+							case 'Q': return KEY_F14;
+	                		case 'R': return KEY_F15;
+							case 'S': return KEY_F16;
+							default: break;
+						}
+	      	          	break;
+	            	}
+ 		           	case '6': {
+ 		               	int afterfinal = getchar();
+						switch(afterfinal) {
+							case '~': return KEY_PAGE_DOWN;
+							case 'P': return KEY_F17;
+							case 'Q': return KEY_F18;
+	 	               		case 'R': return KEY_F19;
+							case 'S': return KEY_F20;
+							default: break;
+						}
+	      	          	break;
+ 		           	}
+
+	            	default:
+						return KEY_NULL;
+ 		           	    break;
+					}
+			}
+			return KEY_ESC;
+		}
+		return gotchar;
+
+
+	#elif defined(_WIN32) || defined(_WIN64)
+
+
+		if (!_kbhit()) return -1;
+		int gotchar = _getch();
+
+		if(gotchar == 0 || gotchar == 224) {
+			// Here switch for all the esc sequences
+			int afterthing = _getch();
+			if(afterthing == '[' || afterthing == 'O') {
+				// Here switch for all the esc sequences
+				int finalthing = _getch();
+				switch(finalthing) {
+					case 'A': return KEY_UP;
+     		       	case 'B': return KEY_DOWN;
+    		        case 'C': return KEY_RIGHT;
+    		        case 'D': return KEY_LEFT;
+    		        case 'H': return KEY_HOME;
+    		        case 'F': return KEY_END;
+
+            		case '1': {
+                		int afterfinal = _getch();
+						switch(afterfinal) {
+                			case '~': return KEY_HOME;
+							case 'P': return KEY_F1;
+							case 'Q': return KEY_F2;
+							case 'R': return KEY_F3;
+							case 'S': return KEY_F4;
+							default: break;
+						}
+                		break;
+            		}
+    		        case '2': {
+                		int afterfinal = _getch();
+     		           	switch(afterfinal) {
+							case '~': return KEY_INSERT;
+							case 'P': return KEY_F5;
+                			case 'Q': return KEY_F6;
+							case 'R': return KEY_F7;
+							case 'S': return KEY_F8;
+							default: break;
+						}
+						break;
+      		     	}
+      		      	case '3': {
+                		int afterfinal = _getch();
+						switch(afterfinal) {
+							case '~': return KEY_DELETE;
+							case 'P': return KEY_F9;
+							case 'Q': return KEY_F10;
+                			case 'R': return KEY_F11;
+							case 'S': return KEY_F12;
+							default: break;
+						}
+      		          	break;
+     		       	}
+      		      	case '5': {
+                		int afterfinal = _getch();
+						switch(afterfinal) {
+							case '~': return KEY_PAGE_UP;
+							case 'P': return KEY_F13;
+							case 'Q': return KEY_F14;
+                			case 'R': return KEY_F15;
+							case 'S': return KEY_F16;
+							default: break;
+						}
+      		          	break;
+            		}
+            		case '6': {
+                		int afterfinal = _getch();
+						switch(afterfinal) {
+							case '~': return KEY_PAGE_DOWN;
+							case 'P': return KEY_F17;
+							case 'Q': return KEY_F18;
+                			case 'R': return KEY_F19;
+							case 'S': return KEY_F20;
+							default: break;
+						}
+      		          	break;
+            		}
+
+            		default:
+						return KEY_NULL;
+            		    break;
+					}
+			}
+			return KEY_ESC;
+		}
+		return gotchar;
+
+
+	#endif
+}
+
+void ToggleRawMode(void) {
+	if(!CORE.Window.rawModeActive) {
+		EnableRawMode();
+		CORE.Window.rawModeActive = true;
+	}
+	else {
+		EnableRawMode();
+		CORE.Window.rawModeActive = false;
 	}
 }
