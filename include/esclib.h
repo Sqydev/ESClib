@@ -10,8 +10,8 @@ typedef struct color {
 } color;
 
 
-// Screen
 void InitTui(unsigned int fps);
+void CloseTui(unsigned int fps);
 
 void SetBackgroundColor(color Color);
 void FillScreen(color Color);
@@ -25,24 +25,15 @@ void ToggleBufferMode(void);
 void EnableBufferMode(void);
 void DisableBufferMode(void);
 
-
-// Cursor
 void SetCursorPosition(int x, int y);
-
 void MoveCursorDirectional(int up, int down, int left, int right);
-
 void MoveCursor(int x, int y);
 
-
-// Input
 void ToggleRawMode(void);
 void EnableRawMode(void);
 void DisableRawMode(void);
 
 int GetKey(void);
-
-
-// Macros
 
 
 // KEYS(by chatgbt becouse I'm not crazy enough to write this myself)
