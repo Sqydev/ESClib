@@ -8,6 +8,7 @@ TODO:
 - End making it into 1 file
 - Do CloseTui
 - Make #define to enums
+- Make #ifdefs better especialy in GetKey()(cuz you can do only one in begining and not do 2 long switches for win and lin. just optim it)
 - Clean .c to fit .h
 
 REMAMBER:

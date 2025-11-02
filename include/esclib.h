@@ -3,6 +3,8 @@
 
 #include <stdbool.h>
 
+// NOTE: Order: Structs, macros, itp THEN functions
+
 typedef struct color {
 	unsigned char red;
 	unsigned char green;
@@ -10,8 +12,17 @@ typedef struct color {
 } color;
 
 
+
 void InitTui(unsigned int fps);
 void CloseTui(unsigned int fps);
+
+void ToggleBufferMode(void);
+void EnableBufferMode(void);
+void DisableBufferMode(void);
+
+void ToggleRawMode(void);
+void EnableRawMode(void);
+void DisableRawMode(void);
 
 void SetBackgroundColor(color Color);
 void FillScreen(color Color);
@@ -21,17 +32,9 @@ void ClearScreen(void);
 void ClearLine(void);
 void ClearChar(void);
 
-void ToggleBufferMode(void);
-void EnableBufferMode(void);
-void DisableBufferMode(void);
-
 void SetCursorPosition(int x, int y);
 void MoveCursorDirectional(int up, int down, int left, int right);
 void MoveCursor(int x, int y);
-
-void ToggleRawMode(void);
-void EnableRawMode(void);
-void DisableRawMode(void);
 
 int GetKey(void);
 
