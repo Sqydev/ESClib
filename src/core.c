@@ -1,4 +1,4 @@
-#include "../../include/esclib.h"
+#include "../include/esclib.h"
 
 #include <stdio.h>
 #include <stdbool.h>
@@ -159,6 +159,7 @@ void ClearChar(void) {
 void EnableBufferMode(void) {
 	printf("\033[?1049h");
 	fflush(stdout);
+	CORE.Window.alternateBuffModeActive = true;
 
 	atexit(DisableBufferMode);
 }
@@ -166,16 +167,15 @@ void EnableBufferMode(void) {
 void DisableBufferMode(void) {
 	printf("\033[?1049l");
 	fflush(stdout);
+	CORE.Window.alternateBuffModeActive = false;
 }
 
 void ToggleBufferMode(void) {
 	if(!CORE.Window.alternateBuffModeActive) {
 		EnableBufferMode();
-		CORE.Window.alternateBuffModeActive = true;
 	}
 	else {
 		DisableBufferMode();
-		CORE.Window.alternateBuffModeActive = false;
 	}
 }
 
@@ -214,9 +214,6 @@ void EnableRawMode(void) {
 		// Set flags to current flags + O_NONBLOCK(So no waiting for \n to return)
 		fcntl(STDIN_FILENO, F_SETFL, flags | O_NONBLOCK);
 
-		// Make sure we restore the terminal when program exits
-		atexit(DisableRawMode);
-
 
 	#elif defined(_WIN32) || defined(_WIN64)
 
@@ -229,10 +226,14 @@ void EnableRawMode(void) {
     	raw |= ENABLE_PROCESSED_INPUT;
 
     	SetConsoleMode(hIn, raw);
-    	atexit(DisableRawMode);
 
 
 	#endif
+
+	CORE.Window.rawModeActive = true;
+
+	// Make sure we restore the terminal when program exits
+	atexit(DisableRawMode);
 }
 
 void DisableRawMode(void) {
@@ -256,6 +257,8 @@ void DisableRawMode(void) {
 
 
 	#endif
+
+	CORE.Window.rawModeActive = false;
 }
 
 int GetKey(void) {
@@ -447,10 +450,8 @@ int GetKey(void) {
 void ToggleRawMode(void) {
 	if(!CORE.Window.rawModeActive) {
 		EnableRawMode();
-		CORE.Window.rawModeActive = true;
 	}
 	else {
 		EnableRawMode();
-		CORE.Window.rawModeActive = false;
 	}
 }

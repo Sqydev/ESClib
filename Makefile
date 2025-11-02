@@ -1,5 +1,5 @@
 # Paths
-SRC_DIR := src/core
+SRC_DIR := src
 OBJ_DIR := obj
 LIB_DIR_LINUX := lib/linux
 LIB_DIR_WINDOWS := lib/windows

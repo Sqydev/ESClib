@@ -13,13 +13,13 @@ void AltBuffModeSwitchTest() {
 	printf("\nEnter to switch, Esc to end: ");
 	fflush(stdout);
 
-	ToggleBufferMode();
-	ClearScreen();
+	//ToggleBufferMode();
+	//ClearScreen();
 	
 	while(1) {
 		gotkey = GetKey();
 
-		if(gotkey == KEY_ENTER) { ToggleBufferMode(); ClearScreen(); continue; }
+		if(gotkey == KEY_ENTER) { ToggleBufferMode(); }
 		if(gotkey == KEY_ESC) { break; }
 
 		usleep(Superfps);
@@ -79,11 +79,7 @@ void GetKeyTest() {
 
 		if(gototototor != KEY_NULL) {
 			ClearLine();
-			printf("| %c <- From lib |", gototototor);
-		}
-		if(gototototor == KEY_TAB) {
-			ClearLine();
-			printf("TAB!");
+			printf("| %d <- From lib |", gototototor);
 		}
 		if(gototototor == KEY_ESC) {
 			break;
