@@ -14,7 +14,7 @@ typedef struct color {
 
 
 void InitTui(unsigned int fps);
-void CloseTui(unsigned int fps);
+void CloseTui(void);
 
 void ToggleBufferMode(void);
 void EnableBufferMode(void);

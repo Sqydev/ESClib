@@ -22,6 +22,7 @@
 typedef struct CoreData {
 	struct {
 		color backgroundColor;
+		bool shouldClose;
 		bool alternateBuffModeActive;
 		bool rawModeActive;
 	} Window;
@@ -49,6 +50,8 @@ void InitTui(unsigned int fps) {
 
 	CORE.Window.backgroundColor = (color){0, 0, 0};
 
+	CORE.Window.shouldClose = false;
+
 	EnableBufferMode();
 
 	EnableRawMode();
@@ -58,6 +61,9 @@ void InitTui(unsigned int fps) {
 	FillScreen(CORE.Window.backgroundColor);
 }
 
+void CloseTui(void) {
+	CORE.Window.shouldClose = false;
+}
 
 
 void SetBackgroundColor(color Color) {
@@ -120,6 +126,7 @@ void FillScreen(color Color) {
 void ClearBackground(color Color) {
 	ClearScreen();
 	FillScreen(Color);
+	SetBackgroundColor(Color);
 }
 
 
