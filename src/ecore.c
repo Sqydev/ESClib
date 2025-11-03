@@ -23,9 +23,9 @@ typedef struct CoreData {
 	struct {
 		color backgroundColor;
 		bool shouldClose;
-		bool alternateBuffModeActive;
+		bool alternateBufferModeActive;
 		bool rawModeActive;
-	} Window;
+	} Tui;
 	struct {
 		#if defined(__APPLE__) || defined(__linux__)
 
@@ -38,19 +38,41 @@ typedef struct CoreData {
 		#endif
 	} Terminal;
 	struct {
+		vector2 currentPosition;
+		intvector2 currentTerminalPosition;
+		vector2 lockedPosition;
+		bool hidden;
+		bool locked;
+	} Cursor;
+	struct {
 		unsigned int targetFPS;
 	} Time;
 } CoreData;
 
 CoreData CORE = { 0 };
 
+
+
+
 // TODO: WHEN DOING LIB WHEN INITING MAKE IT SO IT SETS DEAFOULT COLOR AND THEN IN FILLSCREEN YOU CAN MAKE IT FULLY WORK
 void InitTui(unsigned int fps) {
+
+	#if defined(_WIN32) || defined(_WIN64)
+	
+		HANDLE hOut = GetStdHandle(STD_OUTPUT_HANDLE);
+    	DWORD dwMode = 0;
+    	GetConsoleMode(hOut, &dwMode);
+    	SetConsoleMode(hOut, dwMode | ENABLE_VIRTUAL_TERMINAL_PROCESSING);
+	
+	#endif
+
 	CORE.Time.targetFPS = fps;
 
-	CORE.Window.backgroundColor = (color){0, 0, 0};
+	CORE.Tui.backgroundColor = (color){0, 0, 0};
 
-	CORE.Window.shouldClose = false;
+	CORE.Tui.shouldClose = false;
+
+	CORE.Cursor.hidden = false;
 
 	EnableBufferMode();
 
@@ -58,19 +80,130 @@ void InitTui(unsigned int fps) {
 
 	ClearScreen();
 
-	FillScreen(CORE.Window.backgroundColor);
+	SetCursorPosition(0, 0);
+
+	SetLockedCursorPosition(0, 0);
+
+	atexit(CloseTui);
 }
 
 void CloseTui(void) {
-	CORE.Window.shouldClose = false;
+
+	#if defined(_WIN32) || defined(_WIN64)
+	
+		HANDLE hOut = GetStdHandle(STD_OUTPUT_HANDLE);
+    	DWORD dwMode = 0;
+    	GetConsoleMode(hOut, &dwMode);
+    	SetConsoleMode(hOut, dwMode & ~ENABLE_VIRTUAL_TERMINAL_PROCESSING);
+	
+	#endif
+
+	CORE.Tui.shouldClose = false;
 }
+
+void SetTargetFps(int fps) { CORE.Time.targetFPS = fps; }
+
+
+
+
+bool TuiShouldClose(void) { return CORE.Tui.shouldClose; }
+
+bool IsAlternativeBufferOn(void) {
+	return CORE.Tui.alternateBufferModeActive;
+}
+
+bool IsRawModeOn(void) {
+	return CORE.Tui.rawModeActive;
+}
+
+
+
+
+int GetTuiWidth(void) {
+	#if defined(__APPLE__) || defined(__linux__)
+
+		struct winsize sizers;
+
+		ioctl(STDOUT_FILENO, TIOCGWINSZ, &sizers);
+
+		return sizers.ws_col;
+
+	#elif defined(_WIN32) || defined(_WIN64)
+
+		CONSOLE_SCREEN_BUFFER_INFO csbi;
+		
+		if (GetConsoleScreenBufferInfo(GetStdHandle(STD_OUTPUT_HANDLE), &csbi)) {
+			return csbi.srWindow.Right - csbi.srWindow.Left + 1;
+		}
+
+	#endif
+}
+
+int GetTuiHeight(void) {
+	#if defined(__APPLE__) || defined(__linux__)
+
+		struct winsize sizers;
+
+		ioctl(STDOUT_FILENO, TIOCGWINSZ, &sizers);
+
+		return sizers.ws_row;
+
+	#elif defined(_WIN32) || defined(_WIN64)
+
+		CONSOLE_SCREEN_BUFFER_INFO csbi;
+
+		GetConsoleScreenBufferInfo(GetStdHandle(STD_OUTPUT_HANDLE), &csbi);
+		
+		return csbi.srWindow.Bottom - csbi.srWindow.Top + 1;
+
+	#endif
+}
+
+vector2 GetCursorPosition(void) {
+	return CORE.Cursor.currentPosition;
+}
+
+vector2 GetLockedCursorPosition(void) {
+	return CORE.Cursor.lockedPosition;
+}
+
+
+
+
+void ShowCursor(void) {
+	printf("\033[?25h");
+	fflush(stdout);
+
+	CORE.Cursor.hidden = false;
+}
+
+void HideCursor(void) {
+	printf("\033[?25l");
+	fflush(stdout);
+
+	CORE.Cursor.hidden = true;
+}
+
+void LockCursor(void) {
+	CORE.Cursor.locked = true;
+}
+
+void UnlockCursor(void) {
+	CORE.Cursor.locked = false;
+}
+
+
 
 
 void SetBackgroundColor(color Color) {
 	printf("\033[48;2;%d;%d;%dm", Color.red, Color.green, Color.blue);
+	fflush(stdout);
+	CORE.Tui.backgroundColor = Color;
 }
 
-void FillScreen(color Color) {
+void ClearBackground(color Color) {
+	ClearScreen();
+
 	#if defined(__APPLE__) || defined(__linux__)
 
 
@@ -80,7 +213,7 @@ void FillScreen(color Color) {
 		ioctl(STDOUT_FILENO, TIOCGWINSZ, &sizers);
 
 		// Chainge color of background in terminal
-		printf("\033[48;2;%d;%d;%dm", Color.red, Color.green, Color.blue);
+		SetBackgroundColor(Color);
 
 		for (int i = 0; i < sizers.ws_row; i++) {
 			for (int j = 0; j < sizers.ws_col; j++) {
@@ -88,27 +221,19 @@ void FillScreen(color Color) {
 			}
         	putchar('\n');
 		}
-
-		printf("\033[48;2;%d;%d;%dm", CORE.Window.backgroundColor.red, CORE.Window.backgroundColor.green, CORE.Window.backgroundColor.blue);
+		fflush(stdout);
 
 
 	#elif defined(_WIN32) || defined(_WIN64)
 	// TODO: Chatgbt port, litteraly FillScreen for linux ctrl+c ctrl+v to chatgbt. Why? cuz fuck microsoft. I'll do it myself someday.
 
 
-		HANDLE hOut = GetStdHandle(STD_OUTPUT_HANDLE);
-    
-    	DWORD dwMode = 0;
-    	GetConsoleMode(hOut, &dwMode);
-    	dwMode |= ENABLE_VIRTUAL_TERMINAL_PROCESSING;
-    	SetConsoleMode(hOut, dwMode);
-
     	CONSOLE_SCREEN_BUFFER_INFO csbi;
     	GetConsoleScreenBufferInfo(hOut, &csbi);
     	int rows = csbi.srWindow.Bottom - csbi.srWindow.Top + 1;
     	int cols = csbi.srWindow.Right - csbi.srWindow.Left + 1;
 
-    	printf("\033[48;2;%d;%d;%dm", color.red, color.green, color.blue);
+		SetBackgroundColor(Color);
 
     	for (int i = 0; i < rows; i++) {
         	for (int j = 0; j < cols; j++) {
@@ -116,20 +241,11 @@ void FillScreen(color Color) {
 			}
         	putchar('\n');
     	}
-
-		printf("\033[48;2;%d;%d;%dm", CORE.Window.backgroundColor.red, CORE.Window.backgroundColor.green, CORE.Window.backgroundColor.blue);
+		fflush(stdout);
 
 
 	#endif
 }
-
-void ClearBackground(color Color) {
-	ClearScreen();
-	FillScreen(Color);
-	SetBackgroundColor(Color);
-}
-
-
 
 void ClearScreen(void) {
 	printf("\033[2J\033[H");
@@ -148,31 +264,96 @@ void ClearChar(void) {
 
 
 
-void SetCursorPosition(int x, int y) {
-	printf("\033[%d;%dH", y, x);
+void SetCursorPosition(float x, float y) {
+	printf("\033[%d;%dH", (int)y, (int)x);
 	fflush(stdout);
+
+	CORE.Cursor.currentPosition.x = x;
+	CORE.Cursor.currentPosition.y = y;
+
+	CORE.Cursor.currentTerminalPosition.x = (int)x;
+	CORE.Cursor.currentTerminalPosition.y = (int)y;
 }
 
-void MoveCursorDirectional(int up, int down, int left, int right) {
-	if (up > 0) printf("\033[%dA", up);
-	if (down > 0) printf("\033[%dB", down);
-	if (right > 0) printf("\033[%dC", right);
-	if (left > 0) printf("\033[%dD", left);
-	fflush(stdout);
+void SetLockedCursorPosition(float x, float y) {
+	CORE.Cursor.lockedPosition.x = x;
+	CORE.Cursor.lockedPosition.y = y;
 }
 
-void MoveCursor(int x, int y) {
-	if (y < 0) printf("\033[%dA", -y);
-	if (y > 0) printf("\033[%dB", y);
-	if (x > 0) printf("\033[%dC", x);
-	if (x < 0) printf("\033[%dD", -x);
-	fflush(stdout);
+void MoveCursorDirectional(float up, float down, float left, float right) {
+    if (up > 0) {
+        if (CORE.Cursor.locked) {
+            CORE.Cursor.lockedPosition.y -= up;
+        } else {
+            printf("\033[%dA", (int)up);
+            CORE.Cursor.currentPosition.y -= up;
+            CORE.Cursor.currentTerminalPosition.y -= (int)up;
+        }
+    }
+    if (down > 0) {
+        if (CORE.Cursor.locked) {
+            CORE.Cursor.lockedPosition.y += down;
+        } else {
+            printf("\033[%dB", (int)down);
+            CORE.Cursor.currentPosition.y += down;
+            CORE.Cursor.currentTerminalPosition.y += (int)down;
+        }
+    }
+    if (right > 0) {
+        if (CORE.Cursor.locked) {
+            CORE.Cursor.lockedPosition.x += right;
+        } else {
+            printf("\033[%dC", (int)right);
+            CORE.Cursor.currentPosition.x += right;
+            CORE.Cursor.currentTerminalPosition.x += (int)right;
+        }
+    }
+    if (left > 0) {
+        if (CORE.Cursor.locked) {
+            CORE.Cursor.lockedPosition.x -= left;
+        } else {
+            printf("\033[%dD", (int)left);
+            CORE.Cursor.currentPosition.x -= left;
+            CORE.Cursor.currentTerminalPosition.x -= (int)left;
+        }
+    }
+    fflush(stdout);
 }
+
+void MoveCursor(float x, float y) {
+    if (CORE.Cursor.locked) {
+        CORE.Cursor.lockedPosition.x += x;
+        CORE.Cursor.lockedPosition.y += y;
+    } else {
+        if (y < 0) {
+            printf("\033[%dA", (int)-y);
+            CORE.Cursor.currentPosition.y += y;
+            CORE.Cursor.currentTerminalPosition.y += (int)y;
+        }
+        if (y > 0) {
+            printf("\033[%dB", (int)y);
+            CORE.Cursor.currentPosition.y += y;
+            CORE.Cursor.currentTerminalPosition.y += (int)y;
+        }
+        if (x > 0) {
+            printf("\033[%dC", (int)x);
+            CORE.Cursor.currentPosition.x += x;
+            CORE.Cursor.currentTerminalPosition.x += (int)x;
+        }
+        if (x < 0) {
+            printf("\033[%dD", (int)-x);
+            CORE.Cursor.currentPosition.x += x;
+            CORE.Cursor.currentTerminalPosition.x += (int)x;
+        }
+        fflush(stdout);
+    }
+}
+
 
 void EnableBufferMode(void) {
 	printf("\033[?1049h");
 	fflush(stdout);
-	CORE.Window.alternateBuffModeActive = true;
+	CORE.Tui.alternateBufferModeActive = true;
 
 	atexit(DisableBufferMode);
 }
@@ -180,11 +361,11 @@ void EnableBufferMode(void) {
 void DisableBufferMode(void) {
 	printf("\033[?1049l");
 	fflush(stdout);
-	CORE.Window.alternateBuffModeActive = false;
+	CORE.Tui.alternateBufferModeActive = false;
 }
 
 void ToggleBufferMode(void) {
-	if(!CORE.Window.alternateBuffModeActive) {
+	if(!CORE.Tui.alternateBufferModeActive) {
 		EnableBufferMode();
 	}
 	else {
@@ -243,7 +424,7 @@ void EnableRawMode(void) {
 
 	#endif
 
-	CORE.Window.rawModeActive = true;
+	CORE.Tui.rawModeActive = true;
 
 	// Make sure we restore the terminal when program exits
 	atexit(DisableRawMode);
@@ -271,7 +452,7 @@ void DisableRawMode(void) {
 
 	#endif
 
-	CORE.Window.rawModeActive = false;
+	CORE.Tui.rawModeActive = false;
 }
 
 int GetKey(void) {
@@ -461,7 +642,7 @@ int GetKey(void) {
 }
 
 void ToggleRawMode(void) {
-	if(!CORE.Window.rawModeActive) {
+	if(!CORE.Tui.rawModeActive) {
 		EnableRawMode();
 	}
 	else {

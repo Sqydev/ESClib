@@ -11,10 +11,66 @@ typedef struct color {
 	unsigned char blue;
 } color;
 
+typedef struct vector2 {
+	float x;
+	float y;
+} vector2;
+
+typedef struct vector3 {
+	float x;
+	float y;
+	float z;
+} vector3;
+
+typedef struct vector4 {
+	float x;
+	float y;
+	float z;
+	float w;
+} vector4;
+
+typedef struct intvector2 {
+	int x;
+	int y;
+} intvector2;
+
+typedef struct intvector3 {
+	int x;
+	int y;
+	int z;
+} intvector3;
+
+typedef struct intvector4 {
+	int x;
+	int y;
+	int z;
+	int w;
+} intvector4;
+
 
 
 void InitTui(unsigned int fps);
 void CloseTui(void);
+void SetTargetFps(int fps);
+
+bool TuiShouldClose(void);
+bool IsAlternativeBufferOn(void);
+bool IsRawModeOn(void);
+
+int GetTuiWidth(void);
+int GetTuiHeight(void);
+vector2 GetCursorPosition(void);
+vector2 GetLockedCursorPosition(void);
+
+void SetCursorPosition(float x, float y);
+void SetLockedCursorPosition(float x, float y);
+void MoveCursorDirectional(float up, float down, float left, float right);
+void MoveCursor(float x, float y);
+
+void ShowCursor(void);
+void HideCursor(void);
+void LockCursor(void);
+void UnlockCursor(void);
 
 void ToggleBufferMode(void);
 void EnableBufferMode(void);
@@ -25,16 +81,11 @@ void EnableRawMode(void);
 void DisableRawMode(void);
 
 void SetBackgroundColor(color Color);
-void FillScreen(color Color);
 void ClearBackground(color Color);
 
 void ClearScreen(void);
 void ClearLine(void);
 void ClearChar(void);
-
-void SetCursorPosition(int x, int y);
-void MoveCursorDirectional(int up, int down, int left, int right);
-void MoveCursor(int x, int y);
 
 int GetKey(void);
 
