@@ -7,7 +7,7 @@ TESTER_SRC := tester/src
 TESTER_BIN := tester/compiled
 
 # Libfile's names
-LIB_NAME := libTuiUtils
+LIB_NAME := libesclib
 STATIC_LIN := $(LIB_NAME).a
 SHARED_LIN := $(LIB_NAME).so
 SHARED_WIN := $(LIB_NAME).dll
@@ -47,7 +47,7 @@ full: linux win
 # ------------------ Tester ------------------
 tester: $(TESTER_BIN)/$(SHARED_LIN)
 	@mkdir -p $(TESTER_BIN)
-	$(CC) $(CFLAGS) $(TESTER_SRC)/*.c -L$(TESTER_BIN) -lTuiUtils -o $(TESTER_BIN)/tester -Wl,-rpath,$(abspath $(TESTER_BIN))
+	$(CC) $(CFLAGS) $(TESTER_SRC)/*.c -L$(TESTER_BIN) -lesclib -o $(TESTER_BIN)/tester -Wl,-rpath,$(abspath $(TESTER_BIN))
 
 # Tester's .so builder, so .so of tester is in tester/compiled not lib/
 $(TESTER_BIN)/$(SHARED_LIN): $(OBJS)
