@@ -78,4 +78,6 @@ For example:
 - If I then call `HideCursor()`, it will add to the backbuffer: "\033[?25l"  
 
 When `EndDrawing()` is triggered, it will simply `printf` the contents of the backbuffer to the terminal.
+
+ALSO: USE WRITE SYSCALL AND WINDOWS'S WRITE VERSION INSTEAD OF PRINTF IN PRINTING BACKBUFFOR. BACKBUFFOR SHOULD BE IN CORE STRUCT
 }
