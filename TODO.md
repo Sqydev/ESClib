@@ -10,6 +10,7 @@ TODO:
 - Make #define to enums
 - Make #ifdefs better especialy in GetKey()(cuz you can do only one in begining and not do 2 long switches for win and lin. just optim it)
 - Clean .c to fit .h
+- Make fillscreen into ClearBg(More than name)
 
 REMAMBER:
 - Remamber to make sleep to make fps when making lib
