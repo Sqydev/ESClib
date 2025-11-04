@@ -48,10 +48,14 @@ typedef struct intvector4 {
 } intvector4;
 
 
+void WriteToBackBuffor(char* to_add, size);
 
 void InitTui(unsigned int fps);
 void CloseTui(void);
 void SetTargetFps(int fps);
+
+void BeginDrawing(void);
+void EndDrawing(void);
 
 bool TuiShouldClose(void);
 bool IsAlternativeBufferOn(void);
