@@ -15,7 +15,8 @@ TODO:
 - FAST: GOTO DBP
 - Rewrite tester after making begindrawing && end 
 - Make disable modes in closetui
-- Make it so EndDrawing also moves cursor to currentCursorTerminalPosition
+- MAKE GETKEY RETURN KEY THAT'S PRESSED NOT LAST KEY THAT'S PRESSED
+- MAKE PRINTF INTO WRITEINTOBACKBUFFOR();
 
 REMAMBER:
 - Remamber to make sleep to make fps when making lib
