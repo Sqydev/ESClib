@@ -134,6 +134,8 @@ void BeginDrawing(void) {
 }
 
 void EndDrawing(void) {
+	MoveCursor(CORE.Cursor.currentTerminalPosition.x, CORE.Cursor.currentTerminalPosition.y);
+
 	#if defined(__APPLE__) || defined(__linux__)
 
 		write(STDOUT_FILENO, CORE.Backbuffor.backBuffor, CORE.Backbuffor.lenght);
@@ -319,7 +321,7 @@ void ClearBackground(color Color) {
 }
 
 void ClearScreen(void) {
-	printf("\033[2J\033[H");
+	WriteToBackBuffor("\033[2J\033[H", 7);
 	fflush(stdout);
 }
 

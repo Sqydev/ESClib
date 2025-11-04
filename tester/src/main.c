@@ -81,6 +81,9 @@ void GetKeyTest() {
 			ClearLine();
 			printf("| %d <- From lib |", gototototor);
 		}
+		else {
+			ClearLine();
+		}
 		if(gototototor == KEY_ESC) {
 			break;
 		}
@@ -208,7 +211,7 @@ void TuiLoopTest() {
 
 		ClearBackground((color){0, 0, 0});
 
-		WriteToBackBuffor("Pressed W SPEED!", 8+1+6+2);
+		WriteToBackBuffor("Pressed W SPEED!", 17);
 		
 		EndDrawing();
 	}
