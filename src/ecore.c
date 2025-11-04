@@ -21,6 +21,7 @@
 
 typedef struct CoreData {
 	struct {
+		char* backBuffor;
 		color backgroundColor;
 		bool shouldClose;
 		bool alternateBufferModeActive;
@@ -102,6 +103,17 @@ void CloseTui(void) {
 }
 
 void SetTargetFps(int fps) { CORE.Time.targetFPS = fps; }
+
+
+
+
+void BeginDrawing(void) {
+
+}
+
+void EndDrawing(void) {
+
+}
 
 
 
