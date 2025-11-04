@@ -13,6 +13,7 @@
 #include <sys/ioctl.h>
 #include <termios.h>
 #include <fcntl.h>
+#include <time.h>
 
 #elif defined(_WIN32) || defined(_WIN64)
 
@@ -54,11 +55,8 @@ typedef struct CoreData {
 	struct {
 		double current;
 		double previous;
-		double update;
-		double draw;
-		double frame;
+		double delta;
 		double target;
-		unsigned long long int base;
 		unsigned int frameCounter;
 	} Time;
 } CoreData;
@@ -80,13 +78,21 @@ void InitTui(int fps) {
 	
 	#endif
 
+	CORE.Time.current = GetTime();
+
+	CORE.Time.previous = CORE.Time.current;
+
+	CORE.Time.frameCounter = 0;
+
+	CORE.Time.delta = 0;
+
+	SetTargetFps(fps);
+
 	CORE.Tui.backgroundColor = (color){0, 0, 0};
 
 	CORE.Tui.shouldClose = false;
 
 	CORE.Cursor.hidden = false;
-
-	SetTargetFps(fps);
 
 	EnableBufferMode();
 
@@ -136,12 +142,36 @@ void EndDrawing(void) {
 
 		DWORD written = 0;
 		HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
-
-        if(hConsole != INVALID_HANDLE_VALUE) {
-    		WriteFile(GetStdHandle(STD_OUTPUT_HANDLE), CORE.Backbuffor.backBuffor, CORE.Backbuffor.lenght, &written, NULL);
+		
+		if (hConsole != INVALID_HANDLE_VALUE) {
+    		WriteFile(hConsole, CORE.Backbuffor.backBuffor, CORE.Backbuffor.lenght, &written, NULL);
 		}
 
 	#endif
+
+	CORE.Time.previous = CORE.Time.current;
+    CORE.Time.current = GetTime();
+
+	CORE.Time.delta = CORE.Time.current - CORE.Time.previous;
+
+	if(CORE.Time.delta < CORE.Time.target) {
+		double sleepTime = (CORE.Time.target - CORE.Time.delta);
+
+		#if defined(__APPLE__) || defined(__linux__)
+		
+			usleep((useconds_t)(sleepTime * 1000000.0));
+
+		#elif defined(_WIN32) || defined(_WIN64)
+		
+			Sleep((DWORD)(sleepTime * 1000.0));
+
+		#endif
+
+		CORE.Time.current = GetTime();
+        CORE.Time.delta = CORE.Time.current - CORE.Time.previous;
+	}
+
+	CORE.Time.frameCounter++;
 }
 
 
@@ -678,6 +708,30 @@ int GetKey(void) {
 		}
 		return gotchar;
 
+
+	#endif
+}
+
+double GetTime(void) {
+	#if defined(__APPLE__) || defined(__linux__)
+	
+		struct timespec ts;
+    	clock_gettime(CLOCK_MONOTONIC, &ts);
+    	return ts.tv_sec + ts.tv_nsec / 1e9;
+
+	#elif defined(_WIN32) || defined(_WIN64)
+		// TODO: Also chatgbt things
+	
+		static LARGE_INTEGER frequency;
+    	static BOOL initialized = FALSE;
+    	if (!initialized) {
+    	   	QueryPerformanceFrequency(&frequency);
+    	    initialized = TRUE;
+    	}
+
+    	LARGE_INTEGER counter;
+    	QueryPerformanceCounter(&counter);
+    	return (double)counter.QuadPart / (double)frequency.QuadPart;
 
 	#endif
 }

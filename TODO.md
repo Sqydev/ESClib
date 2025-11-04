@@ -14,6 +14,8 @@ TODO:
 - Find better ways to do Move and Set Cursor fns, cuz there for sure is better way to do same thing that I did when i was tired, and check if it works
 - FAST: GOTO DBP
 - Rewrite tester after making begindrawing && end 
+- Make disable modes in closetui
+- Make it so EndDrawing also moves cursor to currentCursorTerminalPosition
 
 REMAMBER:
 - Remamber to make sleep to make fps when making lib
