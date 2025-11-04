@@ -17,6 +17,9 @@ TODO:
 - Make disable modes in closetui
 - MAKE GETKEY RETURN KEY THAT'S PRESSED NOT LAST KEY THAT'S PRESSED
 - MAKE PRINTF INTO WRITEINTOBACKBUFFOR();
+- Find what makes getkey and just LoopTest break(it's propably becouse most functions doesn't write to backbuffer yet(still do printf)) way to give vars to WritetoTui: {
+    just make char* and do sprintf magic;
+}
 
 REMAMBER:
 - Remamber to make sleep to make fps when making lib
