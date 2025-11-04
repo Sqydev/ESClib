@@ -290,9 +290,9 @@ void ClearBackground(color Color) {
 
 		for (int i = 0; i < sizers.ws_row; i++) {
 			for (int j = 0; j < sizers.ws_col; j++) {
-            	putchar(' ');
+            	WriteToBackBuffor(" ", 1);
 			}
-        	putchar('\n');
+        	WriteToBackBuffor("\n", 1);
 		}
 		fflush(stdout);
 
@@ -310,9 +310,9 @@ void ClearBackground(color Color) {
 
     	for (int i = 0; i < rows; i++) {
         	for (int j = 0; j < cols; j++) {
-            	putchar(' ');
+            	WriteToBackBuffor(" ", 1);
 			}
-        	putchar('\n');
+        	WriteToBackBuffor("\n", 1);
     	}
 		fflush(stdout);
 
@@ -322,16 +322,14 @@ void ClearBackground(color Color) {
 
 void ClearScreen(void) {
 	WriteToBackBuffor("\033[2J\033[H", 7);
-	fflush(stdout);
 }
 
 void ClearLine(void) {
-	printf("\r\033[2K");
-	fflush(stdout);
+	WriteToBackBuffor("\r\033[2K", 5);
 }
 
 void ClearChar(void) {
-	printf("\033[D\033[K");
+	WriteToBackBuffor("\033[D\033[K", 6);
 	fflush(stdout);
 }
 
@@ -748,7 +746,7 @@ void ToggleRawMode(void) {
 }
 
 void WriteToBackBuffor(const char* to_add, size_t lenght) {
-	size_t required = CORE.Backbuffor.lenght + lenght + 1;
+	size_t required = CORE.Backbuffor.lenght + lenght;
 
 	if(required > CORE.Backbuffor.capacity) {
 		size_t new_capacity = CORE.Backbuffor.capacity * 2;
