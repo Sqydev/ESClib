@@ -20,6 +20,8 @@ TODO:
 - Find what makes getkey and just LoopTest break(it's propably becouse most functions doesn't write to backbuffer yet(still do printf)) way to give vars to WritetoTui: {
     just make char* and do sprintf magic;
 }
+- See what make's DisableBufferMode not work
+- Ok, fixed flicering in test(it was ClearBg) NOW CHECK WHAT IS STILL TO REPAIR
 
 REMAMBER:
 - Remamber to make sleep to make fps when making lib
