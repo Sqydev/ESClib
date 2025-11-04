@@ -1,5 +1,7 @@
 #include "../include/esclib.h"
+#include "PrivateErrorProtocols.h"
 
+#include <string.h>
 #include <stdio.h>
 #include <stdbool.h>
 #include <stdlib.h>
@@ -22,6 +24,10 @@
 typedef struct CoreData {
 	struct {
 		char* backBuffor;
+		size_t lenght;
+		size_t capacity;
+	} Backbuffor;
+	struct {
 		color backgroundColor;
 		bool shouldClose;
 		bool alternateBufferModeActive;
@@ -46,7 +52,14 @@ typedef struct CoreData {
 		bool locked;
 	} Cursor;
 	struct {
-		unsigned int targetFPS;
+		double current;
+		double previous;
+		double update;
+		double draw;
+		double frame;
+		double target;
+		unsigned long long int base;
+		unsigned int frameCounter;
 	} Time;
 } CoreData;
 
@@ -56,7 +69,7 @@ CoreData CORE = { 0 };
 
 
 // TODO: WHEN DOING LIB WHEN INITING MAKE IT SO IT SETS DEAFOULT COLOR AND THEN IN FILLSCREEN YOU CAN MAKE IT FULLY WORK
-void InitTui(unsigned int fps) {
+void InitTui(int fps) {
 
 	#if defined(_WIN32) || defined(_WIN64)
 	
@@ -67,13 +80,13 @@ void InitTui(unsigned int fps) {
 	
 	#endif
 
-	CORE.Time.targetFPS = fps;
-
 	CORE.Tui.backgroundColor = (color){0, 0, 0};
 
 	CORE.Tui.shouldClose = false;
 
 	CORE.Cursor.hidden = false;
+
+	SetTargetFps(fps);
 
 	EnableBufferMode();
 
@@ -102,17 +115,33 @@ void CloseTui(void) {
 	CORE.Tui.shouldClose = false;
 }
 
-void SetTargetFps(int fps) { CORE.Time.targetFPS = fps; }
+void SetTargetFps(int fps) {
+	if(fps < 1) { CORE.Time.target = 0.0; }
+	else { CORE.Time.target = 1.0 / (double)fps; }
+}
 
 
 
 
 void BeginDrawing(void) {
-
+	CORE.Backbuffor.lenght = 0;
 }
 
 void EndDrawing(void) {
+	#if defined(__APPLE__) || defined(__linux__)
 
+		write(STDOUT_FILENO, CORE.Backbuffor.backBuffor, CORE.Backbuffor.lenght);
+
+	#elif defined(_WIN32) || defined(_WIN64)
+
+		DWORD written = 0;
+		HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+
+        if(hConsole != INVALID_HANDLE_VALUE) {
+    		WriteFile(GetStdHandle(STD_OUTPUT_HANDLE), CORE.Backbuffor.backBuffor, CORE.Backbuffor.lenght, &written, NULL);
+		}
+
+	#endif
 }
 
 
@@ -660,4 +689,23 @@ void ToggleRawMode(void) {
 	else {
 		EnableRawMode();
 	}
+}
+
+void WriteToBackBuffor(const char* to_add, size_t lenght) {
+	size_t required = CORE.Backbuffor.lenght + lenght + 1;
+
+	if(required > CORE.Backbuffor.capacity) {
+		size_t new_capacity = CORE.Backbuffor.capacity * 2;
+		if(new_capacity < required) new_capacity = required;
+
+		char* newbackbuffor = realloc(CORE.Backbuffor.backBuffor, new_capacity);
+		ReallocErrorProtocolVoid(newbackbuffor);
+
+		CORE.Backbuffor.backBuffor = newbackbuffor;
+		CORE.Backbuffor.capacity = new_capacity;
+	}
+
+	memcpy(CORE.Backbuffor.backBuffor + CORE.Backbuffor.lenght, to_add, lenght);
+	
+	CORE.Backbuffor.lenght += lenght;
 }

@@ -2,6 +2,7 @@
 #define ESCLIB_H
 
 #include <stdbool.h>
+#include <stddef.h>
 
 // NOTE: Order: Structs, macros, itp THEN functions
 
@@ -48,9 +49,7 @@ typedef struct intvector4 {
 } intvector4;
 
 
-void WriteToBackBuffor(char* to_add, size);
-
-void InitTui(unsigned int fps);
+void InitTui(int fps);
 void CloseTui(void);
 void SetTargetFps(int fps);
 
@@ -92,6 +91,9 @@ void ClearLine(void);
 void ClearChar(void);
 
 int GetKey(void);
+
+// Super extra fns
+void WriteToBackBuffor(const char* to_add, size_t lenght);
 
 
 // KEYS(by chatgbt becouse I'm not crazy enough to write this myself)
