@@ -170,7 +170,49 @@ void BackbufforTest() {
 
 	WriteToBackBuffor("LANGUAGE", 8);
 
-	printf("I forgot that CORE ain't avaliable outsite the lib but if it hasn't crashed yet it propably works?");
+	EndDrawing();
+
+	printf("\nAnd now without double buffor(btw. I've done it with write cuz most terminals make semi double bufforing:) but the tty doesn't :0)\n");
+
+	write(STDOUT_FILENO, "I", 1);
+	usleep(500000);
+	write(STDOUT_FILENO, "LOVE", 4);
+	usleep(500000);
+	write(STDOUT_FILENO, "THE", 3);
+	usleep(500000);
+	write(STDOUT_FILENO, "C", 1);
+	usleep(500000);
+	write(STDOUT_FILENO, "PROGRAMING", 10);
+	usleep(500000);
+	write(STDOUT_FILENO, "LANGUAGE", 8);
+	usleep(500000);
+}
+
+void TuiLoopTest() {
+
+	// BTW. THIS IS ABSOLUTE GARBAGE MADE IN NEED OF TESTING WITHOUT MAKING PROPER TOOLS YET
+	// BTW. THIS IS ABSOLUTE GARBAGE MADE IN NEED OF TESTING WITHOUT MAKING PROPER TOOLS YET
+	// BTW. THIS IS ABSOLUTE GARBAGE MADE IN NEED OF TESTING WITHOUT MAKING PROPER TOOLS YET
+	// BTW. THIS IS ABSOLUTE GARBAGE MADE IN NEED OF TESTING WITHOUT MAKING PROPER TOOLS YET
+
+	int tfps = 0;
+
+	printf("Give targetfps(And btw. This test will do GetKey): ");
+
+	scanf("%d", &tfps);
+
+	InitTui(tfps);
+
+	while(!TuiShouldClose()) {
+		BeginDrawing();
+
+		ClearBackground((color){0, 0, 0});
+
+		WriteToBackBuffor("Pressed W SPEED!", 8+1+6+2);
+		
+		EndDrawing();
+	}
+	printf("ENDED");
 }
 
 int main() {
@@ -182,6 +224,7 @@ int main() {
 	printf("4. Funnyahh cursor movement trick test\n");
 	printf("5. ClearandFill test\n");
 	printf("6. Backbuffor WriteTo test\n");
+	printf("7. TuiLoop test\n");
 
 	printf("Input: ");
 	scanf("%d", &Input);
@@ -192,6 +235,7 @@ int main() {
 	else if(Input == 4) { FunnyCrsTest(); }
 	else if(Input == 5) { ClearandFillTest(); }
 	else if(Input == 6) { BackbufforTest(); }
+	else if(Input == 7) { TuiLoopTest(); }
 	
 	return 0;
 }

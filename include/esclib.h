@@ -91,6 +91,7 @@ void ClearLine(void);
 void ClearChar(void);
 
 int GetKey(void);
+double GetTime(void);
 
 // Super extra fns
 void WriteToBackBuffor(const char* to_add, size_t lenght);
