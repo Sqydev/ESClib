@@ -13,6 +13,7 @@ TODO:
 - Make more Is fuctions, especialy for cursor functions for example: IsCursorHidden/Locked, Idea to how to find ones todo, look at bools in CORE
 - Find better ways to do Move and Set Cursor fns, cuz there for sure is better way to do same thing that I did when i was tired, and check if it works
 - FAST: GOTO DBP
+- Rewrite tester after making begindrawing && end 
 
 REMAMBER:
 - Remamber to make sleep to make fps when making lib

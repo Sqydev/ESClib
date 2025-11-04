@@ -145,6 +145,34 @@ void ClearandFillTest() {
 	}
 }
 
+void BackbufforTest() {
+	printf("Adding word of ILOVETHECPROGRAMINGLANGUAGE every half a seccond(and then printing it)\n");
+
+	WriteToBackBuffor("I", 1);
+
+	usleep(500000);
+
+	WriteToBackBuffor("LOVE", 4);
+
+	usleep(500000);
+
+	WriteToBackBuffor("THE", 3);
+
+	usleep(500000);
+
+	WriteToBackBuffor("C", 1);
+
+	usleep(500000);
+
+	WriteToBackBuffor("PROGRAMING", 10);
+
+	usleep(500000);
+
+	WriteToBackBuffor("LANGUAGE", 8);
+
+	printf("I forgot that CORE ain't avaliable outsite the lib but if it hasn't crashed yet it propably works?");
+}
+
 int main() {
 	int Input = 0;
 
@@ -153,6 +181,7 @@ int main() {
 	printf("3. GetKey Test\n");
 	printf("4. Funnyahh cursor movement trick test\n");
 	printf("5. ClearandFill test\n");
+	printf("6. Backbuffor WriteTo test\n");
 
 	printf("Input: ");
 	scanf("%d", &Input);
@@ -162,6 +191,7 @@ int main() {
 	else if(Input == 3) { GetKeyTest(); }
 	else if(Input == 4) { FunnyCrsTest(); }
 	else if(Input == 5) { ClearandFillTest(); }
+	else if(Input == 6) { BackbufforTest(); }
 	
 	return 0;
 }
