@@ -49,7 +49,7 @@ typedef struct intvector4 {
 } intvector4;
 
 
-void InitTui(int fps);
+void InitTui(int fps, bool DisableSignals);
 void CloseTui(void);
 void SetTargetFps(int fps);
 

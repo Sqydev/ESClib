@@ -1,6 +1,7 @@
 #include "../include/esclib.h"
 #include "PrivateErrorProtocols.h"
 
+#include <signal.h>
 #include <string.h>
 #include <stdio.h>
 #include <stdbool.h>
@@ -44,6 +45,8 @@ typedef struct CoreData {
 			DWORD settings;
 
 		#endif
+
+		bool signalsOn;
 	} Terminal;
 	struct {
 		vector2 currentPosition;
@@ -66,8 +69,14 @@ CoreData CORE = { 0 };
 
 
 
-// TODO: WHEN DOING LIB WHEN INITING MAKE IT SO IT SETS DEAFOULT COLOR AND THEN IN FILLSCREEN YOU CAN MAKE IT FULLY WORK
-void InitTui(int fps) {
+static void SignalThingies(int signal) {
+	if(signal == SIGINT) {
+		CloseTui();
+		exit(0);
+	}
+}
+
+void InitTui(int fps, bool DisableSignals) {
 
 	#if defined(_WIN32) || defined(_WIN64)
 	
@@ -77,6 +86,18 @@ void InitTui(int fps) {
     	SetConsoleMode(hOut, dwMode | ENABLE_VIRTUAL_TERMINAL_PROCESSING);
 	
 	#endif
+
+	// TODO: Just delete EnableRaw&BufforMode and do it on Init&CloseTui.
+	if(!DisableSignals) {
+		CORE.Terminal.signalsOn = true;
+
+		signal(SIGINT, SignalThingies);
+
+		EnableRawMode();
+	}
+	else {
+		CORE.Terminal.signalsOn = false;
+	}
 
 	CORE.Time.current = GetTime();
 
@@ -96,8 +117,6 @@ void InitTui(int fps) {
 
 	EnableBufferMode();
 
-	EnableRawMode();
-
 	ClearScreen();
 
 	SetCursorPosition(0, 0);
@@ -108,6 +127,9 @@ void InitTui(int fps) {
 }
 
 void CloseTui(void) {
+	// DO NOT FLUSH FRAME!!!!!!!!!!!!
+	DisableBufferMode();
+	DisableRawMode();
 
 	#if defined(_WIN32) || defined(_WIN64)
 	
@@ -134,7 +156,7 @@ void BeginDrawing(void) {
 }
 
 void EndDrawing(void) {
-	MoveCursor(CORE.Cursor.currentTerminalPosition.x, CORE.Cursor.currentTerminalPosition.y);
+	SetCursorPosition(CORE.Cursor.currentTerminalPosition.x, CORE.Cursor.currentTerminalPosition.y);
 
 	#if defined(__APPLE__) || defined(__linux__)
 

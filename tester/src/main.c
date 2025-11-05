@@ -204,18 +204,24 @@ void TuiLoopTest() {
 
 	scanf("%d", &tfps);
 
-	InitTui(tfps);
+	InitTui(tfps, false);
 
 	while(!TuiShouldClose()) {
+		char key = GetKey();
+
 		BeginDrawing();
 
 		ClearBackground((color){0, 0, 0});
 
-		WriteToBackBuffor("Pressed W SPEED!", 17);
-		
+		if(key == KEY_W) {
+			WriteToBackBuffor("Pressed W SPEED!", 17);
+		}
+		if(key == KEY_ESC) { break; }
+
 		EndDrawing();
 	}
-	printf("ENDED");
+
+	CloseTui();
 }
 
 int main() {
