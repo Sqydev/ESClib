@@ -38,11 +38,13 @@ typedef struct CoreData {
 	struct {
 		#if defined(__APPLE__) || defined(__linux__)
 
-			struct termios settings;
+			struct termios defaultSettings;
+			struct termios esclibSettings;
 
 		#elif defined(_WIN32) || defined(_WIN64)
 
-			DWORD settings;
+			DWORD defaultSettings;
+			DWORD esclibSettings;
 
 		#endif
 
@@ -76,6 +78,7 @@ static void SignalThingies(int signal) {
 	}
 }
 
+// TODO: END IT
 void InitTui(int fps, bool DisableSignals) {
 
 	#if defined(_WIN32) || defined(_WIN64)
@@ -87,17 +90,93 @@ void InitTui(int fps, bool DisableSignals) {
 	
 	#endif
 
-	// TODO: Just delete EnableRaw&BufforMode and do it on Init&CloseTui.
+	#if defined(__APPLE__) || defined(__linux__)
+
+		// This is our workspace
+		struct termios raw;
+
+		// Get current term settings
+		tcgetattr(STDIN_FILENO, &CORE.Terminal.defaultSettings);
+		raw = CORE.Terminal.defaultSettings;
+
+	#elif defined(_WIN32) || defined(_WIN64)
+
+
+    	HANDLE hIn = GetStdHandle(STD_INPUT_HANDLE);
+    	GetConsoleMode(hIn, &CORE.Terminal.settings);
+
+    	DWORD raw = CORE.Terminal.settings;
+
+	#endif
+
+	// Ok, to tera zrób że przed if jest część niezależna od tego czy sygnały włączone czy nie i po ifie zrób tą zależną
 	if(!DisableSignals) {
 		CORE.Terminal.signalsOn = true;
 
 		signal(SIGINT, SignalThingies);
 
-		EnableRawMode();
+		#if defined(__APPLE__) || defined(__linux__)
+
+			// Turn off echo && canon
+			// Echo: Automaticly show wrote chars, so now if you type something it won't be auto shown
+			// Cannon: Waiting until \n
+			raw.c_lflag &= ~(ICANON | ECHO);
+
+		#elif defined(_WIN32) || defined(_WIN64)
+
+    		raw &= ~(ENABLE_ECHO_INPUT | ENABLE_LINE_INPUT);
+		
+		#endif
 	}
 	else {
 		CORE.Terminal.signalsOn = false;
+
+		#if defined(__APPLE__) || defined(__linux__)
+
+			// Turn off echo && canon
+			// Echo: Automaticly show wrote chars, so now if you type something it won't be auto shown
+			// Cannon: Waiting until \n
+			raw.c_lflag &= ~(ICANON | ECHO | ISIG);
+
+		#elif defined(_WIN32) || defined(_WIN64)
+
+    		raw &= ~(ENABLE_ECHO_INPUT | ENABLE_LINE_INPUT | ENABLE_PROCESSED_INPUT);
+		
+		#endif
 	}
+
+	#if defined(__APPLE__) || defined(__linux__)
+
+		// Turn off CR/LF mapping
+		// CR: \r -> \n
+		// LR: \n -> \r
+		// So I'LL decite when to move cursor:)
+		raw.c_iflag &= ~(ICRNL | INLCR);
+
+		// Make it so read() returns when there is any byte(and waits 0 ms or s idk)
+		raw.c_cc[VMIN] = 1;
+		raw.c_cc[VTIME] = 0;
+
+		// Apply new settings
+		tcsetattr(STDIN_FILENO, TCSANOW, &raw);
+
+		// Get current flags
+		int flags = fcntl(STDIN_FILENO, F_GETFL, 0);
+	
+		// Set flags to current flags + O_NONBLOCK(So no waiting for \n to return)
+		fcntl(STDIN_FILENO, F_SETFL, flags | O_NONBLOCK);
+
+		CORE.Terminal.esclibSettings = raw;
+
+	#elif defined(_WIN32) || defined(_WIN64)
+
+    	raw |= ENABLE_PROCESSED_INPUT;
+
+    	SetConsoleMode(hIn, raw);
+
+		CORE.Terminal.esclibSettings = raw;
+	
+	#endif
 
 	CORE.Time.current = GetTime();
 
