@@ -22,6 +22,10 @@ TODO:
 }
 - See what make's DisableBufferMode not work
 - Ok, fixed flicering in test(it was ClearBg) NOW CHECK WHAT IS STILL TO REPAIR
+- Do disableing all signals
+- Tryt to make CloseTui make BeginDrawing Then disable fns nad then EndDrawing and then make Diisable fns write to backbuffor istead of printf
+- CLEAN THIS MESS(Like here. in TODO.md)
+- Line 90 ecore.c
 
 REMAMBER:
 - Remamber to make sleep to make fps when making lib
