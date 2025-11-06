@@ -79,10 +79,6 @@ void ToggleBufferMode(void);
 void EnableBufferMode(void);
 void DisableBufferMode(void);
 
-void ToggleRawMode(void);
-void EnableRawMode(void);
-void DisableRawMode(void);
-
 void SetBackgroundColor(color Color);
 void ClearBackground(color Color);
 
