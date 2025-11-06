@@ -49,6 +49,7 @@ typedef struct intvector4 {
 } intvector4;
 
 
+
 void InitTui(int fps, bool DisableSignals);
 void CloseTui(void);
 void SetTargetFps(int fps);
@@ -64,6 +65,8 @@ int GetTuiWidth(void);
 int GetTuiHeight(void);
 vector2 GetCursorPosition(void);
 vector2 GetLockedCursorPosition(void);
+int GetKey(void);
+double GetTime(void);
 
 void SetCursorPosition(float x, float y);
 void SetLockedCursorPosition(float x, float y);
@@ -75,10 +78,6 @@ void HideCursor(void);
 void LockCursor(void);
 void UnlockCursor(void);
 
-void ToggleBufferMode(void);
-void EnableBufferMode(void);
-void DisableBufferMode(void);
-
 void SetBackgroundColor(color Color);
 void ClearBackground(color Color);
 
@@ -86,11 +85,13 @@ void ClearScreen(void);
 void ClearLine(void);
 void ClearChar(void);
 
-int GetKey(void);
-double GetTime(void);
-
 // Super extra fns
 void WriteToBackBuffor(const char* to_add, size_t lenght);
+
+// Pretty useless fns for normal use
+void ToggleBufferMode(void);
+void EnableBufferMode(void);
+void DisableBufferMode(void);
 
 
 // KEYS(by chatgbt becouse I'm not crazy enough to write this myself)

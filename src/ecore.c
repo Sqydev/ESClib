@@ -10,15 +10,15 @@
 // Setup
 #if defined(__APPLE__) || defined(__linux__)
 
-#include <unistd.h>
-#include <sys/ioctl.h>
-#include <termios.h>
-#include <fcntl.h>
-#include <time.h>
+	#include <unistd.h>
+	#include <sys/ioctl.h>
+	#include <termios.h>
+	#include <fcntl.h>
+	#include <time.h>
 
 #elif defined(_WIN32) || defined(_WIN64)
 
-#include <windows.h>
+	#include <windows.h>
 
 #endif
 
@@ -192,8 +192,16 @@ void InitTui(int fps, bool DisableSignals) {
 	CORE.Cursor.hidden = false;
 
 	// EnableBuffMode
-	printf("\033[?1049h");
-	fflush(stdout);
+	#if defined(__APPLE__) || defined(__linux__)
+	
+		write(STDOUT_FILENO, "\033[?1049h", 8);
+
+	#elif defined(_WIN32) || defined(_WIN64)
+
+		DWORD written = 0;
+    	WriteFile(hConsole, "\033[?1049h", 8, &written, NULL);
+
+	#endif
 	CORE.Tui.alternateBufferModeActive = true;
 
 	ClearScreen();
@@ -238,8 +246,16 @@ void CloseTui(void) {
 	#endif
 
 	// DisableBuffMode
-	printf("\033[?1049l");
-	fflush(stdout);
+	#if defined(__APPLE__) || defined(__linux__)
+
+		write(STDOUT_FILENO, "\033[?1049l", 8);
+	
+	#elif defined(_WIN32) || defined(_WIN64)
+
+		DWORD written = 0;
+    	WriteFile(hConsole, "\033[?1049l", 8, &written, NULL);
+
+	#endif
 	CORE.Tui.alternateBufferModeActive = false;
 
 	CORE.Tui.rawModeActive = false;
@@ -370,15 +386,13 @@ vector2 GetLockedCursorPosition(void) {
 
 
 void ShowCursor(void) {
-	printf("\033[?25h");
-	fflush(stdout);
+	WriteToBackBuffor("\033[?25h", 6);
 
 	CORE.Cursor.hidden = false;
 }
 
 void HideCursor(void) {
-	printf("\033[?25l");
-	fflush(stdout);
+	WriteToBackBuffor("\033[?25l", 6);
 
 	CORE.Cursor.hidden = true;
 }
@@ -395,8 +409,62 @@ void UnlockCursor(void) {
 
 
 void SetBackgroundColor(color Color) {
-	printf("\033[48;2;%d;%d;%dm", Color.red, Color.green, Color.blue);
-	fflush(stdout);
+	char bufi[32];
+	char* pointy = bufi;
+
+	*pointy++ = '\033';
+    *pointy++ = '[';
+    *pointy++ = '4';
+    *pointy++ = '8';
+    *pointy++ = ';';
+    *pointy++ = '2';
+    *pointy++ = ';';
+
+
+	int colorybufi = Color.red;
+
+	// Why this if? becouse 123 is 1 + 2 + 3 and if it was '0' + 123 it would be { but you know, char is 1 char not 3
+    if (colorybufi >= 100) {
+        *pointy++ = '0' + colorybufi / 100;
+        *pointy++ = '0' + (colorybufi / 10) % 10;
+        *pointy++ = '0' + colorybufi % 10;
+    } else if (colorybufi >= 10) {
+        *pointy++ = '0' + colorybufi / 10;
+        *pointy++ = '0' + colorybufi % 10;
+    } else {
+        *pointy++ = '0' + colorybufi;
+    }
+
+    *pointy++ = ';';
+    colorybufi = Color.green;
+    if (colorybufi >= 100) {
+        *pointy++ = '0' + colorybufi / 100;
+        *pointy++ = '0' + (colorybufi / 10) % 10;
+        *pointy++ = '0' + colorybufi % 10;
+    } else if (colorybufi >= 10) {
+        *pointy++ = '0' + colorybufi / 10;
+        *pointy++ = '0' + colorybufi % 10;
+    } else {
+        *pointy++ = '0' + colorybufi;
+    }
+
+    *pointy++ = ';';
+    colorybufi = Color.blue;
+    if (colorybufi >= 100) {
+        *pointy++ = '0' + colorybufi / 100;
+        *pointy++ = '0' + (colorybufi / 10) % 10;
+        *pointy++ = '0' + colorybufi % 10;
+    } else if (colorybufi >= 10) {
+        *pointy++ = '0' + colorybufi / 10;
+        *pointy++ = '0' + colorybufi % 10;
+    } else {
+        *pointy++ = '0' + colorybufi;
+    }
+
+    *pointy++ = 'm';
+
+	WriteToBackBuffor(bufi, pointy - bufi);
+
 	CORE.Tui.backgroundColor = Color;
 }
 
@@ -420,7 +488,6 @@ void ClearBackground(color Color) {
 			}
         	WriteToBackBuffor("\n", 1);
 		}
-		fflush(stdout);
 
 
 	#elif defined(_WIN32) || defined(_WIN64)
@@ -440,7 +507,6 @@ void ClearBackground(color Color) {
 			}
         	WriteToBackBuffor("\n", 1);
     	}
-		fflush(stdout);
 
 
 	#endif
@@ -547,28 +613,7 @@ void MoveCursor(float x, float y) {
 }
 
 
-void EnableBufferMode(void) {
-	printf("\033[?1049h");
-	fflush(stdout);
-	CORE.Tui.alternateBufferModeActive = true;
 
-	atexit(DisableBufferMode);
-}
-
-void DisableBufferMode(void) {
-	printf("\033[?1049l");
-	fflush(stdout);
-	CORE.Tui.alternateBufferModeActive = false;
-}
-
-void ToggleBufferMode(void) {
-	if(!CORE.Tui.alternateBufferModeActive) {
-		EnableBufferMode();
-	}
-	else {
-		DisableBufferMode();
-	}
-}
 
 int GetKey(void) {
 	#if defined(__APPLE__) || defined(__linux__)
@@ -810,4 +855,26 @@ void WriteToBackBuffor(const char* to_add, size_t lenght) {
 	memcpy(CORE.Backbuffor.backBuffor + CORE.Backbuffor.lenght, to_add, lenght);
 	
 	CORE.Backbuffor.lenght += lenght;
+}
+
+
+
+
+void ToggleBufferMode(void) {
+	if(!CORE.Tui.alternateBufferModeActive) {
+		EnableBufferMode();
+	}
+	else {
+		DisableBufferMode();
+	}
+}
+
+void EnableBufferMode(void) {
+	WriteToBackBuffor("\033[?1049h", 8);
+	CORE.Tui.alternateBufferModeActive = true;
+}
+
+void DisableBufferMode(void) {
+	WriteToBackBuffor("\033[?1049l", 8);
+	CORE.Tui.alternateBufferModeActive = false;
 }

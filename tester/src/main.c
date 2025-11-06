@@ -77,6 +77,7 @@ void TuiLoopTest() {
 
 	while(!TuiShouldClose()) {
 		char key = GetKey();
+		key = key -0;
 
 		BeginDrawing();
 
