@@ -1,3 +1,6 @@
+Things done compared to last commit:
+- U
+
 TODO:
 - Readme
 - Name
@@ -22,6 +25,8 @@ TODO:
 - CLEAN THIS MESS(Like here. in TODO.md)
 - Make InitTui slimmer
 - Just fix that fucking GetKey so it doesn't choak without skipping frame.
+- Fix windows versions after and THEN make it slimmer
+- FUCK
 
 REMAMBER:
 - Remamber to make sleep to make fps when making lib
