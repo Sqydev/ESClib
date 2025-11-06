@@ -1,5 +1,5 @@
 Things done compared to last commit:
-- U
+- UUU
 
 TODO:
 - Readme
@@ -10,7 +10,7 @@ TODO:
 - Look for printfs that can be replaced with simple putchar
 - End making it into 1 file
 - Do CloseTui
-- Make #define to enums
+- Make most #define to enums
 - Make #ifdefs better especialy in GetKey()(cuz you can do only one in begining and not do 2 long switches for win and lin. just optim it)
 - Clean .c to fit .h
 - Make more Is fuctions, especialy for cursor functions for example: IsCursorHidden/Locked, Idea to how to find ones todo, look at bools in CORE
@@ -27,9 +27,10 @@ TODO:
 - Just fix that fucking GetKey so it doesn't choak without skipping frame.
 - Fix windows versions after and THEN make it slimmer
 - FUCK
+- In tester nr. 7 if terminal is too big cursor like's to go away for a seccond. BUT it SHOULD go away once I'll implement MoveCursor writing to BUFFOR not printf
 
 REMAMBER:
-- Remamber to make sleep to make fps when making lib
+- First make drawing fns and then fix things(But first first chainge printf to sprintf's faster brothers)
 
 DBP:
 - Ok, so you'll need to make it work on doubble buffor(not tripple) how to:
