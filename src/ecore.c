@@ -81,15 +81,6 @@ static void SignalThingies(int signal) {
 // TODO: Check if it works on windows
 void InitTui(int fps, bool DisableSignals) {
 
-	#if defined(_WIN32) || defined(_WIN64)
-	
-		HANDLE hOut = GetStdHandle(STD_OUTPUT_HANDLE);
-    	DWORD dwMode = 0;
-    	GetConsoleMode(hOut, &dwMode);
-    	SetConsoleMode(hOut, dwMode | ENABLE_VIRTUAL_TERMINAL_PROCESSING);
-	
-	#endif
-
 	#if defined(__APPLE__) || defined(__linux__)
 
 		// This is our workspace
@@ -99,17 +90,23 @@ void InitTui(int fps, bool DisableSignals) {
 		tcgetattr(STDIN_FILENO, &CORE.Terminal.defaultSettings);
 		raw = CORE.Terminal.defaultSettings;
 
+
 	#elif defined(_WIN32) || defined(_WIN64)
 
+    	DWORD dwMode = 0;
 
     	HANDLE hIn = GetStdHandle(STD_INPUT_HANDLE);
-    	GetConsoleMode(hIn, &CORE.Terminal.settings);
+    	GetConsoleMode(hIn, &CORE.Terminal.defaultSettings);
 
-    	DWORD raw = CORE.Terminal.settings;
+		HANDLE hOut = GetStdHandle(STD_OUTPUT_HANDLE);
+    	GetConsoleMode(hOut, &dwMode);
+
+    	SetConsoleMode(hOut, dwMode | ENABLE_VIRTUAL_TERMINAL_PROCESSING);
+
+    	DWORD raw = CORE.Terminal.defaultSettings;
 
 	#endif
 
-	// Ok, to tera zrób że przed if jest część niezależna od tego czy sygnały włączone czy nie i po ifie zrób tą zależną
 	if(!DisableSignals) {
 		CORE.Terminal.signalsOn = true;
 
