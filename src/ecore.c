@@ -78,7 +78,7 @@ static void SignalThingies(int signal) {
 	}
 }
 
-// TODO: END IT
+// TODO: Check if it works on windows
 void InitTui(int fps, bool DisableSignals) {
 
 	#if defined(_WIN32) || defined(_WIN64)
@@ -153,8 +153,8 @@ void InitTui(int fps, bool DisableSignals) {
 		// So I'LL decite when to move cursor:)
 		raw.c_iflag &= ~(ICRNL | INLCR);
 
-		// Make it so read() returns when there is any byte(and waits 0 ms or s idk)
-		raw.c_cc[VMIN] = 1;
+		// Make it so read() returns when there is even no bytes(and waits 0 ms or s idk)
+		raw.c_cc[VMIN] = 0;
 		raw.c_cc[VTIME] = 0;
 
 		// Apply new settings
@@ -194,7 +194,10 @@ void InitTui(int fps, bool DisableSignals) {
 
 	CORE.Cursor.hidden = false;
 
-	EnableBufferMode();
+	// EnableBuffMode
+	printf("\033[?1049h");
+	fflush(stdout);
+	CORE.Tui.alternateBufferModeActive = true;
 
 	ClearScreen();
 
@@ -208,16 +211,41 @@ void InitTui(int fps, bool DisableSignals) {
 void CloseTui(void) {
 	// DO NOT FLUSH FRAME!!!!!!!!!!!!
 	DisableBufferMode();
-	DisableRawMode();
 
-	#if defined(_WIN32) || defined(_WIN64)
-	
+
+	#if defined(__APPLE__) || defined(__linux__)
+
+
+		// Restore original terminal settings
+		tcsetattr(STDIN_FILENO, TCSANOW, &CORE.Terminal.esclibSettings);
+
+		// Get current flags
+		int flags = fcntl(STDIN_FILENO, F_GETFL, 0);
+		// Remove O_NONBLOCK bit (bitwise AND with flag negation)
+		fcntl(STDIN_FILENO, F_SETFL, flags & ~O_NONBLOCK);
+
+
+	#elif defined(_WIN32) || defined(_WIN64)
+
+
+    	HANDLE hIn = GetStdHandle(STD_INPUT_HANDLE);
 		HANDLE hOut = GetStdHandle(STD_OUTPUT_HANDLE);
+
     	DWORD dwMode = 0;
     	GetConsoleMode(hOut, &dwMode);
+
+    	SetConsoleMode(hIn, CORE.Terminal.settings);
     	SetConsoleMode(hOut, dwMode & ~ENABLE_VIRTUAL_TERMINAL_PROCESSING);
-	
+
+
 	#endif
+
+	// DisableBuffMode
+	printf("\033[?1049l");
+	fflush(stdout);
+	CORE.Tui.alternateBufferModeActive = false;
+
+	CORE.Tui.rawModeActive = false;
 
 	CORE.Tui.shouldClose = false;
 }
@@ -545,101 +573,22 @@ void ToggleBufferMode(void) {
 	}
 }
 
-void EnableRawMode(void) {
-	#if defined(__APPLE__) || defined(__linux__)
-
-
-		// This is our workspace
-		struct termios raw;
-
-		// Get current term settings
-		tcgetattr(STDIN_FILENO, &CORE.Terminal.settings);
-		raw = CORE.Terminal.settings;
-
-		// Turn off echo && canon
-		// Echo: Automaticly show wrote chars, so now if you type something it won't be auto shown
-		// Cannon: Waiting until \n
-		raw.c_lflag &= ~(ICANON | ECHO);
-
-		// Turn off CR/LF mapping
-		// CR: \r -> \n
-		// LR: \n -> \r
-		// So I'LL decite when to move cursor:)
-		raw.c_iflag &= ~(ICRNL | INLCR);
-
-		// Make it so read() returns when there is any byte(and waits 0 ms or s idk)
-		raw.c_cc[VMIN] = 1;
-		raw.c_cc[VTIME] = 0;
-
-		// Apply new settings
-		tcsetattr(STDIN_FILENO, TCSANOW, &raw);
-
-		// Get current flags
-		int flags = fcntl(STDIN_FILENO, F_GETFL, 0);
-	
-		// Set flags to current flags + O_NONBLOCK(So no waiting for \n to return)
-		fcntl(STDIN_FILENO, F_SETFL, flags | O_NONBLOCK);
-
-
-	#elif defined(_WIN32) || defined(_WIN64)
-
-
-    	HANDLE hIn = GetStdHandle(STD_INPUT_HANDLE);
-    	GetConsoleMode(hIn, &CORE.Terminal.settings);
-
-    	DWORD raw = CORE.Terminal.settings;
-    	raw &= ~(ENABLE_ECHO_INPUT | ENABLE_LINE_INPUT);
-    	raw |= ENABLE_PROCESSED_INPUT;
-
-    	SetConsoleMode(hIn, raw);
-
-
-	#endif
-
-	CORE.Tui.rawModeActive = true;
-
-	// Make sure we restore the terminal when program exits
-	atexit(DisableRawMode);
-}
-
-void DisableRawMode(void) {
-	#if defined(__APPLE__) || defined(__linux__)
-
-
-		// Restore original terminal settings
-		tcsetattr(STDIN_FILENO, TCSANOW, &CORE.Terminal.settings);
-
-		// Get current flags
-		int flags = fcntl(STDIN_FILENO, F_GETFL, 0);
-		// Remove O_NONBLOCK bit (bitwise AND with flag negation)
-		fcntl(STDIN_FILENO, F_SETFL, flags & ~O_NONBLOCK);
-
-
-	#elif defined(_WIN32) || defined(_WIN64)
-
-
-    	HANDLE hIn = GetStdHandle(STD_INPUT_HANDLE);
-    	SetConsoleMode(hIn, CORE.Terminal.settings);
-
-
-	#endif
-
-	CORE.Tui.rawModeActive = false;
-}
-
 int GetKey(void) {
 	#if defined(__APPLE__) || defined(__linux__)
-
-
-		int gotchar = getchar();
-		// NOTHING
-		if (gotchar == EOF) return -1;
-	
+		unsigned char gotchar;
+		int n = read(STDIN_FILENO, &gotchar, 1);
+		if(n <= 0) return -1;
+		
+		
 		if(gotchar == '\033') {
-			int afterthing = getchar();
+			unsigned char afterthing;
+			n = read(STDIN_FILENO, &afterthing, 1);
+
 			if(afterthing == '[' || afterthing == 'O') {
 				// Here switch for all the esc sequences
-				int finalthing = getchar();
+				unsigned char finalthing;
+				n = read(STDIN_FILENO, &finalthing, 1);
+
 				switch(finalthing) {
 					case 'A': return KEY_UP;
 	     	       	case 'B': return KEY_DOWN;
@@ -649,7 +598,9 @@ int GetKey(void) {
 	    	        case 'F': return KEY_END;
 	
 	            	case '1': {
-	                	int afterfinal = getchar();
+	                	unsigned char afterfinal; 
+						n = read(STDIN_FILENO, &afterfinal, 1);
+
 						switch(afterfinal) {
 	                		case '~': return KEY_HOME;
 							case 'P': return KEY_F1;
@@ -661,7 +612,9 @@ int GetKey(void) {
 	                	break;
 	            	}
 	    	        case '2': {
-	                	int afterfinal = getchar();
+	                	unsigned char afterfinal; 
+						n = read(STDIN_FILENO, &afterfinal, 1);
+
  	    	           	switch(afterfinal) {
 							case '~': return KEY_INSERT;
 							case 'P': return KEY_F5;
@@ -673,7 +626,9 @@ int GetKey(void) {
 						break;
 	      	     	}
 	      	      	case '3': {
-	                	int afterfinal = getchar();
+	                	unsigned char afterfinal; 
+						n = read(STDIN_FILENO, &afterfinal, 1);
+
 						switch(afterfinal) {
 							case '~': return KEY_DELETE;
 							case 'P': return KEY_F9;
@@ -685,7 +640,9 @@ int GetKey(void) {
 	      	          	break;
 	     	       	}
 	      	      	case '5': {
-	                	int afterfinal = getchar();
+	                	unsigned char afterfinal; 
+						n = read(STDIN_FILENO, &afterfinal, 1);
+
 						switch(afterfinal) {
 							case '~': return KEY_PAGE_UP;
 							case 'P': return KEY_F13;
@@ -697,7 +654,9 @@ int GetKey(void) {
 	      	          	break;
 	            	}
  		           	case '6': {
- 		               	int afterfinal = getchar();
+	                	unsigned char afterfinal; 
+						n = read(STDIN_FILENO, &afterfinal, 1);
+
 						switch(afterfinal) {
 							case '~': return KEY_PAGE_DOWN;
 							case 'P': return KEY_F17;
@@ -835,15 +794,6 @@ double GetTime(void) {
     	return (double)counter.QuadPart / (double)frequency.QuadPart;
 
 	#endif
-}
-
-void ToggleRawMode(void) {
-	if(!CORE.Tui.rawModeActive) {
-		EnableRawMode();
-	}
-	else {
-		EnableRawMode();
-	}
 }
 
 void WriteToBackBuffor(const char* to_add, size_t lenght) {

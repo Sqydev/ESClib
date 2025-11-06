@@ -14,18 +14,14 @@ TODO:
 - Find better ways to do Move and Set Cursor fns, cuz there for sure is better way to do same thing that I did when i was tired, and check if it works
 - FAST: GOTO DBP
 - Rewrite tester after making begindrawing && end 
-- Make disable modes in closetui
 - MAKE GETKEY RETURN KEY THAT'S PRESSED NOT LAST KEY THAT'S PRESSED
 - MAKE PRINTF INTO WRITEINTOBACKBUFFOR();
 - Find what makes getkey and just LoopTest break(it's propably becouse most functions doesn't write to backbuffer yet(still do printf)) way to give vars to WritetoTui: {
-    just make char* and do sprintf magic;
+    just make char* and do sprintf's faster brother's magic magic;
 }
-- See what make's DisableBufferMode not work
-- Ok, fixed flicering in test(it was ClearBg) NOW CHECK WHAT IS STILL TO REPAIR
-- Do disableing all signals
-- Tryt to make CloseTui make BeginDrawing Then disable fns nad then EndDrawing and then make Diisable fns write to backbuffor istead of printf
 - CLEAN THIS MESS(Like here. in TODO.md)
-- Line 90 ecore.c
+- Make InitTui slimmer
+- Just fix that fucking GetKey so it doesn't choak without skipping frame.
 
 REMAMBER:
 - Remamber to make sleep to make fps when making lib
