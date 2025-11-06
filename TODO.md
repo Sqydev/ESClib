@@ -31,6 +31,7 @@ TODO:
 
 REMAMBER:
 - First make drawing fns and then fix things(But first first chainge printf to sprintf's faster brothers)
+- DO DRAWING IN eshapes AND etext
 
 DBP:
 - Ok, so you'll need to make it work on doubble buffor(not tripple) how to:
