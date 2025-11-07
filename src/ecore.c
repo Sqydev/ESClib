@@ -194,7 +194,18 @@ void InitTui(int fps, bool DisableSignals) {
 	// EnableBuffMode
 	#if defined(__APPLE__) || defined(__linux__)
 	
-		if(write(STDOUT_FILENO, "\033[?1049h", 8) == -1) { perror("write error"); }
+		if(write(STDOUT_FILENO, "\033[?1049h", 8) == -1) { 
+			int tries = 0;
+
+			while(tries < 10) {
+				if(write(STDOUT_FILENO, "\033[?1049h", 8) != -1) { break; }
+				else { tries++; }
+			}
+
+			if (tries == 10) {
+    			fprintf(stderr, "Failed to write after 10 attempts\n");
+			}
+		}
 
 	#elif defined(_WIN32) || defined(_WIN64)
 
@@ -248,7 +259,18 @@ void CloseTui(void) {
 	// DisableBuffMode
 	#if defined(__APPLE__) || defined(__linux__)
 
-		if(write(STDOUT_FILENO, "\033[?1049l", 8) == -1) { perror("write error"); }
+		if(write(STDOUT_FILENO, "\033[?1049l", 8) == -1) { 
+			int tries = 0;
+	
+			while(tries < 10) {
+				if(write(STDOUT_FILENO, "\033[?1049l", 8) != -1) { break; }
+				else { tries++; }
+			}
+
+			if (tries == 10) {
+    			fprintf(stderr, "Failed to write after 10 attempts\n");
+			}
+		}
 	
 	#elif defined(_WIN32) || defined(_WIN64)
 
@@ -280,7 +302,18 @@ void EndDrawing(void) {
 
 	#if defined(__APPLE__) || defined(__linux__)
 
-		if(write(STDOUT_FILENO, CORE.Backbuffor.backBuffor, CORE.Backbuffor.lenght) == -1) { perror("write error"); }
+		if(write(STDOUT_FILENO, CORE.Backbuffor.backBuffor, CORE.Backbuffor.lenght) == -1) { 
+			int tries = 0;
+
+			while(tries < 10) {
+				if(write(STDOUT_FILENO, CORE.Backbuffor.backBuffor, CORE.Backbuffor.lenght) == -1) { break; }
+				else { tries++; }
+			}
+
+			if (tries == 10) {
+    			fprintf(stderr, "Failed to write after 10 attempts\n");
+			}
+		}
 
 	#elif defined(_WIN32) || defined(_WIN64)
 
@@ -522,26 +555,66 @@ void ClearLine(void) {
 
 void ClearChar(void) {
 	WriteToBackBuffor("\033[D\033[K", 6);
-	fflush(stdout);
 }
 
 
 
 void SetCursorPosition(float x, float y) {
+	if(x < 0) { perror("x is negative"); x = 0.0f; }
+	if(y < 0) { perror("y is negative"); y = 0.0f; }
+
 	int xinted = (int)x;
 	int yinted = (int)y;
-
-	printf("\033[%d;%dH", (int)y, (int)x);
-	fflush(stdout);
-
-	// BRRRRRRRRRRRRRRRRRRRRRRRRRRRRRR TODO: 
-
 
 	CORE.Cursor.currentPosition.x = x;
 	CORE.Cursor.currentPosition.y = y;
 
 	CORE.Cursor.currentTerminalPosition.x = xinted;
 	CORE.Cursor.currentTerminalPosition.y = yinted;
+
+	char bufi[32];
+    char* pointy = bufi;
+
+	*pointy++ = '\033';
+    *pointy++ = '[';
+
+	if(yinted == 0) {
+        *pointy++ = '0';
+    }
+	else {
+		char intbufi[12];
+		int len = 0;
+
+        while(yinted > 0 && len < (int)sizeof(intbufi)) {
+            intbufi[len++] = '0' + (yinted % 10);
+            yinted /= 10;
+        }
+        for(int i = len - 1; i >= 0; i--) {
+            *pointy++ = intbufi[i];
+        }
+	}
+
+	*pointy++ = ';';
+
+	if(xinted == 0) {
+        *pointy++ = '0';
+    }
+	else {
+		char intbufi[12];
+		int len = 0;
+
+        while(xinted > 0 && len < (int)sizeof(intbufi)) {
+            intbufi[len++] = '0' + (xinted % 10);
+            xinted /= 10;
+        }
+        for(int i = len - 1; i >= 0; i--) {
+            *pointy++ = intbufi[i];
+        }
+	}
+
+	*pointy++ = 'H';
+
+	WriteToBackBuffor(bufi, pointy - bufi);
 }
 
 void SetLockedCursorPosition(float x, float y) {

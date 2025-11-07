@@ -30,10 +30,13 @@ TODO:
 - In tester nr. 7 if terminal is too big cursor like's to go away for a seccond. BUT it SHOULD go away once I'll implement MoveCursor writing to BUFFOR not printf
 - In the future, do mouse tracking things(like get mouse position)
 - Remamber to do more get fns
+- LET'S GOOOOOOO!!!!!!!
+- Never mind, flickering is still here. Fix it info: it hapens after about 5 sec and then idk
 
 REMAMBER:
 - First make drawing fns and then fix things(But first first chainge printf to sprintf's faster brothers)
 - DO DRAWING IN eshapes AND etext
+- Remamber that in tester 7 cursor on top and getkey on bottom is intended, cuz Draw... will have where to draw it. SO DO NOT TRY TO FIX THIS BECOUSE IT IS JUST UNCLEAR INTENDED BEHAVIOUR
 
 DBP:
 - Ok, so you'll need to make it work on doubble buffor(not tripple) how to:
