@@ -31,7 +31,8 @@ TODO:
 - In the future, do mouse tracking things(like get mouse position)
 - Remamber to do more get fns
 - LET'S GOOOOOOO!!!!!!!
-- Never mind, flickering is still here. Fix it info: it hapens after about 5 sec and then idk
+- Fix HideCursor and lock by making it use write not WriteToBackBuffor
+- Never mind, flickering is still here. Fix it info: it hapens after about 5 sec and then idk, Idea. Do SetCursorPosition in EndDrawing but with write INSTEAD of WriteToBackBuffor
 
 REMAMBER:
 - First make drawing fns and then fix things(But first first chainge printf to sprintf's faster brothers)
