@@ -194,7 +194,7 @@ void InitTui(int fps, bool DisableSignals) {
 	// EnableBuffMode
 	#if defined(__APPLE__) || defined(__linux__)
 	
-		write(STDOUT_FILENO, "\033[?1049h", 8);
+		if(write(STDOUT_FILENO, "\033[?1049h", 8) == -1) { perror("write error"); }
 
 	#elif defined(_WIN32) || defined(_WIN64)
 
@@ -248,7 +248,7 @@ void CloseTui(void) {
 	// DisableBuffMode
 	#if defined(__APPLE__) || defined(__linux__)
 
-		write(STDOUT_FILENO, "\033[?1049l", 8);
+		if(write(STDOUT_FILENO, "\033[?1049l", 8) == -1) { perror("write error"); }
 	
 	#elif defined(_WIN32) || defined(_WIN64)
 
@@ -280,7 +280,7 @@ void EndDrawing(void) {
 
 	#if defined(__APPLE__) || defined(__linux__)
 
-		write(STDOUT_FILENO, CORE.Backbuffor.backBuffor, CORE.Backbuffor.lenght);
+		if(write(STDOUT_FILENO, CORE.Backbuffor.backBuffor, CORE.Backbuffor.lenght) == -1) { perror("write error"); }
 
 	#elif defined(_WIN32) || defined(_WIN64)
 
@@ -528,14 +528,20 @@ void ClearChar(void) {
 
 
 void SetCursorPosition(float x, float y) {
+	int xinted = (int)x;
+	int yinted = (int)y;
+
 	printf("\033[%d;%dH", (int)y, (int)x);
 	fflush(stdout);
+
+	// BRRRRRRRRRRRRRRRRRRRRRRRRRRRRRR TODO: 
+
 
 	CORE.Cursor.currentPosition.x = x;
 	CORE.Cursor.currentPosition.y = y;
 
-	CORE.Cursor.currentTerminalPosition.x = (int)x;
-	CORE.Cursor.currentTerminalPosition.y = (int)y;
+	CORE.Cursor.currentTerminalPosition.x = xinted;
+	CORE.Cursor.currentTerminalPosition.y = yinted;
 }
 
 void SetLockedCursorPosition(float x, float y) {
