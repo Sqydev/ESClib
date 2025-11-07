@@ -28,6 +28,8 @@ TODO:
 - Fix windows versions after and THEN make it slimmer
 - FUCK
 - In tester nr. 7 if terminal is too big cursor like's to go away for a seccond. BUT it SHOULD go away once I'll implement MoveCursor writing to BUFFOR not printf
+- In the future, do mouse tracking things(like get mouse position)
+- Remamber to do more get fns
 
 REMAMBER:
 - First make drawing fns and then fix things(But first first chainge printf to sprintf's faster brothers)
