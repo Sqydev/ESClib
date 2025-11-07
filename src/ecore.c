@@ -298,8 +298,6 @@ void BeginDrawing(void) {
 }
 
 void EndDrawing(void) {
-	SetCursorPosition(CORE.Cursor.currentTerminalPosition.x, CORE.Cursor.currentTerminalPosition.y);
-
 	#if defined(__APPLE__) || defined(__linux__)
 
 		if(write(STDOUT_FILENO, CORE.Backbuffor.backBuffor, CORE.Backbuffor.lenght) == -1) { 
