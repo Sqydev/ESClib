@@ -32,7 +32,11 @@ TODO:
 - Remamber to do more get fns
 - LET'S GOOOOOOO!!!!!!!
 - Fix HideCursor and lock by making it use write not WriteToBackBuffor
-- Never mind, flickering is still here. Fix it info: it hapens after about 5 sec and then idk, Idea. Do SetCursorPosition in EndDrawing but with write INSTEAD of WriteToBackBuffor
+
+TOUGHTS SAVE(In case cursor starts to flicker again(YES I FUCKING FIXED IT!!!!)):
+- Never mind, flickering is still here. Fix it info: it hapens after about 5 sec and then idk, Idea. Do SetCursorPosition in EndDrawing but with write INSTEAD of WriteToBackBuffor, there's nothing left besides 1. terminal is retarded 2. It's floating point problem
+- Backbuffor is ok, Cursor. is ok, I DON'T KNOW WHAT IT ISSSSS, I GIVE UP FOR NOW
+- Mabey it's something with WriteToBackBuffor
 
 REMAMBER:
 - First make drawing fns and then fix things(But first first chainge printf to sprintf's faster brothers)

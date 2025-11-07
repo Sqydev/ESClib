@@ -298,6 +298,8 @@ void BeginDrawing(void) {
 }
 
 void EndDrawing(void) {
+	SetCursorPosition(CORE.Cursor.currentPosition.x, CORE.Cursor.currentPosition.y);
+
 	#if defined(__APPLE__) || defined(__linux__)
 
 		if(write(STDOUT_FILENO, CORE.Backbuffor.backBuffor, CORE.Backbuffor.lenght) == -1) { 
@@ -502,49 +504,11 @@ void SetBackgroundColor(color Color) {
 void ClearBackground(color Color) {
 	ClearScreen();
 
-	#if defined(__APPLE__) || defined(__linux__)
-
-
-		struct winsize sizers;
-
-		// Get that mesures
-		ioctl(STDOUT_FILENO, TIOCGWINSZ, &sizers);
-
-		// Chainge color of background in terminal
-		SetBackgroundColor(Color);
-
-		for (int i = 0; i < sizers.ws_row; i++) {
-			for (int j = 0; j < sizers.ws_col; j++) {
-            	WriteToBackBuffor(" ", 1);
-			}
-        	WriteToBackBuffor("\n", 1);
-		}
-
-
-	#elif defined(_WIN32) || defined(_WIN64)
-	// TODO: Chatgbt port, litteraly FillScreen for linux ctrl+c ctrl+v to chatgbt. Why? cuz fuck microsoft. I'll do it myself someday.
-
-
-    	CONSOLE_SCREEN_BUFFER_INFO csbi;
-    	GetConsoleScreenBufferInfo(hOut, &csbi);
-    	int rows = csbi.srWindow.Bottom - csbi.srWindow.Top + 1;
-    	int cols = csbi.srWindow.Right - csbi.srWindow.Left + 1;
-
-		SetBackgroundColor(Color);
-
-    	for (int i = 0; i < rows; i++) {
-        	for (int j = 0; j < cols; j++) {
-            	WriteToBackBuffor(" ", 1);
-			}
-        	WriteToBackBuffor("\n", 1);
-    	}
-
-
-	#endif
+	SetBackgroundColor(Color);
 }
 
 void ClearScreen(void) {
-	WriteToBackBuffor("\033[2J\033[H", 7);
+	WriteToBackBuffor("\033[2J", 4);
 }
 
 void ClearLine(void) {
