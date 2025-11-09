@@ -30,8 +30,7 @@ TODO:
 - In tester nr. 7 if terminal is too big cursor like's to go away for a seccond. BUT it SHOULD go away once I'll implement MoveCursor writing to BUFFOR not printf
 - In the future, do mouse tracking things(like get mouse position)
 - Remamber to do more get fns
-- LET'S GOOOOOOO!!!!!!!
-- Fix fns used outside Drawing "loop", f.e. HideCursor and LockCursor. It doesn't work becouse BeginDrawing clears backbuffor before HideCursor and LockCursor can be printed. I would make it so in BeginDrawing it would if if CORE.Cursor.hidden is true and if so it would WriteToBackBuffor
+- Find more fns that have same situation as HideCursor
 
 TOUGHTS SAVE(In case cursor starts to flicker again(YES I FUCKING FIXED IT!!!!)):
 - Never mind, flickering is still here. Fix it info: it hapens after about 5 sec and then idk, Idea. Do SetCursorPosition in EndDrawing but with write INSTEAD of WriteToBackBuffor, there's nothing left besides 1. terminal is retarded 2. It's floating point problem

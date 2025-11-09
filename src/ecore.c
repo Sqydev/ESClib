@@ -7,6 +7,8 @@
 #include <stdbool.h>
 #include <stdlib.h>
 
+// EXPLANATIONCOMMENT1: Soo, I decited to make functions that are in 99% of cases used in init (like HideCursor) do write becouse BeginDrawing clears backbuffor so it wouldn't work AND becouse raylib does this the same way and if it works for raylib it should be ok :)
+
 // Setup
 #if defined(__APPLE__) || defined(__linux__)
 
@@ -419,13 +421,15 @@ vector2 GetLockedCursorPosition(void) {
 
 
 void ShowCursor(void) {
-	WriteToBackBuffor("\033[?25h", 6);
+	// Explanation in EXPLANATIONCOMMENT1 (just search it in the file)
+	write(STDOUT_FILENO, "\033[?25h", 6);
 
 	CORE.Cursor.hidden = false;
 }
 
 void HideCursor(void) {
-	WriteToBackBuffor("\033[?25l", 6);
+	// Explanation in EXPLANATIONCOMMENT1 (just search it in the file)
+	write(STDOUT_FILENO, "\033[?25l", 6);
 
 	CORE.Cursor.hidden = true;
 }
