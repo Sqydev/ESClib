@@ -92,16 +92,32 @@ void TuiLoopTest() {
 	CloseTui();
 }
 
+void HUHTest() {
+	InitTui(60, false);
+
+	while(!TuiShouldClose()) {
+		char key = GetKey();
+
+		BeginDrawing();
+
+		ClearBackground((color){0, 0, 0});
+
+		WriteToBackBuffor("S to show, H to hide", 20);
+
+		if(key == KEY_S) { ShowCursor(); }
+		if(key == KEY_H) { HideCursor(); }
+		if(key == KEY_ESC) { break; }
+
+		EndDrawing();
+	}
+}
+
 int main() {
 	int Input = 0;
 
-	printf("1. Mode Switch Test\n");
-	printf("2. Clear Test\n");
-	printf("3. GetKey Test\n");
-	printf("4. Funnyahh cursor movement trick test\n");
-	printf("5. ClearandFill test\n");
-	printf("6. Backbuffor WriteTo test\n");
-	printf("7. TuiLoop test\n");
+	printf("1. Backbuffor WriteTo test\n");
+	printf("2. TuiLoop test\n");
+	printf("3. Hide/UnHide test\n");
 
 	printf("Input: ");
 	scanf("%d", &Input);
@@ -112,8 +128,9 @@ int main() {
 	//else if(Input == 4) { FunnyCrsTest(); }
 	//else if(Input == 5) { ClearandFillTest(); }
 	//else 
-	if(Input == 6) { BackbufforTest(); }
-	else if(Input == 7) { TuiLoopTest(); }
+	if(Input == 1) { BackbufforTest(); }
+	else if(Input == 2) { TuiLoopTest(); }
+	else if(Input == 3) { HUHTest(); }
 	
 	return 0;
 }
