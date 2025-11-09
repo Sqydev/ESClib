@@ -31,7 +31,7 @@ TODO:
 - In the future, do mouse tracking things(like get mouse position)
 - Remamber to do more get fns
 - LET'S GOOOOOOO!!!!!!!
-- Fix HideCursor and lock by making it use write not WriteToBackBuffor
+- Fix fns used outside Drawing "loop", f.e. HideCursor and LockCursor. It doesn't work becouse BeginDrawing clears backbuffor before HideCursor and LockCursor can be printed. I would make it so in BeginDrawing it would if if CORE.Cursor.hidden is true and if so it would WriteToBackBuffor
 
 TOUGHTS SAVE(In case cursor starts to flicker again(YES I FUCKING FIXED IT!!!!)):
 - Never mind, flickering is still here. Fix it info: it hapens after about 5 sec and then idk, Idea. Do SetCursorPosition in EndDrawing but with write INSTEAD of WriteToBackBuffor, there's nothing left besides 1. terminal is retarded 2. It's floating point problem
@@ -42,7 +42,7 @@ REMAMBER:
 - First make drawing fns and then fix things(But first first chainge printf to sprintf's faster brothers)
 - DO DRAWING IN eshapes AND etext
 - Remamber that in tester 7 cursor on top and getkey on bottom is intended, cuz Draw... will have where to draw it. SO DO NOT TRY TO FIX THIS BECOUSE IT IS JUST UNCLEAR INTENDED BEHAVIOUR
-- If there is super big number of things in backbuffor there can be disturbences. It's only a theory thou so I'm leaving this note just in case it FLICKERING will happen again
+- If there is super big number of things in backbuffor there can be disturbences. It's only a theory thou so I'm leaving this note just in case it FLICKERING will happen again. Mabey thats becouse of that write instead of printf in EndDrawing
 
 DBP:
 - Ok, so you'll need to make it work on doubble buffor(not tripple) how to:
