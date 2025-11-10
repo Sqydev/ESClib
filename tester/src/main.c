@@ -102,7 +102,7 @@ void HUHTest() {
 
 		ClearBackground((color){0, 0, 0});
 
-		WriteToBackBuffor("S to show, H to hide", 20);
+		WriteToBackBuffor("  S to show, H to hide", 22);
 
 		if(key == KEY_S) { ShowCursor(); }
 		if(key == KEY_H) { HideCursor(); }
