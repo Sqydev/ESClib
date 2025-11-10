@@ -221,7 +221,7 @@ void InitTui(int fps, bool DisableSignals) {
 
 	SetCursorPosition(0, 0);
 
-	SetLockedCursorPosition(0, 0);
+	SetLockedCursorPosition(1, 1);
 
 	atexit(CloseTui);
 }
@@ -524,13 +524,12 @@ void ClearChar(void) {
 }
 
 
-
 void SetCursorPosition(float x, float y) {
-	if(x < 0) { perror("x is negative"); x = 0.0f; }
-	if(y < 0) { perror("y is negative"); y = 0.0f; }
+	if(x < 0) { fprintf(stderr, "Warning: x is negative, clamping to 0.\n"); x = 0.0f; }
+	if(y < 0) { fprintf(stderr, "Warning: y is negative, clamping to 0.\n"); y = 0.0f; }
 
-	int xinted = (int)x;
-	int yinted = (int)y;
+	unsigned int xinted = (unsigned int)x;
+	unsigned int yinted = (unsigned int)y;
 
 	CORE.Cursor.currentPosition.x = x;
 	CORE.Cursor.currentPosition.y = y;
@@ -538,7 +537,10 @@ void SetCursorPosition(float x, float y) {
 	CORE.Cursor.currentTerminalPosition.x = xinted;
 	CORE.Cursor.currentTerminalPosition.y = yinted;
 
-	char bufi[32];
+	xinted++;
+	yinted++;
+
+	char bufi[32]; // Check for 23
     char* pointy = bufi;
 
 	*pointy++ = '\033';
@@ -548,10 +550,10 @@ void SetCursorPosition(float x, float y) {
         *pointy++ = '0';
     }
 	else {
-		char intbufi[12];
-		int len = 0;
+		char intbufi[10];
+		unsigned int len = 0;
 
-        while(yinted > 0 && len < (int)sizeof(intbufi)) {
+        while(yinted > 0 && len < (unsigned int)sizeof(intbufi)) {
             intbufi[len++] = '0' + (yinted % 10);
             yinted /= 10;
         }
@@ -566,10 +568,10 @@ void SetCursorPosition(float x, float y) {
         *pointy++ = '0';
     }
 	else {
-		char intbufi[12];
-		int len = 0;
+		char intbufi[10];
+		unsigned int len = 0;
 
-        while(xinted > 0 && len < (int)sizeof(intbufi)) {
+        while(xinted > 0 && len < (unsigned int)sizeof(intbufi)) {
             intbufi[len++] = '0' + (xinted % 10);
             xinted /= 10;
         }

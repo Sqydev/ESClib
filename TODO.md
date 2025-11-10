@@ -31,6 +31,10 @@ TODO:
 - In the future, do mouse tracking things(like get mouse position)
 - Remamber to do more get fns
 - Find more fns that have same situation as HideCursor
+- Find good name for WriteToBackBuffor
+- Make sure that size of intbuffer in SecCursorPosition is max size of int. Try 23 in SetCursorPosition
+- Do more get fns and use them in tester. (Like in HideCursor tester state of cursor hidness)
+- REMAMBER TO CONVERT FROM PRITNF TO WRITETOBACKBUFFOR/write
 
 TOUGHTS SAVE(In case cursor starts to flicker again(YES I FUCKING FIXED IT!!!!)):
 - Never mind, flickering is still here. Fix it info: it hapens after about 5 sec and then idk, Idea. Do SetCursorPosition in EndDrawing but with write INSTEAD of WriteToBackBuffor, there's nothing left besides 1. terminal is retarded 2. It's floating point problem
