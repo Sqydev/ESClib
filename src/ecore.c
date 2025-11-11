@@ -33,6 +33,8 @@ typedef struct CoreData {
 	} Backbuffor;
 	struct {
 		color backgroundColor;
+		color foregroundColor;
+		fontStyle foregroundStyle;
 		bool shouldClose;
 		bool alternateBufferModeActive;
 		bool rawModeActive;
@@ -417,6 +419,18 @@ vector2 GetLockedCursorPosition(void) {
 	return CORE.Cursor.lockedPosition;
 }
 
+color GetBackgroundColor(void) {
+	return CORE.Tui.backgroundColor;
+}
+
+color GetForegroundColor(void) {
+	return CORE.Tui.foregroundColor;
+}
+
+fontStyle GetForegroundStyle(void) {
+	return CORE.Tui.foregroundStyle;
+}
+
 
 
 
@@ -504,6 +518,80 @@ void SetBackgroundColor(color Color) {
 
 	CORE.Tui.backgroundColor = Color;
 }
+
+void SetForegroundColor(color Color) {
+	char bufi[32];
+	char* pointy = bufi;
+
+	*pointy++ = '\033';
+    *pointy++ = '[';
+    *pointy++ = '3';
+    *pointy++ = '8';
+    *pointy++ = ';';
+    *pointy++ = '2';
+    *pointy++ = ';';
+
+
+	int colorybufi = Color.red;
+
+	// Why this if? becouse 123 is 1 + 2 + 3 and if it was '0' + 123 it would be { but you know, char is 1 char not 3
+    if (colorybufi >= 100) {
+        *pointy++ = '0' + colorybufi / 100;
+        *pointy++ = '0' + (colorybufi / 10) % 10;
+        *pointy++ = '0' + colorybufi % 10;
+    } else if (colorybufi >= 10) {
+        *pointy++ = '0' + colorybufi / 10;
+        *pointy++ = '0' + colorybufi % 10;
+    } else {
+        *pointy++ = '0' + colorybufi;
+    }
+
+    *pointy++ = ';';
+    colorybufi = Color.green;
+    if (colorybufi >= 100) {
+        *pointy++ = '0' + colorybufi / 100;
+        *pointy++ = '0' + (colorybufi / 10) % 10;
+        *pointy++ = '0' + colorybufi % 10;
+    } else if (colorybufi >= 10) {
+        *pointy++ = '0' + colorybufi / 10;
+        *pointy++ = '0' + colorybufi % 10;
+    } else {
+        *pointy++ = '0' + colorybufi;
+    }
+
+    *pointy++ = ';';
+    colorybufi = Color.blue;
+    if (colorybufi >= 100) {
+        *pointy++ = '0' + colorybufi / 100;
+        *pointy++ = '0' + (colorybufi / 10) % 10;
+        *pointy++ = '0' + colorybufi % 10;
+    } else if (colorybufi >= 10) {
+        *pointy++ = '0' + colorybufi / 10;
+        *pointy++ = '0' + colorybufi % 10;
+    } else {
+        *pointy++ = '0' + colorybufi;
+    }
+
+    *pointy++ = 'm';
+
+	WriteToBackBuffor(bufi, pointy - bufi);
+
+	CORE.Tui.foregroundColor = Color;
+}
+
+void SetForegroundStyle(fontStyle Style) {
+	char buffi[8];
+	char* pointy = buffi;
+
+	*pointy++ = '\033';
+    *pointy++ = '[';
+    *pointy++ = '0' + Style;
+    *pointy++ = 'm';
+
+	WriteToBackBuffor(buffi, pointy - buffi);
+}
+
+
 
 void ClearBackground(color Color) {
 	ClearScreen();

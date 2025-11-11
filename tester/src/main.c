@@ -112,12 +112,40 @@ void HUHTest() {
 	}
 }
 
+void DrawCharTest() {
+	InitTui(60, false);
+
+	while(!TuiShouldClose()) {
+		char key = GetKey();
+
+		BeginDrawing();
+
+		ClearBackground((color){0, 0, 0});
+
+		// Old good copy and spam paste and manual things
+		DrawCharV('H', (vector2){(float)GetTuiWidth() / 2 - 4, (float)GetTuiHeight() / 2}, STYLE_NORMAL, (color){255, 0, 0});
+		DrawCharV('e', (vector2){(float)GetTuiWidth() / 2 - 3, (float)GetTuiHeight() / 2}, STYLE_BOLD, (color){0, 255, 0});
+		DrawCharV('L', (vector2){(float)GetTuiWidth() / 2 - 2, (float)GetTuiHeight() / 2}, STYLE_DIMM, (color){0, 0, 255});
+		DrawCharV('w', (vector2){(float)GetTuiWidth() / 2 + 1, (float)GetTuiHeight() / 2}, STYLE_BLINK, (color){0, 255, 255});
+		DrawCharV(' ', (vector2){(float)GetTuiWidth() / 2 + 2, (float)GetTuiHeight() / 2}, STYLE_REVERSE, (color){255, 128, 0});
+		DrawCharV('T', (vector2){(float)GetTuiWidth() / 2 + 3, (float)GetTuiHeight() / 2}, STYLE_HIDDEN, (color){128, 0, 255});
+		DrawCharV('u', (vector2){(float)GetTuiWidth() / 2 + 4, (float)GetTuiHeight() / 2}, STYLE_STRIKETHROUGH, (color){0, 128, 255});
+		DrawCharV('I', (vector2){(float)GetTuiWidth() / 2 + 5, (float)GetTuiHeight() / 2}, STYLE_NORMAL, (color){128, 255, 0});
+
+
+		if(key == KEY_ESC) { break; }
+
+		EndDrawing();
+	}
+}
+
 int main() {
 	int Input = 0;
 
 	printf("1. Backbuffor WriteTo test\n");
 	printf("2. TuiLoop test\n");
 	printf("3. Hide/UnHide test\n");
+	printf("4. DrawChar test\n");
 
 	printf("Input: ");
 	scanf("%d", &Input);
@@ -131,6 +159,7 @@ int main() {
 	if(Input == 1) { BackbufforTest(); }
 	else if(Input == 2) { TuiLoopTest(); }
 	else if(Input == 3) { HUHTest(); }
+	else if(Input == 4) { DrawCharTest(); }
 	
 	return 0;
 }
