@@ -37,7 +37,8 @@ TODO:
 - REMAMBER TO CONVERT FROM PRITNF TO WRITETOBACKBUFFOR/write
 - You forgot to make 'platform handling' and error handling in HideCursor and ShowCursor. Just search for write and look if these are done
 - Do SetForegroundColor and Style in ecore
-- Fix DrawChar. SetForegroundStyle BREAKS IT. If in DrawChar SetForegroundStyle isn't present everything works just fine. Jup, SetForegroundStyle is just something else(or it's something with the (fontstyle)enum).
+- Fix DrawChar. SetForegroundStyle BREAKS IT. If in DrawChar SetForegroundStyle isn't present everything works just fine. Jup, SetForegroundStyle is just something else. ok, so it's becouse SetForegroundStyle resets everything. remamber about CORE.Tui.foregroundStyle = STYLE_NORMAL; in Init
+
 
 TOUGHTS SAVE(In case cursor starts to flicker again(YES I FUCKING FIXED IT!!!!)):
 - Never mind, flickering is still here. Fix it info: it hapens after about 5 sec and then idk, Idea. Do SetCursorPosition in EndDrawing but with write INSTEAD of WriteToBackBuffor, there's nothing left besides 1. terminal is retarded 2. It's floating point problem

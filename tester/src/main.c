@@ -110,6 +110,8 @@ void HUHTest() {
 
 		EndDrawing();
 	}
+
+	CloseTui();
 }
 
 void DrawCharTest() {
@@ -137,6 +139,8 @@ void DrawCharTest() {
 
 		EndDrawing();
 	}
+
+	CloseTui();
 }
 
 int main() {
