@@ -21,8 +21,6 @@ void DrawChar(const char character, int posX, int posY, fontStyle Style, color C
 
 	SetForegroundColor(foregroundColorBuff);
 	SetForegroundStyle(foregroundStyleBuff);
-
-	SetBackgroundColor(GetBackgroundColor());
 }
 
 void DrawCharV(const char character, vector2 position, fontStyle Style, color Color) {
