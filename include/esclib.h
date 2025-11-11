@@ -48,8 +48,21 @@ typedef struct intvector4 {
 	int w;
 } intvector4;
 
+typedef enum {
+    STYLE_NORMAL        = 0,
+    STYLE_BOLD          = 1,
+    STYLE_DIMM          = 2,
+    STYLE_ITALIC        = 3,
+    STYLE_UNDERLINE     = 4,
+    STYLE_BLINK         = 5,
+    STYLE_REVERSE       = 7,
+    STYLE_HIDDEN        = 8,
+    STYLE_STRIKETHROUGH = 9
+} fontStyle;
 
 
+
+// eCore
 void InitTui(int fps, bool DisableSignals);
 void CloseTui(void);
 void SetTargetFps(int fps);
@@ -65,6 +78,9 @@ int GetTuiWidth(void);
 int GetTuiHeight(void);
 vector2 GetCursorPosition(void);
 vector2 GetLockedCursorPosition(void);
+color GetBackgroundColor(void);
+color GetForegroundColor(void);
+fontStyle GetForegroundStyle(void);
 int GetKey(void);
 double GetTime(void);
 
@@ -79,6 +95,8 @@ void LockCursor(void);
 void UnlockCursor(void);
 
 void SetBackgroundColor(color Color);
+void SetForegroundColor(color Color);
+void SetForegroundStyle(fontStyle Style);
 void ClearBackground(color Color);
 
 void ClearScreen(void);
@@ -92,6 +110,12 @@ void WriteToBackBuffor(const char* to_add, size_t lenght);
 void ToggleBufferMode(void);
 void EnableBufferMode(void);
 void DisableBufferMode(void);
+
+
+
+// eShapes
+void DrawChar(const char character, int posX, int posY, fontStyle Style, color Color);
+void DrawCharV(const char character, vector2 position, fontStyle Style, color Color);
 
 
 // KEYS(by chatgbt becouse I'm not crazy enough to write this myself)
