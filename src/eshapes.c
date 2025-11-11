@@ -5,6 +5,7 @@
 
 
 
+// FIX: SetForegroundStyle BREAKS IT. If in DrawChar SetForegroundStyle isn't present everything works just fine. Jup, SetForegroundStyle is just something else(or it's something with the (fontstyle)enum).
 void DrawChar(const char character, int posX, int posY, fontStyle Style, color Color) {
 	vector2 cursorPositionBuff = GetCursorPosition();
 	color foregroundColorBuff = GetForegroundColor();
