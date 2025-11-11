@@ -37,7 +37,7 @@ TODO:
 - REMAMBER TO CONVERT FROM PRITNF TO WRITETOBACKBUFFOR/write
 - You forgot to make 'platform handling' and error handling in HideCursor and ShowCursor. Just search for write and look if these are done
 - Do SetForegroundColor and Style in ecore
-- Fix DrawChar. Something with enum and some styles break things
+- Fix DrawChar. SETFOREGROUNDSTYLE BREAKS IT. If in DrawChar SETFOREGROUNDSTYLE isn't present everything works just fine
 
 TOUGHTS SAVE(In case cursor starts to flicker again(YES I FUCKING FIXED IT!!!!)):
 - Never mind, flickering is still here. Fix it info: it hapens after about 5 sec and then idk, Idea. Do SetCursorPosition in EndDrawing but with write INSTEAD of WriteToBackBuffor, there's nothing left besides 1. terminal is retarded 2. It's floating point problem
