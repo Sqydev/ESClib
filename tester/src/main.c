@@ -128,11 +128,11 @@ void DrawCharTest() {
 		DrawCharV('H', (vector2){(float)GetTuiWidth() / 2 - 4, (float)GetTuiHeight() / 2}, STYLE_NORMAL, (color){255, 0, 0});
 		DrawCharV('e', (vector2){(float)GetTuiWidth() / 2 - 3, (float)GetTuiHeight() / 2}, STYLE_BOLD, (color){0, 255, 0});
 		DrawCharV('L', (vector2){(float)GetTuiWidth() / 2 - 2, (float)GetTuiHeight() / 2}, STYLE_DIMM, (color){0, 0, 255});
-		DrawCharV('w', (vector2){(float)GetTuiWidth() / 2 + 1, (float)GetTuiHeight() / 2}, STYLE_BLINK, (color){0, 255, 255});
-		DrawCharV(' ', (vector2){(float)GetTuiWidth() / 2 + 2, (float)GetTuiHeight() / 2}, STYLE_REVERSE, (color){255, 128, 0});
-		DrawCharV('T', (vector2){(float)GetTuiWidth() / 2 + 3, (float)GetTuiHeight() / 2}, STYLE_HIDDEN, (color){128, 0, 255});
-		DrawCharV('u', (vector2){(float)GetTuiWidth() / 2 + 4, (float)GetTuiHeight() / 2}, STYLE_STRIKETHROUGH, (color){0, 128, 255});
-		DrawCharV('I', (vector2){(float)GetTuiWidth() / 2 + 5, (float)GetTuiHeight() / 2}, STYLE_NORMAL, (color){128, 255, 0});
+		DrawCharV('l', (vector2){(float)GetTuiWidth() / 2 - 1, (float)GetTuiHeight() / 2}, STYLE_ITALIC, (color){0, 255, 255});
+		DrawCharV('O', (vector2){(float)GetTuiWidth() / 2    , (float)GetTuiHeight() / 2}, STYLE_UNDERLINE, (color){255, 128, 0});
+		DrawCharV('T', (vector2){(float)GetTuiWidth() / 2 + 2, (float)GetTuiHeight() / 2}, STYLE_BACKGROUND, (color){128, 0, 255});
+		DrawCharV('u', (vector2){(float)GetTuiWidth() / 2 + 3, (float)GetTuiHeight() / 2}, STYLE_HIDDEN, (color){0, 128, 255});
+		DrawCharV('I', (vector2){(float)GetTuiWidth() / 2 + 4, (float)GetTuiHeight() / 2}, STYLE_STRIKETHROUGH, (color){128, 255, 0});
 
 
 		if(key == KEY_ESC) { break; }
