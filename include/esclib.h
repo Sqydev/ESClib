@@ -54,8 +54,7 @@ typedef enum {
     STYLE_DIMM          = 2,
     STYLE_ITALIC        = 3,
     STYLE_UNDERLINE     = 4,
-    STYLE_BLINK         = 5,
-    STYLE_REVERSE       = 7,
+    STYLE_BACKGROUND    = 7,
     STYLE_HIDDEN        = 8,
     STYLE_STRIKETHROUGH = 9
 } fontStyle;
