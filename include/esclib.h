@@ -120,6 +120,10 @@ void DrawTextRaw(const char* text, int posX, int posY, fontStyle Style, color Co
 void DrawText(const char* text, int posX, int posY, fontStyle Style, color Color);
 void DrawTextV(const char* text, vector2 position, fontStyle Style, color Color);
 
+void DrawTextGradientRaw(const char* text, int posX, int posY, fontStyle Style, color Left, color Right, size_t lenght);
+void DrawTextGradient(const char* text, int posX, int posY, fontStyle Style, color Left, color Right);
+void DrawTextGradientV(const char* text, vector2 position, fontStyle Style, color Left, color Right);
+
 
 // KEYS(by chatgbt becouse I'm not crazy enough to write this myself)
 

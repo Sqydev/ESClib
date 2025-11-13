@@ -33,7 +33,6 @@ TODO:
 - Do more get fns and use them in tester. (Like in HideCursor tester state of cursor hidness)
 - REMAMBER TO CONVERT FROM PRITNF TO WRITETOBACKBUFFOR/write
 - You forgot to make 'platform handling' and error handling in HideCursor and ShowCursor. Just search for write and look if these are done
-- Do draw text gradient variant
 
 
 TOUGHTS SAVE(In case cursor starts to flicker again(YES I FUCKING FIXED IT!!!!)):
