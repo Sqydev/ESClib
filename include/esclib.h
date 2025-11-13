@@ -116,6 +116,10 @@ void DisableBufferMode(void);
 void DrawChar(const char character, int posX, int posY, fontStyle Style, color Color);
 void DrawCharV(const char character, vector2 position, fontStyle Style, color Color);
 
+void DrawTextRaw(const char* text, int posX, int posY, fontStyle Style, color Color, size_t lenght);
+void DrawText(const char* text, int posX, int posY, fontStyle Style, color Color);
+void DrawTextV(const char* text, vector2 position, fontStyle Style, color Color);
+
 
 // KEYS(by chatgbt becouse I'm not crazy enough to write this myself)
 
