@@ -54,8 +54,7 @@ typedef enum {
     STYLE_DIMM          = 2,
     STYLE_ITALIC        = 3,
     STYLE_UNDERLINE     = 4,
-    STYLE_BLINK         = 5,
-    STYLE_REVERSE       = 7,
+    STYLE_BACKGROUND    = 7,
     STYLE_HIDDEN        = 8,
     STYLE_STRIKETHROUGH = 9
 } fontStyle;
@@ -116,6 +115,14 @@ void DisableBufferMode(void);
 // eShapes
 void DrawChar(const char character, int posX, int posY, fontStyle Style, color Color);
 void DrawCharV(const char character, vector2 position, fontStyle Style, color Color);
+
+void DrawTextRaw(const char* text, int posX, int posY, fontStyle Style, color Color, size_t lenght);
+void DrawText(const char* text, int posX, int posY, fontStyle Style, color Color);
+void DrawTextV(const char* text, vector2 position, fontStyle Style, color Color);
+
+void DrawTextGradientRaw(const char* text, int posX, int posY, fontStyle Style, color Left, color Right, size_t lenght);
+void DrawTextGradient(const char* text, int posX, int posY, fontStyle Style, color Left, color Right);
+void DrawTextGradientV(const char* text, vector2 position, fontStyle Style, color Left, color Right);
 
 
 // KEYS(by chatgbt becouse I'm not crazy enough to write this myself)

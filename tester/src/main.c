@@ -1,5 +1,6 @@
 #include "../../include/esclib.h"
 
+#include <string.h>
 #include <unistd.h>
 #include <stdio.h>
 
@@ -128,12 +129,52 @@ void DrawCharTest() {
 		DrawCharV('H', (vector2){(float)GetTuiWidth() / 2 - 4, (float)GetTuiHeight() / 2}, STYLE_NORMAL, (color){255, 0, 0});
 		DrawCharV('e', (vector2){(float)GetTuiWidth() / 2 - 3, (float)GetTuiHeight() / 2}, STYLE_BOLD, (color){0, 255, 0});
 		DrawCharV('L', (vector2){(float)GetTuiWidth() / 2 - 2, (float)GetTuiHeight() / 2}, STYLE_DIMM, (color){0, 0, 255});
-		DrawCharV('w', (vector2){(float)GetTuiWidth() / 2 + 1, (float)GetTuiHeight() / 2}, STYLE_BLINK, (color){0, 255, 255});
-		DrawCharV(' ', (vector2){(float)GetTuiWidth() / 2 + 2, (float)GetTuiHeight() / 2}, STYLE_REVERSE, (color){255, 128, 0});
-		DrawCharV('T', (vector2){(float)GetTuiWidth() / 2 + 3, (float)GetTuiHeight() / 2}, STYLE_HIDDEN, (color){128, 0, 255});
-		DrawCharV('u', (vector2){(float)GetTuiWidth() / 2 + 4, (float)GetTuiHeight() / 2}, STYLE_STRIKETHROUGH, (color){0, 128, 255});
-		DrawCharV('I', (vector2){(float)GetTuiWidth() / 2 + 5, (float)GetTuiHeight() / 2}, STYLE_NORMAL, (color){128, 255, 0});
+		DrawCharV('l', (vector2){(float)GetTuiWidth() / 2 - 1, (float)GetTuiHeight() / 2}, STYLE_ITALIC, (color){0, 255, 255});
+		DrawCharV('O', (vector2){(float)GetTuiWidth() / 2    , (float)GetTuiHeight() / 2}, STYLE_UNDERLINE, (color){255, 128, 0});
+		DrawCharV('T', (vector2){(float)GetTuiWidth() / 2 + 2, (float)GetTuiHeight() / 2}, STYLE_BACKGROUND, (color){128, 0, 255});
+		DrawCharV('u', (vector2){(float)GetTuiWidth() / 2 + 3, (float)GetTuiHeight() / 2}, STYLE_HIDDEN, (color){0, 128, 255});
+		DrawCharV('I', (vector2){(float)GetTuiWidth() / 2 + 4, (float)GetTuiHeight() / 2}, STYLE_STRIKETHROUGH, (color){128, 255, 0});
 
+
+		if(key == KEY_ESC) { break; }
+
+		EndDrawing();
+	}
+
+	CloseTui();
+}
+
+void DrawTextTest() {
+	InitTui(60, false);
+
+	while(!TuiShouldClose()) {
+		char key = GetKey();
+
+		BeginDrawing();
+
+		ClearBackground((color){0, 0, 0});
+
+		DrawTextV("Hello Tui", (vector2){(float)GetTuiWidth() / 2 - ((float)strlen("Hello Tui") / 2), (float)GetTuiHeight() / 2}, STYLE_NORMAL, (color){255, 255, 255});
+
+		if(key == KEY_ESC) { break; }
+
+		EndDrawing();
+	}
+
+	CloseTui();
+}
+
+void DrawTextGradientTest() {
+	InitTui(60, false);
+
+	while(!TuiShouldClose()) {
+		char key = GetKey();
+
+		BeginDrawing();
+
+		ClearBackground((color){0, 0, 0});
+
+		DrawTextGradientV("Hello Tui", (vector2){(float)GetTuiWidth() / 2 - ((float)strlen("Hello Tui") / 2), (float)GetTuiHeight() / 2}, STYLE_NORMAL, (color){255, 0, 0}, (color){0, 0, 255});
 
 		if(key == KEY_ESC) { break; }
 
@@ -150,6 +191,8 @@ int main() {
 	printf("2. TuiLoop test\n");
 	printf("3. Hide/UnHide test\n");
 	printf("4. DrawChar test\n");
+	printf("5. DrawText test\n");
+	printf("6. DrawTextGradient test\n");
 
 	printf("Input: ");
 	scanf("%d", &Input);
@@ -164,6 +207,8 @@ int main() {
 	else if(Input == 2) { TuiLoopTest(); }
 	else if(Input == 3) { HUHTest(); }
 	else if(Input == 4) { DrawCharTest(); }
+	else if(Input == 5) { DrawTextTest(); }
+	else if(Input == 6) { DrawTextGradientTest(); }
 	
 	return 0;
 }

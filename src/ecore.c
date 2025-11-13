@@ -580,17 +580,43 @@ void SetForegroundColor(color Color) {
 
 	CORE.Tui.foregroundColor = Color;
 }
-
+// INFO: There are only 10 possible combinations and one need special threatment so It's fastest(In speed runtime sence) to make it 'by hand' (also, fuck microsoft)
 void SetForegroundStyle(fontStyle Style) {
-	char buffi[8];
-	char* pointy = buffi;
+	switch(Style) {
+		case STYLE_NORMAL:
+			WriteToBackBuffor("\033[22;23;24;25;27;28;29m", 23);
+			break;
+			
+		case STYLE_BOLD:
+			WriteToBackBuffor("\033[1m", 4);
+			break;
 
-	*pointy++ = '\033';
-    *pointy++ = '[';
-    *pointy++ = '0' + Style;
-    *pointy++ = 'm';
+		case STYLE_DIMM:
+			WriteToBackBuffor("\033[2m", 4);
+			break;
 
-	WriteToBackBuffor(buffi, pointy - buffi);
+		case STYLE_ITALIC:
+			WriteToBackBuffor("\033[3m", 4);
+			break;
+
+		case STYLE_UNDERLINE:
+			WriteToBackBuffor("\033[4m", 4);
+			break;
+
+		case STYLE_BACKGROUND:
+			WriteToBackBuffor("\033[7m", 4);
+			break;
+
+		case STYLE_HIDDEN:
+			WriteToBackBuffor("\033[8m", 4);
+			break;
+
+		case STYLE_STRIKETHROUGH:
+			WriteToBackBuffor("\033[9m", 4);
+			break;
+	}
+
+	CORE.Tui.foregroundStyle = Style;
 }
 
 
