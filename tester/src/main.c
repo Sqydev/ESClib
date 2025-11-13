@@ -1,5 +1,6 @@
 #include "../../include/esclib.h"
 
+#include <string.h>
 #include <unistd.h>
 #include <stdio.h>
 
@@ -143,6 +144,26 @@ void DrawCharTest() {
 	CloseTui();
 }
 
+void DrawTextTest() {
+	InitTui(60, false);
+
+	while(!TuiShouldClose()) {
+		char key = GetKey();
+
+		BeginDrawing();
+
+		ClearBackground((color){0, 0, 0});
+
+		DrawTextV("Hello Tui", (vector2){(float)GetTuiWidth() / 2 - ((float)strlen("Hello Tui") / 2), (float)GetTuiHeight() / 2}, STYLE_NORMAL, (color){255, 255, 255});
+
+		if(key == KEY_ESC) { break; }
+
+		EndDrawing();
+	}
+
+	CloseTui();
+}
+
 int main() {
 	int Input = 0;
 
@@ -150,6 +171,7 @@ int main() {
 	printf("2. TuiLoop test\n");
 	printf("3. Hide/UnHide test\n");
 	printf("4. DrawChar test\n");
+	printf("5. DrawText test\n");
 
 	printf("Input: ");
 	scanf("%d", &Input);
@@ -164,6 +186,7 @@ int main() {
 	else if(Input == 2) { TuiLoopTest(); }
 	else if(Input == 3) { HUHTest(); }
 	else if(Input == 4) { DrawCharTest(); }
+	else if(Input == 5) { DrawTextTest(); }
 	
 	return 0;
 }
