@@ -189,9 +189,9 @@ void InitTui(int fps, bool DisableSignals) {
 
 	SetTargetFps(fps);
 
-	CORE.Tui.backgroundColor = (color){0, 0, 0};
-	CORE.Tui.foregroundColor = (color){0, 0, 0};
-	CORE.Tui.foregroundStyle = STYLE_NORMAL;
+	SetBackgroundColor((color){0, 0, 0});
+	SetForegroundColor((color){255, 255, 255});
+	SetForegroundStyle(STYLE_NORMAL);
 
 	CORE.Tui.shouldClose = false;
 
