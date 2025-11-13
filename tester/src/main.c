@@ -164,6 +164,26 @@ void DrawTextTest() {
 	CloseTui();
 }
 
+void DrawTextGradientTest() {
+	InitTui(60, false);
+
+	while(!TuiShouldClose()) {
+		char key = GetKey();
+
+		BeginDrawing();
+
+		ClearBackground((color){0, 0, 0});
+
+		DrawTextGradientV("Hello Tui", (vector2){(float)GetTuiWidth() / 2 - ((float)strlen("Hello Tui") / 2), (float)GetTuiHeight() / 2}, STYLE_NORMAL, (color){255, 0, 0}, (color){0, 0, 255});
+
+		if(key == KEY_ESC) { break; }
+
+		EndDrawing();
+	}
+
+	CloseTui();
+}
+
 int main() {
 	int Input = 0;
 
@@ -172,6 +192,7 @@ int main() {
 	printf("3. Hide/UnHide test\n");
 	printf("4. DrawChar test\n");
 	printf("5. DrawText test\n");
+	printf("6. DrawTextGradient test\n");
 
 	printf("Input: ");
 	scanf("%d", &Input);
@@ -187,6 +208,7 @@ int main() {
 	else if(Input == 3) { HUHTest(); }
 	else if(Input == 4) { DrawCharTest(); }
 	else if(Input == 5) { DrawTextTest(); }
+	else if(Input == 6) { DrawTextGradientTest(); }
 	
 	return 0;
 }
