@@ -45,3 +45,4 @@ REMAMBER:
 - DO DRAWING IN eshapes AND etext
 - Remamber that in tester 7 cursor on top and getkey on bottom is intended, cuz Draw... will have where to draw it. SO DO NOT TRY TO FIX THIS BECOUSE IT IS JUST UNCLEAR INTENDED BEHAVIOUR
 - If there is super big number of things in backbuffor there can be disturbences. It's only a theory thou so I'm leaving this note just in case it FLICKERING will happen again. Mabey thats becouse of that write instead of printf in EndDrawing
+- Funny char: █

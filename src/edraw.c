@@ -59,3 +59,36 @@ void DrawTextGradient(const char* text, int posX, int posY, fontStyle Style, col
 void DrawTextGradientV(const char* text, vector2 position, fontStyle Style, color Left, color Right) {
 	DrawTextGradient(text, position.x, position.y, Style, Left, Right);
 }
+
+
+
+
+void DrawRectangleRaw(const char character, int posX, int posY, int width, int height, fontStyle Style, color Color) {
+
+}
+void DrawRectangle(int posX, int posY, int width, int height, color Color) {
+	DrawRectangleRaw(' ', posX, posY, width, height, STYLE_BACKGROUND, Color);
+}
+void DrawRectangleV(int posX, int posY, int width, int height, color Color) {
+
+}
+
+void DrawRectangleGradientVerticalRaw(const char character, int posX, int posY, int width, int height, fontStyle Style, color Top, color Bottom) {
+
+}
+void DrawRectangleGradientVertical(int posX, int posY, int width, int height, color Top, color Bottom) {
+
+}
+void DrawRectangleGradientVerticalV(int posX, int posY, int width, int height, color Top, color Bottom) {
+
+}
+
+void DrawRectangleGradientHorizontalRaw(const char character, int posX, int posY, int width, int height, fontStyle Style, color Left, color Right) {
+
+}
+void DrawRectangleGradientHorizontal(int posX, int posY, int width, int height, color Left, color Right) {
+
+}
+void DrawRectangleGradientHorizontalV(int posX, int posY, int width, int height, color Left, color Right) {
+
+}

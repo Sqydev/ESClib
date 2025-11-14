@@ -175,6 +175,7 @@ void DrawTextGradientTest() {
 		ClearBackground((color){0, 0, 0});
 
 		DrawTextGradientV("Hello Tui", (vector2){(float)GetTuiWidth() / 2 - ((float)strlen("Hello Tui") / 2), (float)GetTuiHeight() / 2}, STYLE_NORMAL, (color){255, 0, 0}, (color){0, 0, 255});
+		DrawTextGradientV("                    ", (vector2){(float)GetTuiWidth() / 2 - ((float)strlen("                    ") / 2), (float)GetTuiHeight() / 2 + 2}, STYLE_BACKGROUND, (color){255, 0, 255}, (color){255, 255, 0});
 
 		if(key == KEY_ESC) { break; }
 
