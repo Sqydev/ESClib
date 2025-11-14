@@ -34,6 +34,7 @@ TODO:
 - REMAMBER TO CONVERT FROM PRITNF TO WRITETOBACKBUFFOR/write
 - You forgot to make 'platform handling' and error handling in HideCursor and ShowCursor. Just search for write and look if these are done
 - Jup, rectangle broke:(
+- Ok, chainge the logic so backbuffor is 2d array at dimmentions of the terminal. And every frame it just clear's WHOLE terminal and writes backbuffor. Becouse as I thouth the terminal is just retarted and you chan't thrust it with esqseq
 
 
 TOUGHTS SAVE(In case cursor starts to flicker again(YES I FUCKING FIXED IT!!!!)):
