@@ -64,31 +64,35 @@ void DrawTextGradientV(const char* text, vector2 position, fontStyle Style, colo
 
 
 void DrawRectangleRaw(const char character, int posX, int posY, int width, int height, fontStyle Style, color Color) {
-
+	for(int i = 0; i < width; i++) {
+		for (int j = 0; j < height; j++) {
+			DrawChar(character, posX + i, posY + j, Style, Color);
+	 	}
+	}
 }
 void DrawRectangle(int posX, int posY, int width, int height, color Color) {
 	DrawRectangleRaw(' ', posX, posY, width, height, STYLE_BACKGROUND, Color);
 }
-void DrawRectangleV(int posX, int posY, int width, int height, color Color) {
-
+void DrawRectangleV(vector2 position, int width, int height, color Color) {
+	DrawRectangle(position.x, position.y, width, height, Color);
 }
 
-void DrawRectangleGradientVerticalRaw(const char character, int posX, int posY, int width, int height, fontStyle Style, color Top, color Bottom) {
+//void DrawRectangleGradientVerticalRaw(const char character, int posX, int posY, int width, int height, fontStyle Style, color Top, color Bottom) {
 
-}
-void DrawRectangleGradientVertical(int posX, int posY, int width, int height, color Top, color Bottom) {
+//}
+//void DrawRectangleGradientVertical(int posX, int posY, int width, int height, color Top, color Bottom) {
 
-}
-void DrawRectangleGradientVerticalV(int posX, int posY, int width, int height, color Top, color Bottom) {
+//}
+//void DrawRectangleGradientVerticalV(vector2 position, int width, int height, color Top, color Bottom) {
 
-}
+//}
 
-void DrawRectangleGradientHorizontalRaw(const char character, int posX, int posY, int width, int height, fontStyle Style, color Left, color Right) {
+//void DrawRectangleGradientHorizontalRaw(const char character, int posX, int posY, int width, int height, fontStyle Style, color Left, color Right) {
 
-}
-void DrawRectangleGradientHorizontal(int posX, int posY, int width, int height, color Left, color Right) {
+//}
+//void DrawRectangleGradientHorizontal(int posX, int posY, int width, int height, color Left, color Right) {
 
-}
-void DrawRectangleGradientHorizontalV(int posX, int posY, int width, int height, color Left, color Right) {
+//}
+//void DrawRectangleGradientHorizontalV(vector2 position, int width, int height, color Left, color Right) {
 
-}
+//}

@@ -185,6 +185,26 @@ void DrawTextGradientTest() {
 	CloseTui();
 }
 
+void DrawRectangleTest() {
+	InitTui(1, false);
+
+	while(!TuiShouldClose()) {
+		char key = GetKey();
+
+		BeginDrawing();
+
+		ClearBackground((color){0, 0, 0});
+
+		DrawRectangleV((vector2){(float)GetTuiWidth() / 2 - 30, (float)GetTuiHeight() / 2 - 20}, 20, 20, (color){255, 255, 255});
+
+		if(key == KEY_ESC) { break; }
+
+		EndDrawing();
+	}
+
+	CloseTui();
+}
+
 int main() {
 	int Input = 0;
 
@@ -194,6 +214,7 @@ int main() {
 	printf("4. DrawChar test\n");
 	printf("5. DrawText test\n");
 	printf("6. DrawTextGradient test\n");
+	printf("7. DrawRectangle test\n");
 
 	printf("Input: ");
 	scanf("%d", &Input);
@@ -210,6 +231,7 @@ int main() {
 	else if(Input == 4) { DrawCharTest(); }
 	else if(Input == 5) { DrawTextTest(); }
 	else if(Input == 6) { DrawTextGradientTest(); }
+	else if(Input == 7) { DrawRectangleTest(); }
 	
 	return 0;
 }
