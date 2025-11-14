@@ -25,9 +25,21 @@ void DrawCharV(const char character, vector2 position, fontStyle Style, color Co
 }
 
 void DrawTextRaw(const char* text, int posX, int posY, fontStyle Style, color Color, size_t lenght) {
-	for(int i = 0; i < (int)lenght; i++) {
-		DrawChar(text[i], posX + i, posY, Style, Color);
-	}
+	vector2 cursorPositionBuff = GetCursorPosition();
+	color foregroundColorBuff = GetForegroundColor();
+	char foregroundStyleBuff = GetForegroundStyle();
+	
+	SetCursorPosition(posX, posY);
+
+	SetForegroundColor(Color);
+	SetForegroundStyle(Style);
+
+	WriteToBackBuffor(text, lenght);
+
+	SetCursorPosition(cursorPositionBuff.x, cursorPositionBuff.y);
+
+	SetForegroundColor(foregroundColorBuff);
+	SetForegroundStyle(foregroundStyleBuff);
 }
 void DrawText(const char* text, int posX, int posY, fontStyle Style, color Color) {
 	size_t lenght = strlen(text);
@@ -38,6 +50,14 @@ void DrawTextV(const char* text, vector2 position, fontStyle Style, color Color)
 }
 
 void DrawTextGradientRaw(const char* text, int posX, int posY, fontStyle Style, color Left, color Right, size_t lenght) {
+	vector2 cursorPositionBuff = GetCursorPosition();
+	color foregroundColorBuff = GetForegroundColor();
+	char foregroundStyleBuff = GetForegroundStyle();
+	
+	SetCursorPosition(posX, posY);
+
+	SetForegroundStyle(Style);
+
 	for(int i = 0; i < (int)lenght; i++) {
 		// Sum alghorytm from THE internet
 
@@ -49,8 +69,17 @@ void DrawTextGradientRaw(const char* text, int posX, int posY, fontStyle Style, 
         Color.green = Left.green + (int)((Right.green - Left.green) * state_of_journey);
         Color.blue = Left.blue + (int)((Right.blue - Left.blue) * state_of_journey);
 
-		DrawChar(text[i], posX + i, posY, Style, Color);
+		SetCursorPosition(posX + i, posY);
+
+		SetForegroundColor(Color);
+
+		WriteToBackBuffor(&text[i], 1);
 	}
+
+	SetCursorPosition(cursorPositionBuff.x, cursorPositionBuff.y);
+
+	SetForegroundColor(foregroundColorBuff);
+	SetForegroundStyle(foregroundStyleBuff);
 }
 void DrawTextGradient(const char* text, int posX, int posY, fontStyle Style, color Left, color Right) {
 	size_t lenght = strlen(text);
