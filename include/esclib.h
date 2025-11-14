@@ -124,6 +124,19 @@ void DrawTextGradientRaw(const char* text, int posX, int posY, fontStyle Style, 
 void DrawTextGradient(const char* text, int posX, int posY, fontStyle Style, color Left, color Right);
 void DrawTextGradientV(const char* text, vector2 position, fontStyle Style, color Left, color Right);
 
+void DrawRectangleRaw(const char character, int posX, int posY, int width, int height, fontStyle Style, color Color);
+void DrawRectangle(int posX, int posY, int width, int height, fontStyle Style, color Color);
+void DrawRectangleV(int posX, int posY, int width, int height, fontStyle Style, color Color);
+
+void DrawRectangleGradientVerticalRaw(const char character, int posX, int posY, int width, int height, fontStyle Style, color Top, color Bottom);
+void DrawRectangleGradientVertical(int posX, int posY, int width, int height, fontStyle Style, color Top, color Bottom);
+void DrawRectangleGradientVerticalV(int posX, int posY, int width, int height, fontStyle Style, color Top, color Bottom);
+
+void DrawRectangleGradientHorizontalRaw(const char character, int posX, int posY, int width, int height, fontStyle Style, color Left, color Right);
+void DrawRectangleGradientHorizontal(int posX, int posY, int width, int height, fontStyle Style, color Left, color Right);
+void DrawRectangleGradientHorizontalV(int posX, int posY, int width, int height, fontStyle Style, color Left, color Right);
+
+
 
 // KEYS(by chatgbt becouse I'm not crazy enough to write this myself)
 
