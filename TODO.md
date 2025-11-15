@@ -34,17 +34,18 @@ TODO:
 - REMAMBER TO CONVERT FROM PRITNF TO WRITETOBACKBUFFOR/write
 - You forgot to make 'platform handling' and error handling in HideCursor and ShowCursor. Just search for write and look if these are done
 - Jup, rectangle broke:(
-- Ok, chainge the logic so backbuffor is 2d array at dimmentions of the terminal. And every frame it just clear's WHOLE terminal and writes backbuffor. Becouse as I thouth the terminal is just retarted and you chan't thrust it with esqseq
+- Ok, chainge the logic so backbuffor is array at dimmentions of the terminal. And every frame it just clear's WHOLE terminal and writes backbuffor. Becouse as I thouth the terminal is just retarted and you chan't thrust it with esqseq
+- Jup, FOR SURE it's terminal's foult with thoes bug's that make's f.e. DRAWRECTANGLE not drawing full rectangle. In summ just do the thing up
 
 
 TOUGHTS SAVE(In case cursor starts to flicker again(YES I FUCKING FIXED IT!!!!)):
 - Never mind, flickering is still here. Fix it info: it hapens after about 5 sec and then idk, Idea. Do SetCursorPosition in EndDrawing but with write INSTEAD of WriteToBackBuffor, there's nothing left besides 1. terminal is retarded 2. It's floating point problem
 - Backbuffor is ok, Cursor. is ok, I DON'T KNOW WHAT IT ISSSSS, I GIVE UP FOR NOW
 - Mabey it's something with WriteToBackBuffor
+- DrawRectangle works now but remamber that that was fixed by optimasing how much escseqs are spamed
 
 REMAMBER:
 - First make drawing fns and then fix things(But first first chainge printf to sprintf's faster brothers)
 - DO DRAWING IN eshapes AND etext
 - Remamber that in tester 7 cursor on top and getkey on bottom is intended, cuz Draw... will have where to draw it. SO DO NOT TRY TO FIX THIS BECOUSE IT IS JUST UNCLEAR INTENDED BEHAVIOUR
 - If there is super big number of things in backbuffor there can be disturbences. It's only a theory thou so I'm leaving this note just in case it FLICKERING will happen again. Mabey thats becouse of that write instead of printf in EndDrawing
-- Funny char: █
