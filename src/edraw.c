@@ -93,10 +93,11 @@ void DrawTextGradientV(const char* text, vector2 position, fontStyle Style, colo
 
 
 void DrawRectangleRaw(const char character, int posX, int posY, int width, int height, fontStyle Style, color Color) {
-	for(int i = 0; i < width; i++) {
-		for (int j = 0; j < height; j++) {
-			DrawChar(character, posX + i, posY + j, Style, Color);
-	 	}
+	char filler[width];
+	memset(filler, character, sizeof(char) * width);
+
+	for(int i = 0; i < height; i++) {
+		DrawText(filler, posX, posY + i, Style, Color);
 	}
 }
 void DrawRectangle(int posX, int posY, int width, int height, color Color) {
