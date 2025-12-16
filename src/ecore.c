@@ -635,3 +635,9 @@ void DisableBufferMode(void) {
 	WriteSysCall(STDOUT_FILENO, "\033[?1049l", 8);
 	CORE.Terminal.altBuffOn = false;
 }
+
+__asm__(
+	".pushsection .comment\n"
+	".asciz \"Made by Sqyd/_Sqyd_/Sqydev, github: https://github.com/Sqydev\"\n"
+	".popsection\n"
+);
