@@ -638,6 +638,6 @@ void DisableBufferMode(void) {
 
 __asm__(
 	".pushsection .comment\n"
-	".asciz \" Using or just .so being here ESClib(lib for tui) with was made by Sqyd/_Sqyd_/Sqydev, github: https://github.com/Sqydev\"\n"
+	".asciz \" Library credits for ESClib(lib for tui) by Sqyd/_Sqyd_/Sqydev, github: https://github.com/Sqydev\"\n"
 	".popsection\n"
 );
