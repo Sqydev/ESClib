@@ -1,0 +1,2 @@
+- When you'll do loop call SignalsStep
+- When I'll do tester for sighandling ever again remamber to do fflush when you'll thest it with printf:)
