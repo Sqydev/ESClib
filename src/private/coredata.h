@@ -3,13 +3,18 @@
 
 #if defined(__WIN32) || defined(__WIN64)
 #elif defined(__linux__) || defined(__APPLE__)
-	#include <signal.h>
 #endif
+
+#include <signal.h>
+#include <stdbool.h>
 
 typedef struct {
 	struct {
-		struct sigaction sigint;
-		volatile sig_atomic_t sigintOn;
+		struct {
+			struct sigaction old;
+			volatile sig_atomic_t triggered;
+			bool enabled;
+		} SIG_INT;
 	} SignalData;
 } CoreData;
 
