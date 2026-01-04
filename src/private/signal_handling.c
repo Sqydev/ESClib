@@ -1,6 +1,6 @@
 #include "../../include/esclib.h"
 
-#include "./utils.h"
+#include "./signal_handling.h"
 #include "./coredata.h"
 
 #if defined(__WIN32) || defined(__WIN64)
@@ -18,7 +18,7 @@ CoreData *gDATA = NULL;
 	void sigint_handler(int signo) {
 		(void)signo;
 		if(!gDATA) { return; }
-		gDATA->SignalData.sigintOn = 1;
+		gDATA->SignalData.SIG_INT.triggered = 1;
 	}
 #endif
 
@@ -26,10 +26,11 @@ CoreData *gDATA = NULL;
 void SignalsSetup(CoreData *DATA) {
 	#if defined(_WIN32) || defined(_WIN64)
 	#elif defined(__linux__) || defined(__APPLE__)
-		DATA->SignalData.sigintOn = 0;
+		DATA->SignalData.SIG_INT.triggered = 0;
+		DATA->SignalData.SIG_INT.enabled = 1;
 		gDATA = DATA;
 	
-		sigaction(SIGINT, NULL, &DATA->SignalData.sigint);
+		sigaction(SIGINT, NULL, &DATA->SignalData.SIG_INT.old);
 
 		struct sigaction sia = {0};
 		sia.sa_handler = sigint_handler;
@@ -43,21 +44,21 @@ void SignalsSetup(CoreData *DATA) {
 void SignalsStep() {
 	#if defined(_WIN32) || defined(_WIN64)
 	#elif defined(__linux__) || defined(__APPLE__)
-		if(gDATA->SignalData.sigintOn == 1) {
-			gDATA->SignalData.sigintOn = 0;
+		if(gDATA->SignalData.SIG_INT.triggered == 1 && gDATA->SignalData.SIG_INT.enabled == true) {
+			gDATA->SignalData.SIG_INT.triggered = 0;
 			
 			CloseTui();
 	
 			// NOTE: Retrive the old functions of SIGINT
-			sigaction(SIGINT, &gDATA->SignalData.sigint, NULL);
+			sigaction(SIGINT, &gDATA->SignalData.SIG_INT.old, NULL);
 	
-			if(gDATA->SignalData.sigint.sa_handler == SIG_DFL) {
+			if(gDATA->SignalData.SIG_INT.old.sa_handler == SIG_DFL) {
 				// NOTE: Call SIGINT
 				raise(SIGINT);
 			}
-			else if(gDATA->SignalData.sigint.sa_handler != SIG_IGN) {
+			else if(gDATA->SignalData.SIG_INT.old.sa_handler != SIG_IGN) {
 				// NOTE: Ignore
-				gDATA->SignalData.sigint.sa_handler(SIGINT);
+				gDATA->SignalData.SIG_INT.old.sa_handler(SIGINT);
 			}
 		}
 	#endif

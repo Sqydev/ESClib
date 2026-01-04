@@ -33,4 +33,7 @@ typedef enum TuiType {
 RLAPI void InitTui(int width, int height, int targetFps, TuiType tuiType);
 RLAPI void CloseTui(void);
 
+RLAPI int EnableSignal(int signal);
+RLAPI int DisableSignal(int signal);
+
 #endif
