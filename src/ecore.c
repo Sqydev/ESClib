@@ -2,10 +2,11 @@
 
 #include "./private/coredata.h"
 #include "./private/signal_handling.h"
-#include "./private/common_utils.h"
-#include "unistd.h"
 
-#include <errno.h>
+#if defined(_WIN32) || defined(_WIN64)
+#elif defined(__linux__) || defined(__APPLE__)
+#endif
+
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -15,7 +16,7 @@ CoreData DATA;
 void InitTui(int width, int height, int targetFps, TuiType tuiType) {
 	atexit(CloseTui);
 
-	SignalsSetup(&DATA);
+	SignalsSetup();
 
 	(void)width;
 	(void)height;
@@ -26,34 +27,4 @@ void InitTui(int width, int height, int targetFps, TuiType tuiType) {
 void CloseTui(void) {
 	printf("This is testing message from CloseTui() :)");
 	fflush(stdout);
-}
-
-int EnableSignal(int signal) {
-	switch(signal) {
-		case SIGINT:
-			DATA.SignalData.SIG_INT.enabled = true;
-			break;
-		
-		default:
-			UniWrite(STDERR_FILENO, "ERROR: Couldn't enable signal becouse signal is NOT supported", 62);
-			errno = EINVAL;
-			return EXIT_FAILURE;
-	}
-
-	return EXIT_SUCCESS;
-}
-
-int DisableSignal(int signal) {
-	switch(signal) {
-		case SIGINT:
-			DATA.SignalData.SIG_INT.enabled = false;
-			break;
-		
-		default:
-			UniWrite(STDERR_FILENO, "ERROR: Couldn't disable signal becouse signal is NOT supported", 62);
-			errno = EINVAL;
-			return EXIT_FAILURE;
-	}
-
-	return EXIT_SUCCESS;
 }

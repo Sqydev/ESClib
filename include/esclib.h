@@ -35,5 +35,11 @@ RLAPI void CloseTui(void);
 
 RLAPI int EnableSignal(int signal);
 RLAPI int DisableSignal(int signal);
+RLAPI int EnableSignalESClibTasks(int signal);
+RLAPI int DisableSignalESClibTasks(int signal);
+RLAPI int EnableSignalCustomTasks(int signal);
+RLAPI int DisableSignalCustomTasks(int signal);
+RLAPI int EnableSignalBuildInTasks(int signal);
+RLAPI int DisableSignalBuildInTasks(int signal);
 
 #endif
