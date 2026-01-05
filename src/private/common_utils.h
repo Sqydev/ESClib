@@ -3,6 +3,11 @@
 
 #include <stddef.h>
 
-int UniWrite(int fd, const void *buf, size_t n);
+typedef enum {
+	UNI_WRITE_TARGET_STDOUT = 1,
+	UNI_WRITE_TARGET_STDERR = 2
+} UniWriteTarget;
+
+int UniWrite(UniWriteTarget target, const void *buf, size_t n);
 
 #endif

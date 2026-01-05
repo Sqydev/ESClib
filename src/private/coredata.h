@@ -14,8 +14,13 @@ typedef struct {
 			struct sigaction old;
 			volatile sig_atomic_t triggered;
 			bool enabled;
+			bool enabledESClibTasks;
+			bool enabledCustomTasks;
+			bool enabledBuildInTasks;
 		} SIG_INT;
 	} SignalData;
 } CoreData;
+
+extern CoreData DATA;
 
 #endif

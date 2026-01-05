@@ -1,16 +1,36 @@
+#include "../../include/esclib.h"
+
 #include "./common_utils.h"
 
 #if defined(_WIN32) || defined(_WIN64)
+	#define STD
 #elif defined(__linux__) || defined(__APPLE__)
 	#include <unistd.h>
 #endif
 
 // TODO: DO return codes here
-int UniWrite(int fd, const void *buf, size_t n) {
+int UniWrite(UniWriteTarget target, const void *buf, size_t n) {
 	#if defined(_WIN32) || defined(_WIN64)
-	#elif defined(__linux__) || defined(__APPLE__)
-		write(fd, buf, n);
-	#endif
+		HANDLE h;
 
-	return 0;
+		switch (target) {
+		case UNI_WRITE_TARGET_STDOUT:
+			h = GetStdHandle(STD_OUTPUT_HANDLE);
+			break;
+		case UNI_WRITE_TARGET_STDERR:
+			h = GetStdHandle(STD_ERROR_HANDLE);
+			break;
+		default:
+			return -1;
+		}
+
+		DWORD written = 0;
+		if (!WriteFile(h, buf, (DWORD)n, &written, NULL))
+			return -1;
+
+		return (int)written;
+
+	#elif defined(__linux__) || defined(__APPLE__)
+		return (int)write((int)target, buf, n);
+	#endif
 }

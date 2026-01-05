@@ -3,7 +3,7 @@
 
 #include "./coredata.h"
 
-void SignalsSetup(CoreData *DATA);
+void SignalsSetup(void);
 void SignalsStep(void);
 
 #endif

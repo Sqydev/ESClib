@@ -1,5 +1,7 @@
 #include "../../include/esclib.h"
 
+#include "../../include/esclib.h"
+
 #include "./signal_handling.h"
 #include "./coredata.h"
 
@@ -10,27 +12,25 @@
 
 #include <stddef.h>
 
-// NOTE: That's global DATA pointer(will point to DATA after SignalsSetup)
-CoreData *gDATA = NULL;
-
 #if defined(_WIN32) || defined(_WIN64)
 #elif defined(__linux__) || defined(__APPLE__)
 	void sigint_handler(int signo) {
 		(void)signo;
-		if(!gDATA) { return; }
-		gDATA->SignalData.SIG_INT.triggered = 1;
+		DATA.SignalData.SIG_INT.triggered = 1;
 	}
 #endif
 
 // TODO: Add handling for more signals(like SIGWITH to know when terrminal is resized itp.)
-void SignalsSetup(CoreData *DATA) {
+void SignalsSetup(void) {
 	#if defined(_WIN32) || defined(_WIN64)
 	#elif defined(__linux__) || defined(__APPLE__)
-		DATA->SignalData.SIG_INT.triggered = 0;
-		DATA->SignalData.SIG_INT.enabled = 1;
-		gDATA = DATA;
+		DATA.SignalData.SIG_INT.triggered = 0;
+		DATA.SignalData.SIG_INT.enabled = 1;
+		DATA.SignalData.SIG_INT.enabledESClibTasks = 1;
+		DATA.SignalData.SIG_INT.enabledCustomTasks = 1;
+		DATA = DATA;
 	
-		sigaction(SIGINT, NULL, &DATA->SignalData.SIG_INT.old);
+		sigaction(SIGINT, NULL, &DATA.SignalData.SIG_INT.old);
 
 		struct sigaction sia = {0};
 		sia.sa_handler = sigint_handler;
@@ -41,24 +41,28 @@ void SignalsSetup(CoreData *DATA) {
 	#endif
 }
 
-void SignalsStep() {
+void SignalsStep(void) {
 	#if defined(_WIN32) || defined(_WIN64)
 	#elif defined(__linux__) || defined(__APPLE__)
-		if(gDATA->SignalData.SIG_INT.triggered == 1 && gDATA->SignalData.SIG_INT.enabled == true) {
-			gDATA->SignalData.SIG_INT.triggered = 0;
+		if(DATA.SignalData.SIG_INT.triggered == 1 && DATA.SignalData.SIG_INT.enabled == true) {
+			DATA.SignalData.SIG_INT.triggered = 0;
 			
-			CloseTui();
-	
-			// NOTE: Retrive the old functions of SIGINT
-			sigaction(SIGINT, &gDATA->SignalData.SIG_INT.old, NULL);
-	
-			if(gDATA->SignalData.SIG_INT.old.sa_handler == SIG_DFL) {
-				// NOTE: Call SIGINT
-				raise(SIGINT);
+			if(DATA.SignalData.SIG_INT.enabledESClibTasks) {
+				CloseTui();
 			}
-			else if(gDATA->SignalData.SIG_INT.old.sa_handler != SIG_IGN) {
-				// NOTE: Ignore
-				gDATA->SignalData.SIG_INT.old.sa_handler(SIGINT);
+
+			// NOTE: Retrive the old functions of SIGINT
+			sigaction(SIGINT, &DATA.SignalData.SIG_INT.old, NULL);
+	
+			if(DATA.SignalData.SIG_INT.enabledBuildInTasks) {
+				if(DATA.SignalData.SIG_INT.old.sa_handler == SIG_DFL) {
+					// NOTE: Call SIGINT
+					raise(SIGINT);
+				}
+				else if(DATA.SignalData.SIG_INT.old.sa_handler != SIG_IGN) {
+					// NOTE: Ignore
+					DATA.SignalData.SIG_INT.old.sa_handler(SIGINT);
+				}
 			}
 		}
 	#endif
