@@ -1,24 +1,14 @@
-#include "../../include/esclib.h"
+#include "../../../include/esclib.h"
 
-#include "../../include/esclib.h"
+#include "../../../include/esclib.h"
 
-#include "./signal_handling.h"
-#include "./coredata.h"
+#include "./signals_actions.h"
+#include "./handlers.h"
+#include "../coredata.h"
 
-#if defined(__WIN32) || defined(__WIN64)
-#elif defined(__linux__) || defined(__APPLE__)
-	#include <signal.h>
-#endif
-
+#include <signal.h>
 #include <stddef.h>
 
-#if defined(_WIN32) || defined(_WIN64)
-#elif defined(__linux__) || defined(__APPLE__)
-	void sigint_handler(int signo) {
-		(void)signo;
-		DATA.SignalData.SIG_INT.triggered = 1;
-	}
-#endif
 
 // TODO: Add handling for more signals(like SIGWITH to know when terrminal is resized itp.)
 void SignalsSetup(void) {
