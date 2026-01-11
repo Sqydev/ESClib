@@ -1,7 +1,7 @@
 #include "../include/esclib.h"
 
 #include "./private/coredata.h"
-#include "./private/signal_handling.h"
+#include "./private/signals/signals_actions.h"
 
 #if defined(_WIN32) || defined(_WIN64)
 #elif defined(__linux__) || defined(__APPLE__)
