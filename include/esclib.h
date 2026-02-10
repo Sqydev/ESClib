@@ -25,6 +25,8 @@
     #define RLAPI
 #endif
 
+#include <stddef.h>
+
 typedef enum TuiType {
 	TUI_STATIC,
 	TUI_DYNAMIC,
@@ -32,6 +34,9 @@ typedef enum TuiType {
 
 RLAPI void InitTui(int width, int height, int targetFps, TuiType tuiType);
 RLAPI void CloseTui(void);
+
+RLAPI static inline size_t GetBackbuffSize();
+RLAPI size_t WriteToBackbuff(const char* content);
 
 RLAPI int EnableSignal(int signal);
 RLAPI int DisableSignal(int signal);

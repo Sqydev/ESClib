@@ -9,6 +9,9 @@
 #include <stdbool.h>
 
 typedef struct {
+	char* frontbuff;
+	char* backbuff;
+
 	struct {
 		struct {
 			struct sigaction old;
