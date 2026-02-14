@@ -5,12 +5,19 @@
 #elif defined(__linux__) || defined(__APPLE__)
 #endif
 
+#include "../../include/esclib.h"
+
 #include <signal.h>
 #include <stdbool.h>
 
 typedef struct {
 	char* frontbuff;
 	char* backbuff;
+
+	struct {
+		Vector2i termdimm;
+		Vector2i termdimmInPixels;
+	} TuiData;
 
 	struct {
 		struct {

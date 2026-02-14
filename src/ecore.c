@@ -15,15 +15,15 @@
 // NOTE: Create CoreData(Defined in ./private/coredata.h)
 CoreData DATA;
 
-void InitTui(int width, int height, int targetFps, TuiType tuiType) {
+void InitTui(int targetFps) {
 	atexit(CloseTui);
 
 	SignalsSetup();
 
-	(void)width;
-	(void)height;
+	DATA.TuiData.termdimm = GetTuiDimmentionsForReal();
+	DATA.TuiData.termdimmInPixels = GetTuiDimmensionsInPixelsForReal();
+
 	(void)targetFps;
-	(void)tuiType;
 }
 
 void CloseTui(void) {
@@ -32,7 +32,7 @@ void CloseTui(void) {
 }
 
 static inline size_t GetBackbuffSize() {
-	return 0;
+	return DATA.TuiData.termdimm.x * DATA.TuiData.termdimm.y;
 }
 
 size_t WriteToBackbuff(const char* content) {
