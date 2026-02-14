@@ -27,15 +27,22 @@
 
 #include <stddef.h>
 
-typedef enum TuiType {
-	TUI_STATIC,
-	TUI_DYNAMIC,
-} TuiType;
+typedef struct {
+	float x;
+	float y;
+} Vecrot2;
 
-RLAPI void InitTui(int width, int height, int targetFps, TuiType tuiType);
+typedef struct {
+	int x;
+	int y;
+} Vector2i;
+
+// ECORE
+
+RLAPI void InitTui(int targetFps);
 RLAPI void CloseTui(void);
 
-RLAPI static inline size_t GetBackbuffSize();
+RLAPI static inline size_t GetBackbuffSize(void);
 RLAPI size_t WriteToBackbuff(const char* content);
 
 RLAPI int EnableSignal(int signal);
@@ -46,5 +53,13 @@ RLAPI int EnableSignalCustomTasks(int signal);
 RLAPI int DisableSignalCustomTasks(int signal);
 RLAPI int EnableSignalBuildInTasks(int signal);
 RLAPI int DisableSignalBuildInTasks(int signal);
+
+// EGET
+RLAPI Vector2i GetTuiDimmentions(void);
+RLAPI Vector2i GetTuiDimmensionsInPixels(void);
+RLAPI Vector2i* GetTuiDimmensionsPtr(void);
+RLAPI Vector2i* GetTuiDimmensionsPtrInPixels(void);
+RLAPI Vector2i GetTuiDimmentionsForReal(void);
+RLAPI Vector2i GetTuiDimmensionsInPixelsForReal(void);
 
 #endif
