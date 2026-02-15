@@ -1,7 +1,7 @@
 #include "../tester.h"
 
 void EnableSignalTester(void) {
-	InitTui(0, 0, 0, TUI_DYNAMIC);
+	InitTui(0);
 
 	DisableSignal(SIGINT);
 
@@ -28,7 +28,7 @@ void EnableSignalTester(void) {
 }
 
 void EnableSignalESClibTasksTester(void) {
-	InitTui(0, 0, 0, TUI_DYNAMIC);
+	InitTui(0);
 
 	DisableSignalESClibTasks(SIGINT);
 
@@ -55,7 +55,7 @@ void EnableSignalESClibTasksTester(void) {
 }
 
 void EnableSignalCustomTasksTester(void) {
-	InitTui(0, 0, 0, TUI_DYNAMIC);
+	InitTui(0);
 
 	DisableSignalCustomTasks(SIGINT);
 
@@ -82,7 +82,7 @@ void EnableSignalCustomTasksTester(void) {
 }
 
 void EnableSignalBuildInTasksTester(void) {
-	InitTui(0, 0, 0, TUI_DYNAMIC);
+	InitTui(0);
 
 	DisableSignalBuildInTasks(SIGINT);
 

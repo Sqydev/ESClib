@@ -4,6 +4,7 @@
 
 #include "./private/coredata.h"
 #include "./private/signals/signals_actions.h"
+#include "./private/common_utils.h"
 
 #if defined(_WIN32) || defined(_WIN64)
 #elif defined(__linux__) || defined(__APPLE__)
@@ -12,7 +13,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-// NOTE: Create CoreData(Defined in ./private/coredata.h)
 CoreData DATA;
 
 void InitTui(int targetFps) {
@@ -23,7 +23,10 @@ void InitTui(int targetFps) {
 	DATA.TuiData.termdimm = GetTuiDimmentionsForReal();
 	DATA.TuiData.termdimmInPixels = GetTuiDimmensionsInPixelsForReal();
 
-	(void)targetFps;
+	SetTargetFps(targetFps);
+
+	// Start chainging things
+	UniWrite(UNI_WRITE_TARGET_STDOUT, "\033[?1048h", 8);
 }
 
 void CloseTui(void) {
@@ -31,7 +34,7 @@ void CloseTui(void) {
 	fflush(stdout);
 }
 
-static inline size_t GetBackbuffSize() {
+size_t GetBackbuffSize(void) {
 	return DATA.TuiData.termdimm.x * DATA.TuiData.termdimm.y;
 }
 

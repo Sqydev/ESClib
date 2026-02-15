@@ -1,5 +1,6 @@
 #include "../../include/esclib.h"
-#include "../../src/private/signal_handling.h"
+
+#include "../../src/private/signals/signals_actions.h"
 
 #include <stdlib.h>
 #include <signal.h>
@@ -24,3 +25,5 @@ void DisableSignalCustomTasksTester(void);
 
 void EnableSignalBuildInTasksTester(void);
 void DisableSignalBuildInTasksTester(void);
+
+void InitTuiTester(void);

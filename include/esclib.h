@@ -42,7 +42,7 @@ typedef struct {
 RLAPI void InitTui(int targetFps);
 RLAPI void CloseTui(void);
 
-RLAPI static inline size_t GetBackbuffSize(void);
+RLAPI size_t GetBackbuffSize(void);
 RLAPI size_t WriteToBackbuff(const char* content);
 
 RLAPI int EnableSignal(int signal);
@@ -54,7 +54,12 @@ RLAPI int DisableSignalCustomTasks(int signal);
 RLAPI int EnableSignalBuildInTasks(int signal);
 RLAPI int DisableSignalBuildInTasks(int signal);
 
-// EGET
+// ESETS
+
+RLAPI void SetTargetFps(int targetFps);
+
+// EGETS
+
 RLAPI Vector2i GetTuiDimmentions(void);
 RLAPI Vector2i GetTuiDimmensionsInPixels(void);
 RLAPI Vector2i* GetTuiDimmensionsPtr(void);
