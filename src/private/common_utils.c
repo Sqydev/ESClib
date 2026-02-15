@@ -3,7 +3,6 @@
 #include "./common_utils.h"
 
 #if defined(_WIN32) || defined(_WIN64)
-	#define STD
 #elif defined(__linux__) || defined(__APPLE__)
 	#include <unistd.h>
 #endif

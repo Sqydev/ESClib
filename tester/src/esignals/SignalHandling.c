@@ -1,7 +1,7 @@
 #include "../tester.h"
 
 void SignalHandlingTester(void) {
-	InitTui(0, 0, 0, TUI_DYNAMIC);
+	InitTui(0);
 
 	printf("TESTER: SIGINT, and no more signals for now should trigger CloseTui() now\n");
 	fflush(stdout);

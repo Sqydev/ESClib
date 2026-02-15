@@ -18,7 +18,6 @@ void SignalsSetup(void) {
 		DATA.SignalData.SIG_INT.enabled = 1;
 		DATA.SignalData.SIG_INT.enabledESClibTasks = 1;
 		DATA.SignalData.SIG_INT.enabledCustomTasks = 1;
-		DATA = DATA;
 	
 		sigaction(SIGINT, NULL, &DATA.SignalData.SIG_INT.old);
 

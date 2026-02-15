@@ -20,8 +20,15 @@ typedef struct {
 	} TuiData;
 
 	struct {
+		int targetFps;
+	} Time;
+
+	struct {
 		struct {
+#if defined(__WIN32) || defined(__WIN64)
+#elif defined(__linux__) || defined(__APPLE__)
 			struct sigaction old;
+#endif
 			volatile sig_atomic_t triggered;
 			bool enabled;
 			bool enabledESClibTasks;
