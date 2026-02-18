@@ -62,6 +62,7 @@ TEST_DIR := tester
 TEST_SRC := $(shell find $(TEST_DIR)/src -name '*.c')
 TEST_OBJ := $(patsubst $(TEST_DIR)/src/%.c,$(OBJ_SUBDIR)/$(TESTER_NAME)_%.o,$(TEST_SRC))
 TEST_BIN := $(TESTER_NAME)/$(BIN_DIR)/$(TESTER_NAME)
+TEST_LIB_DIR := $(TEST_DIR)/$(BIN_DIR)
 
 
 STATIC_LIB := $(BIN_DIR)/$(BIN_SUBDIR)/lib$(LIB_NAME).a
@@ -74,7 +75,7 @@ SRC := $(sort $(shell find $(SRC_DIR) -name '*.c'))
 OBJ := $(patsubst $(SRC_DIR)/%.c,$(OBJ_SUBDIR)/%.o,$(SRC))
 DEP := $(OBJ:.o=.d)
 
-.PHONY: all tester build static shared install clean clean-all \
+.PHONY: all tester tester-lib build static shared install clean clean-all \
 	local-build san-build check-build \
 	docker-windows docker-windows-static \
 	docker-bleeding docker-normal docker-stable \
@@ -85,7 +86,7 @@ DEP := $(OBJ:.o=.d)
 
 all: local-build docker-bleeding docker-normal docker-stable \
      docker-bleeding-musl docker-normal-musl docker-stable-musl \
-     docker-static-musl docker-windows
+     docker-static-musl docker-windows tester tester-lib
 
 build: static shared
 
@@ -96,9 +97,25 @@ $(OBJ_SUBDIR)/$(TESTER_NAME)_%.o: $(TEST_DIR)/src/%.c
 	@mkdir -p $(@D)
 	$(CC) $(CFLAGS) -Iinclude -c $< -o $@
 
-$(TEST_BIN): static shared $(TEST_OBJ)
+$(TEST_BIN): tester-lib $(TEST_OBJ)
 	@mkdir -p $(@D)
-	$(CC) $(TEST_OBJ) -L$(BIN_DIR)/$(BIN_SUBDIR) -l$(LIB_NAME) -o $@
+	$(CC) $(TEST_OBJ) \
+		-L$(TEST_LIB_DIR) \
+		-Wl,-rpath,$(abspath $(TEST_LIB_DIR)) \
+		-l$(LIB_NAME) \
+		-o $@ $(LDFLAGS)
+
+tester-lib: $(STATIC_LIB)
+	@mkdir -p $(TEST_LIB_DIR)
+	cp $(STATIC_LIB) $(TEST_LIB_DIR)/
+ifneq ($(SO_EXT),)
+ifneq ($(LIBC),static-musl)
+	cp $(SHARED_LIB) $(TEST_LIB_DIR)/ 2>/dev/null || true
+endif
+endif
+ifneq ($(DLL_EXT),)
+	cp $(WINDOWS_DLL) $(TEST_LIB_DIR)/ 2>/dev/null || true
+endif
 
 tester: $(TEST_BIN)
 
