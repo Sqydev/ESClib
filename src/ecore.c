@@ -35,24 +35,29 @@ void CloseTui(void) {
 }
 
 size_t GetBackbuffSize(void) {
+	return (DATA.TuiData.termdimm.x * DATA.TuiData.termdimm.y) * sizeof(SBCell);
+}
+
+size_t GetBackbuffCellCount(void) {
 	return DATA.TuiData.termdimm.x * DATA.TuiData.termdimm.y;
 }
 
-size_t WriteToBackbuff(const char* content) {
-	size_t len = strlen(DATA.backbuff);
-
-	if(len + 1/* \0 */ >= GetBackbuffSize()) { return 0; }
+size_t WriteToBackbuff(const SBCell* content, size_t cellCount) {
 	if(!content) { return 0; }
 
-	size_t freeSpace = GetBackbuffSize() - len - 1; // -1 == \0
-	size_t content_len = strlen(content);
+	size_t maxCells = GetBackbuffCellCount();
 
-	if(content_len > freeSpace) {
-		content_len = freeSpace;
+	if(DATA.Buffers.backbuffOffset >= maxCells) { return 0; }
+
+	if(cellCount > maxCells - DATA.Buffers.backbuffOffset) {
+		cellCount = maxCells - DATA.Buffers.backbuffOffset;
 	}
 
-	memcpy(DATA.backbuff + len, content, content_len);
-	DATA.backbuff[len + content_len] = '\0';
+	size_t bytesToWrite = cellCount * sizeof(SBCell);
 
-	return content_len;
+	memcpy(DATA.Buffers.backbuff + DATA.Buffers.backbuffOffset, content, bytesToWrite);
+
+	DATA.Buffers.backbuffOffset += cellCount;
+
+	return bytesToWrite;
 }

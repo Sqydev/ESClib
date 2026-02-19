@@ -26,6 +26,22 @@
 #endif
 
 #include <stddef.h>
+#include <stdbool.h>
+
+typedef struct {
+	unsigned char r;
+	unsigned char g;
+	unsigned char b;
+	bool trueColor;
+} Color;
+
+typedef struct {
+	char Char[4];
+	char CharLen;
+
+	Color fgColor;
+	Color bgColor;
+} SBCell;
 
 typedef struct {
 	float x;
@@ -43,7 +59,8 @@ RLAPI void InitTui(int targetFps);
 RLAPI void CloseTui(void);
 
 RLAPI size_t GetBackbuffSize(void);
-RLAPI size_t WriteToBackbuff(const char* content);
+RLAPI size_t GetBackbuffCellCount(void);
+RLAPI size_t WriteToBackbuff(const SBCell* content, size_t cellCount);
 
 RLAPI int EnableSignal(int signal);
 RLAPI int DisableSignal(int signal);
