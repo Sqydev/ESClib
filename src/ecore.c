@@ -26,12 +26,10 @@ void InitTui(int targetFps) {
 	SetTargetFps(targetFps);
 
 	// Start chainging things
-	UniWrite(UNI_WRITE_TARGET_STDOUT, "\033[?1048h", 8);
+	UniWrite(UNI_WRITE_TARGET_STDOUT, "\033[?1049h", 8);
 }
 
 void CloseTui(void) {
-	printf("This is testing message from CloseTui() :)");
-	fflush(stdout);
 }
 
 size_t GetBackbuffSize(void) {
