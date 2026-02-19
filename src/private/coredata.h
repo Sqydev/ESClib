@@ -11,8 +11,12 @@
 #include <stdbool.h>
 
 typedef struct {
-	char* frontbuff;
-	char* backbuff;
+	struct {
+		SBCell* frontbuff;
+		
+		SBCell* backbuff;
+		int backbuffOffset;
+	} Buffers;
 
 	struct {
 		Vector2i termdimm;
