@@ -1,4 +1,5 @@
 #include "../../include/esclib.h"
+#include <stdlib.h>
 
 #include "./common_utils.h"
 
@@ -30,6 +31,16 @@ int UniWrite(UniWriteTarget target, const void *buf, size_t n) {
 		return (int)written;
 
 	#elif defined(__linux__) || defined(__APPLE__)
-		return (int)write((int)target, buf, n);
+		switch((int)target) {
+			case UNI_WRITE_TARGET_STDOUT: {
+				return (int)write(STDOUT_FILENO, buf, n);
+			}
+			case UNI_WRITE_TARGET_STDERR: {
+				return (int)write(STDERR_FILENO, buf, n);
+			}
+			default: {
+				return EXIT_FAILURE;
+			}
+		}
 	#endif
 }

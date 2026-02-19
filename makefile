@@ -100,9 +100,7 @@ $(OBJ_SUBDIR)/$(TESTER_NAME)_%.o: $(TEST_DIR)/src/%.c
 $(TEST_BIN): tester-lib $(TEST_OBJ)
 	@mkdir -p $(@D)
 	$(CC) $(TEST_OBJ) \
-		-L$(TEST_LIB_DIR) \
-		-Wl,-rpath,$(abspath $(TEST_LIB_DIR)) \
-		-l$(LIB_NAME) \
+		$(TEST_LIB_DIR)/lib$(LIB_NAME).a \
 		-o $@ $(LDFLAGS)
 
 tester-lib: $(STATIC_LIB)

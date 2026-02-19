@@ -54,6 +54,8 @@ int main(int argc, char* argv[]) {
 
 		printf("8. ESBTT: EnableSignalBuildInTasksTester()\n");
 		printf("9. DSBTT: DisableSignalBuildInTasksTester()\n");
+
+		printf("10. ITT: InitTuiTester()\n");
 		fflush(stdout);
 
 		return EXIT_FAILURE;
