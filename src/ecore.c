@@ -1,5 +1,3 @@
-#include <string.h>
-
 #include "../include/esclib.h"
 
 #include "./private/coredata.h"
@@ -12,6 +10,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 CoreData DATA;
 
