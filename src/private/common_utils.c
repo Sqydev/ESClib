@@ -3,17 +3,31 @@
 
 #include "./common_utils.h"
 
-#if defined(_WIN32) || defined(_WIN64)
-#elif defined(__linux__) || defined(__APPLE__)
+#if defined(unix) || defined(__unix) || defined(__unix__)
 	#include <unistd.h>
+#elif defined(__WIN32) || defined(__WIN64)
 #endif
 
 // TODO: DO return codes here
 int UniWrite(UniWriteTarget target, const void *buf, size_t n) {
-	#if defined(_WIN32) || defined(_WIN64)
-		HANDLE h;
+#if defined(unix) || defined(__unix) || defined(__unix__)
 
-		switch (target) {
+	switch((int)target) {
+		case UNI_WRITE_TARGET_STDOUT: {
+			return (int)write(STDOUT_FILENO, buf, n);
+		}
+		case UNI_WRITE_TARGET_STDERR: {
+			return (int)write(STDERR_FILENO, buf, n);
+		}
+		default: {
+			return EXIT_FAILURE;
+		}
+	}
+
+#elif defined(__WIN32) || defined(__WIN64)
+
+	HANDLE h;
+	switch (target) {
 		case UNI_WRITE_TARGET_STDOUT:
 			h = GetStdHandle(STD_OUTPUT_HANDLE);
 			break;
@@ -22,25 +36,11 @@ int UniWrite(UniWriteTarget target, const void *buf, size_t n) {
 			break;
 		default:
 			return -1;
-		}
+	}
+	DWORD written = 0;
+	if (!WriteFile(h, buf, (DWORD)n, &written, NULL)) return -1;
+			
+	return (int)written;
 
-		DWORD written = 0;
-		if (!WriteFile(h, buf, (DWORD)n, &written, NULL))
-			return -1;
-
-		return (int)written;
-
-	#elif defined(__linux__) || defined(__APPLE__)
-		switch((int)target) {
-			case UNI_WRITE_TARGET_STDOUT: {
-				return (int)write(STDOUT_FILENO, buf, n);
-			}
-			case UNI_WRITE_TARGET_STDERR: {
-				return (int)write(STDERR_FILENO, buf, n);
-			}
-			default: {
-				return EXIT_FAILURE;
-			}
-		}
-	#endif
+#endif
 }
