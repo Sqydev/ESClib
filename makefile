@@ -8,6 +8,7 @@ MAKEFLAGS += --no-builtin-rules --warn-undefined-variables
 PROFILE ?= local
 LIBC    ?= glibc
 CC ?= gcc
+STD ?= -std=c99
 
 LIB_NAME := esclib
 TESTER_NAME := tester
@@ -46,7 +47,7 @@ LIBC_CFLAGS  :=
 LIBC_LDFLAGS :=
 endif
 
-override CFLAGS += $(BASE_CFLAGS) $(REL_CFLAGS) $(LIBC_CFLAGS)
+override CFLAGS += $(BASE_CFLAGS) $(REL_CFLAGS) $(LIBC_CFLAGS) $(STD)
 LDFLAGS ?= $(LIBC_LDFLAGS)
 
 # ==== Paths ====

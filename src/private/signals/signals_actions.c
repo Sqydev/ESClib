@@ -35,14 +35,14 @@ void SignalsStep(void) {
 	#elif defined(__linux__) || defined(__APPLE__)
 		if(DATA.SignalData.SIG_INT.triggered == 1 && DATA.SignalData.SIG_INT.enabled == true) {
 			DATA.SignalData.SIG_INT.triggered = 0;
+
+			// NOTE: Retrive the old functions of SIGINT
+			sigaction(SIGINT, &DATA.SignalData.SIG_INT.old, NULL);
 			
 			if(DATA.SignalData.SIG_INT.enabledESClibTasks) {
 				CloseTui();
 			}
 
-			// NOTE: Retrive the old functions of SIGINT
-			sigaction(SIGINT, &DATA.SignalData.SIG_INT.old, NULL);
-	
 			if(DATA.SignalData.SIG_INT.enabledBuildInTasks) {
 				if(DATA.SignalData.SIG_INT.old.sa_handler == SIG_DFL) {
 					// NOTE: Call SIGINT

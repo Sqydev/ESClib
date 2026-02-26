@@ -32,7 +32,7 @@ void CloseTui(void) {
 }
 
 size_t GetBackbuffSize(void) {
-	return (DATA.TuiData.termdimm.x * DATA.TuiData.termdimm.y) * sizeof(SBCell);
+	return GetBackbuffCellCount() * sizeof(SBCell);
 }
 
 size_t GetBackbuffCellCount(void) {
