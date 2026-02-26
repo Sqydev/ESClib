@@ -1,5 +1,6 @@
 #include "../tester.h"
 
+#include <stdio.h>
 #include <time.h>
 
 void EnableSignalTester(void) {
