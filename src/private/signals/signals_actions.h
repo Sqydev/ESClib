@@ -5,5 +5,6 @@
 
 void SignalsSetup(void);
 void SignalsStep(void);
+void SignalsCleanup(void);
 
 #endif

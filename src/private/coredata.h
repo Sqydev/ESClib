@@ -2,7 +2,7 @@
 #define ESCLIB_PRIVATE_COREDATA_H
 
 #if defined(unix) || defined(__unix) || defined(__unix__)
-#elif defined(__WIN32) || defined(__WIN64)
+#elif defined(_WIN32) || defined(__WIN64)
 #endif
 
 #include "../../include/esclib.h"
@@ -33,7 +33,7 @@ typedef struct {
 
 			struct sigaction old;
 
-#elif defined(__WIN32) || defined(__WIN64)
+#elif defined(_WIN32) || defined(_WIN64)
 #endif
 			volatile sig_atomic_t triggered;
 			bool enabled;
@@ -41,6 +41,20 @@ typedef struct {
 			bool enabledCustomTasks;
 			bool enabledBuildInTasks;
 		} SIG_INT;
+
+		struct {
+#if defined(unix) || defined(__unix) || defined(__unix__)
+
+			struct sigaction old;
+
+#elif defined(_WIN32) || defined(__WIN64)
+#endif
+			volatile sig_atomic_t triggered;
+			bool enabled;
+			bool enabledESClibTasks;
+			bool enabledCustomTasks;
+			bool enabledBuildInTasks;
+		} SIG_WINCH;
 	} SignalData;
 } CoreData;
 
