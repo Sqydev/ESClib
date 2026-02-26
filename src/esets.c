@@ -2,8 +2,8 @@
 
 #include "./private/coredata.h"
 
-#if defined(_WIN32) || defined(_WIN64)
-#elif defined(__linux__) || defined(__APPLE__)
+#if defined(unix) || defined(__unix) || defined(__unix__)
+#elif defined(__WIN32) || defined(__WIN64)
 #endif
 
 void SetTargetFps(int targetFps) {

@@ -1,14 +1,14 @@
 #ifndef ESCLIB_PRIVATE_COREDATA_H
 #define ESCLIB_PRIVATE_COREDATA_H
 
-#if defined(__WIN32) || defined(__WIN64)
-#elif defined(__linux__) || defined(__APPLE__)
+#if defined(unix) || defined(__unix) || defined(__unix__)
+#elif defined(__WIN32) || defined(__WIN64)
 #endif
 
 #include "../../include/esclib.h"
 
-#include <signal.h>
 #include <stdbool.h>
+#include <signal.h>
 
 typedef struct {
 	struct {
@@ -29,9 +29,11 @@ typedef struct {
 
 	struct {
 		struct {
-#if defined(__WIN32) || defined(__WIN64)
-#elif defined(__linux__) || defined(__APPLE__)
+#if defined(unix) || defined(__unix) || defined(__unix__)
+
 			struct sigaction old;
+
+#elif defined(__WIN32) || defined(__WIN64)
 #endif
 			volatile sig_atomic_t triggered;
 			bool enabled;
