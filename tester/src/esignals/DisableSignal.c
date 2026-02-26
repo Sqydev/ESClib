@@ -1,5 +1,7 @@
 #include "../tester.h"
 
+#include <time.h>
+
 void DisableSignalTester(void) {
 	InitTui(0);
 
@@ -15,7 +17,10 @@ void DisableSignalTester(void) {
 	while(getchar() != 'e') {
 		SignalsStep();
 
-		usleep(16667);
+		struct timespec ts;
+		ts.tv_sec = 0;
+		ts.tv_nsec = 16667 * 1000;
+		nanosleep(&ts, NULL);
 	}
 
 	printf("TESTER: Ending test\n");
@@ -37,7 +42,10 @@ void DisableSignalESClibTasksTester(void) {
 	while(getchar() != 'e') {
 		SignalsStep();
 
-		usleep(16667);
+		struct timespec ts;
+		ts.tv_sec = 0;
+		ts.tv_nsec = 16667 * 1000;
+		nanosleep(&ts, NULL);
 	}
 
 	printf("TESTER: Ending test\n");
@@ -59,7 +67,10 @@ void DisableSignalCustomTasksTester(void) {
 	while(getchar() != 'e') {
 		SignalsStep();
 
-		usleep(16667);
+		struct timespec ts;
+		ts.tv_sec = 0;
+		ts.tv_nsec = 16667 * 1000;
+		nanosleep(&ts, NULL);
 	}
 
 	printf("TESTER: Ending test\n");
@@ -81,7 +92,10 @@ void DisableSignalBuildInTasksTester(void) {
 	while(getchar() != 'e') {
 		SignalsStep();
 
-		usleep(16667);
+		struct timespec ts;
+		ts.tv_sec = 0;
+		ts.tv_nsec = 16667 * 1000;
+		nanosleep(&ts, NULL);
 	}
 
 	printf("TESTER: Ending test\n");
