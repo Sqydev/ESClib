@@ -9,6 +9,7 @@ PROFILE ?= local
 LIBC    ?= glibc
 CC ?= gcc
 STD ?= -std=c99
+POSIX_C_SRC ?= -D_POSIX_C_SOURCE=200809L
 
 LIB_NAME := esclib
 TESTER_NAME := tester
@@ -47,7 +48,7 @@ LIBC_CFLAGS  :=
 LIBC_LDFLAGS :=
 endif
 
-override CFLAGS += $(BASE_CFLAGS) $(REL_CFLAGS) $(LIBC_CFLAGS) $(STD)
+override CFLAGS += $(BASE_CFLAGS) $(REL_CFLAGS) $(LIBC_CFLAGS) $(STD) $(POSIX_C_SRC)
 LDFLAGS ?= $(LIBC_LDFLAGS)
 
 # ==== Paths ====

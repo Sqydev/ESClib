@@ -1,5 +1,7 @@
 #include "../tester.h"
 
+#include <time.h>
+
 void SignalHandlingTester(void) {
 	InitTui(0);
 
@@ -9,7 +11,10 @@ void SignalHandlingTester(void) {
 	while(1) {
 		SignalsStep();
 
-		usleep(16667);
+		struct timespec ts;
+		ts.tv_sec = 0;
+		ts.tv_nsec = 16667 * 1000;
+		nanosleep(&ts, NULL);
 	}
 
 	printf("TESTER: Ending test\n");
