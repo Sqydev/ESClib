@@ -5,7 +5,7 @@
 
 #if defined(unix) || defined(__unix) || defined(__unix__)
 	#include <unistd.h>
-#elif defined(__WIN32) || defined(__WIN64)
+#elif defined(_WIN32) || defined(_WIN64)
 #endif
 
 // TODO: DO return codes here
@@ -24,7 +24,7 @@ int UniWrite(UniWriteTarget target, const void *buf, size_t n) {
 		}
 	}
 
-#elif defined(__WIN32) || defined(__WIN64)
+#elif defined(_WIN32) || defined(_WIN64)
 
 	HANDLE h;
 	switch (target) {

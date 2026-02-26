@@ -5,7 +5,7 @@
 #if defined(unix) || defined(__unix) || defined(__unix__)
 	#include <unistd.h>
 	#include <sys/ioctl.h>
-#elif defined(__WIN32) || defined(__WIN64)
+#elif defined(_WIN32) || defined(_WIN64)
 #endif
 
 Vector2i GetTuiDimmensions(void) { return DATA.TuiData.termdimm; }

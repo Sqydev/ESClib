@@ -35,8 +35,8 @@ int main(int argc, char* argv[]) {
 	else if(strcmp(argv[1], "DSBTT") == 0) {
 		DisableSignalBuildInTasksTester();
 	}
-	else if(strcmp(argv[1], "ITT") == 0) {
-		InitTuiTester();
+	else if(strcmp(argv[1], "ICTT") == 0) {
+		InitCloseTuiTester();
 	}
 	else {
 		printf("Wrong argument\n");

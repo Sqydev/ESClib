@@ -26,4 +26,4 @@ void DisableSignalCustomTasksTester(void);
 void EnableSignalBuildInTasksTester(void);
 void DisableSignalBuildInTasksTester(void);
 
-void InitTuiTester(void);
+void InitCloseTuiTester(void);
