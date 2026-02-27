@@ -19,6 +19,8 @@ void EnableSignalTester(void) {
 	printf("TESTER: Doing while loop until getchar returns: e\n");
 	fflush(stdout);
 
+	struct sigaction current;
+	sigaction(SIGINT, NULL, &current);
 
 	while(getchar() != 'e') {
 		SignalsStep();
