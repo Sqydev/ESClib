@@ -1,13 +1,14 @@
 #include "../../../include/esclib.h"
 
 #include <unistd.h>
+#include <time.h>
 
 void InitCloseTuiTester() {
 	InitTui(0);
 
 	write(STDOUT_FILENO, "TESTER: Doing 2 sec break:)\n", 28);
 
-	sleep(2);
+	ESleep(5, 0, 0);
 
 	write(STDOUT_FILENO, "TESTER: Closing Tui\n", 20);
 

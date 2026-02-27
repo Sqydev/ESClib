@@ -2,28 +2,18 @@
 
 #include "../../src/private/signals/signals_actions.h"
 
-#include <stdlib.h>
-#include <signal.h>
 #include <stdio.h>
-#include <string.h>
-
-#if defined (__linux__) || defined (__APPLE__)
-	#include <unistd.h>
-#endif
 
 int main(int argc, char* argv[]);
-void SignalHandlingTester(void);
 
-void EnableSignalTester(void);
-void DisableSignalTester(void);
+void RunSignalTester(int signo, const char* signame, int (*disableFn)(int), int (*enableFn)(int), const char* backendDesc);
 
-void EnableSignalESClibTasksTester(void);
-void DisableSignalESClibTasksTester(void);
+void SignalTester_SIGINT(void);
+void SignalESClibTasksTester_SIGINT(void);
+void SignalCustomTasksTester_SIGINT(void);
+void SignalBuildInTasksTester_SIGINT(void);
 
-void EnableSignalCustomTasksTester(void);
-void DisableSignalCustomTasksTester(void);
-
-void EnableSignalBuildInTasksTester(void);
-void DisableSignalBuildInTasksTester(void);
-
-void InitCloseTuiTester(void);
+void SignalTester_SIGWINCH(void);
+void SignalESClibTasksTester_SIGWINCH(void);
+void SignalCustomTasksTester_SIGWINCH(void);
+void SignalBuildInTasksTester_SIGWINCH(void);

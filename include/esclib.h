@@ -62,6 +62,8 @@ RLAPI size_t GetBackbuffSize(void);
 RLAPI size_t GetBackbuffCellCount(void);
 RLAPI size_t WriteToBackbuff(const SBCell* content, size_t cellCount);
 
+// ESIGNALS
+
 RLAPI int EnableSignal(int signal);
 RLAPI int DisableSignal(int signal);
 RLAPI int EnableSignalESClibTasks(int signal);
@@ -83,5 +85,9 @@ RLAPI Vector2i* GetTuiDimmensionsPtr(void);
 RLAPI Vector2i* GetTuiDimmensionsPtrInPixels(void);
 RLAPI Vector2i GetTuiDimmentionsForReal(void);
 RLAPI Vector2i GetTuiDimmensionsInPixelsForReal(void);
+
+// EUTILS
+
+void ESleep(int sec, int ms, long ns);
 
 #endif

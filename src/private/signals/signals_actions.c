@@ -17,7 +17,7 @@
 #include <stdio.h>
 
 
-static void SignalFatal(const char *msg) {
+void SignalFatal(const char* msg) {
 
 #if defined(unix) || defined(__unix) || defined(__unix__)
 
@@ -33,10 +33,10 @@ static void SignalFatal(const char *msg) {
 
 #if defined(unix) || defined(__unix) || defined(__unix__)
 
-static void Install(int sig, struct sigaction *old, void (*handler)(int)) {
+void Install(int sig, struct sigaction* old, void (*handler)(int)) {
     struct sigaction sa = {0};
     sa.sa_handler = handler;
-    sa.sa_flags = 0;
+    sa.sa_flags = SA_RESTART;
     sigemptyset(&sa.sa_mask);
 
     if (sigaction(sig, NULL, old) == -1) {
@@ -50,21 +50,23 @@ static void Install(int sig, struct sigaction *old, void (*handler)(int)) {
 
 #elif defined(_WIN32) || defined(_WIN64)
 
-	static BOOL WINAPI ConsoleHandler(DWORD type) {
-	    switch (type)
-	    {
-	        case CTRL_C_EVENT:
-	            DATA.SignalData.SIG_INT.triggered = 1;
-	            return TRUE;
+BOOL WINAPI ConsoleHandler(DWORD type) {
+    switch (type) {
+        case CTRL_C_EVENT: {
+            DATA.SignalData.SIG_INT.triggered = 1;
+            return TRUE;
+		}
 	
-	        case WINDOW_BUFFER_SIZE_EVENT:
-	            DATA.SignalData.SIG_WINCH.triggered = 1;
-	            return TRUE;
+        case WINDOW_BUFFER_SIZE_EVENT: {
+            DATA.SignalData.SIG_WINCH.triggered = 1;
+            return TRUE;
+		}
 
-	        default:
-	            return FALSE;
-	    }
-	}
+	    default: {
+            return FALSE;
+		}
+    }
+}
 
 #endif
 
@@ -104,7 +106,7 @@ void SignalsStep(void) {
 #if defined(unix) || defined(__unix) || defined(__unix__)
 
     // NOTE: SIGINT
-	//
+	
     if (DATA.SignalData.SIG_INT.triggered == 1 && DATA.SignalData.SIG_INT.enabled == true) {
         DATA.SignalData.SIG_INT.triggered = 0;
 

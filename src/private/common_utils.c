@@ -9,7 +9,7 @@
 #endif
 
 // TODO: DO return codes here
-int UniWrite(UniWriteTarget target, const void *buf, size_t n) {
+int UniWrite(UniWriteTarget target, const void* buf, size_t n) {
 #if defined(unix) || defined(__unix) || defined(__unix__)
 
 	switch((int)target) {
