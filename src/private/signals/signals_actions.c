@@ -14,6 +14,7 @@
 #include <stdlib.h>
 #include <stddef.h>
 #include <string.h>
+#include <stdio.h>
 
 
 static void SignalFatal(const char *msg) {
@@ -35,14 +36,16 @@ static void SignalFatal(const char *msg) {
 static void Install(int sig, struct sigaction *old, void (*handler)(int)) {
     struct sigaction sa = {0};
     sa.sa_handler = handler;
-    sa.sa_flags = SA_RESTART;
+    sa.sa_flags = 0;
     sigemptyset(&sa.sa_mask);
 
-    if (sigaction(sig, NULL, old) == -1)
+    if (sigaction(sig, NULL, old) == -1) {
         SignalFatal("ERROR: Sigaction has messed up save\n");
+	}
 
-    if (sigaction(sig, &sa, NULL) == -1)
+    if (sigaction(sig, &sa, NULL) == -1) {
         SignalFatal("ERROR: Sigaction has messed up install\n");
+	}
 }
 
 #elif defined(_WIN32) || defined(_WIN64)
@@ -70,11 +73,13 @@ void SignalsSetup(void) {
     DATA.SignalData.SIG_INT.enabled = 1;
     DATA.SignalData.SIG_INT.enabledESClibTasks = 1;
     DATA.SignalData.SIG_INT.enabledCustomTasks = 1;
+	DATA.SignalData.SIG_INT.enabledBuildInTasks = 1;
 
     DATA.SignalData.SIG_WINCH.triggered = 0;
     DATA.SignalData.SIG_WINCH.enabled = 1;
     DATA.SignalData.SIG_WINCH.enabledESClibTasks = 1;
     DATA.SignalData.SIG_WINCH.enabledCustomTasks = 1;
+	DATA.SignalData.SIG_WINCH.enabledBuildInTasks = 1;
 
 #if defined(unix) || defined(__unix) || defined(__unix__)
 
@@ -94,6 +99,7 @@ void SignalsSetup(void) {
 // and it execs when DATA.SignalData.SIGNAL.enabledCustomTasks == true
 // and you can remove that fn with like function RemoveTask(INDEX) and if INDEX == NULL than that removes latest fn and is INDEX != NULL than it removes function: DATA.SignalData.SIGNAL.UserTasks?[INDEX]
 // And don't forget, thoes functions(like AddTask...(some function) and RemoveTask(INDEX) ARE IN esignals NOT HERE YOU DUMBASS!!!!!
+// Oh, and if INDEX is NULL than AddTask returns the index that the fn will get
 void SignalsStep(void) {
 #if defined(unix) || defined(__unix) || defined(__unix__)
 
@@ -115,14 +121,8 @@ void SignalsStep(void) {
         }
 
         if (DATA.SignalData.SIG_INT.enabledBuildInTasks) {
-            if (DATA.SignalData.SIG_INT.old.sa_handler == SIG_DFL) {
-                // NOTE: Call SIGINT
-                raise(SIGINT);
-            } else if (DATA.SignalData.SIG_INT.old.sa_handler != SIG_IGN) {
-                // NOTE: Ignore
-                DATA.SignalData.SIG_INT.old.sa_handler(SIGINT);
-            }
-        }
+			raise(SIGINT);
+		}
     }
 
     // NOTE: SIGWINCH
@@ -136,7 +136,12 @@ void SignalsStep(void) {
 		}
 
         if (DATA.SignalData.SIG_WINCH.enabledBuildInTasks) {
-        	sigaction(SIGWINCH, &DATA.SignalData.SIG_WINCH.old, NULL);
+        	if(sigaction(SIGWINCH, &DATA.SignalData.SIG_WINCH.old, NULL)) {
+            	write(STDERR_FILENO,
+                  "ERROR: Signalaction messed up SIGWINCH state retreat!\n",
+                  sizeof("ERROR: Signalaction messed up SIGWINCH state retreat!\n") - 1);
+            	exit(EXIT_FAILURE);
+			}
 
         	if (DATA.SignalData.SIG_WINCH.old.sa_handler != SIG_DFL && DATA.SignalData.SIG_WINCH.old.sa_handler != SIG_IGN) {
             	DATA.SignalData.SIG_WINCH.old.sa_handler(SIGWINCH);

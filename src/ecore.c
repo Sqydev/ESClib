@@ -29,7 +29,7 @@ void InitTui(int targetFps) {
 }
 
 void CloseTui(void) {
-	
+	UniWrite(UNI_WRITE_TARGET_STDOUT, "Greetings from CloseTui()!\n", 27);
 }
 
 size_t GetBackbuffSize(void) {
