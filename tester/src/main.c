@@ -1,68 +1,52 @@
 #include "./tester.h"
 
-#include <unistd.h>
-#include <fcntl.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+typedef void (*TesterFn)(void);
+
+typedef struct {
+	const char* name;
+	TesterFn	fn;
+	const char* description;
+} TesterEntry;
+
+const TesterEntry testers[] = {
+	{"ST_SIGINT", SignalTester_SIGINT, "SignalTester_SIGINT"},
+	{"SET_SIGINT", SignalESClibTasksTester_SIGINT, "SignalESClibTasksTester_SIGINT"},
+	{"SCT_SIGINT", SignalCustomTasksTester_SIGINT, "SignalCustomTasksTester_SIGINT"},
+	{"SBT_SIGINT", SignalBuildInTasksTester_SIGINT, "SignalBuildInTasksTester_SIGINT"},
+
+	{"ST_SIGWINCH", SignalTester_SIGWINCH, "SignalTester_SIGWINCH"},
+	{"SET_SIGWINCH", SignalESClibTasksTester_SIGWINCH, "SignalESClibTasksTester_SIGWINCH"},
+	{"SCT_SIGWINCH", SignalCustomTasksTester_SIGWINCH, "SignalCustomTasksTester_SIGWINCH"},
+	{"SBT_SIGWINCH", SignalBuildInTasksTester_SIGWINCH, "SignalBuildInTasksTester_SIGWINCH"},
+};
+
+void PrintUsage(const char* prog) {
+	printf("Usage: %s <TEST>\n\n", prog);
+	printf("Available tests:\n");
+
+	for(size_t i = 0; i < sizeof(testers) / sizeof(testers[0]); i++) {
+		printf("  %s -> %s\n", testers[i].name, testers[i].description);
+	}
+}
 
 int main(int argc, char* argv[]) {
 	if(argc != 2) {
-		printf("You have to give 1 and only 1 argument\n");
-		fflush(stdout);
-
+		PrintUsage(argv[0]);
 		return EXIT_FAILURE;
 	}
 
-	if(strcmp(argv[1], "SHT") == 0) {
-		SignalHandlingTester();
+	// NOTE: Sooo, I found out that if there are 10 elements in the array then sizeof(array) / sizeof(array[0]) will be 10 :0
+	for(size_t i = 0; i < sizeof(testers) / sizeof(testers[0]); i++) {
+		if(strcmp(argv[1], testers[i].name) == 0) {
+			testers[i].fn();
+			return EXIT_SUCCESS;
+		}
 	}
-	else if(strcmp(argv[1], "EST") == 0) {
-		EnableSignalTester();
-	}
-	else if(strcmp(argv[1], "DST") == 0) {
-		DisableSignalTester();
-	}
-	else if(strcmp(argv[1], "ESETT") == 0) {
-		EnableSignalESClibTasksTester();
-	}
-	else if(strcmp(argv[1], "DSETT") == 0) {
-		DisableSignalESClibTasksTester();
-	}
-	else if(strcmp(argv[1], "ESCTT") == 0) {
-		EnableSignalCustomTasksTester();
-	}
-	else if(strcmp(argv[1], "DSCTT") == 0) {
-		DisableSignalCustomTasksTester();
-	}
-	else if(strcmp(argv[1], "ESBTT") == 0) {
-		EnableSignalBuildInTasksTester();
-	}
-	else if(strcmp(argv[1], "DSBTT") == 0) {
-		DisableSignalBuildInTasksTester();
-	}
-	else if(strcmp(argv[1], "ICTT") == 0) {
-		InitCloseTuiTester();
-	}
-	else {
-		printf("Wrong argument\n");
-		printf("Correct arguments:\n");
-		printf("1. SHT: SignalHandlingTester()\n");
-
-		printf("2. EST: EnableSignalTester()\n");
-		printf("3. DST: DisableSignalTester()\n");
-
-		printf("4. ESETT: EnableSignalESClibTasksTester()\n");
-		printf("5. DSETT: DisableSignalESClibTasksTester()\n");
-
-		printf("6. ESCTT: EnableSignalCustomTasksTester()\n");
-		printf("7. DSCTT: DisableSignalCustomTasksTester()\n");
-
-		printf("8. ESBTT: EnableSignalBuildInTasksTester()\n");
-		printf("9. DSBTT: DisableSignalBuildInTasksTester()\n");
-
-		printf("10. ITT: InitTuiTester()\n");
-		fflush(stdout);
-
-		return EXIT_FAILURE;
-	}
-
-	return EXIT_SUCCESS;
+	
+	PrintUsage(argv[0]);
+	return EXIT_FAILURE;
 }

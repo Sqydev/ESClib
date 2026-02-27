@@ -7,4 +7,14 @@ void SignalsSetup(void);
 void SignalsStep(void);
 void SignalsCleanup(void);
 
+#if defined(unix) || defined(__unix) || defined(__unix__)
+
+void Install(int sig, struct sigaction* old, void (*handler)(int));
+
+#elif defined(_WIN32) || defined(_WIN64)
+
+BOOL WINAPI ConsoleHandler(DWORD type);
+
+#endif
+
 #endif
