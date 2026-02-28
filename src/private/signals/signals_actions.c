@@ -76,12 +76,16 @@ void SignalsSetup(void) {
     DATA.SignalData.SIG_INT.enabledESClibTasks = 1;
     DATA.SignalData.SIG_INT.enabledCustomTasks = 1;
 	DATA.SignalData.SIG_INT.enabledBuildInTasks = 1;
+	DATA.SignalData.SIG_INT.customTasksNumber = 0;
+	DATA.SignalData.SIG_INT.customTasks = NULL;
 
     DATA.SignalData.SIG_WINCH.triggered = 0;
     DATA.SignalData.SIG_WINCH.enabled = 1;
     DATA.SignalData.SIG_WINCH.enabledESClibTasks = 1;
     DATA.SignalData.SIG_WINCH.enabledCustomTasks = 1;
 	DATA.SignalData.SIG_WINCH.enabledBuildInTasks = 1;
+	DATA.SignalData.SIG_WINCH.customTasksNumber = 0;
+	DATA.SignalData.SIG_WINCH.customTasks = NULL;
 
 #if defined(unix) || defined(__unix) || defined(__unix__)
 
@@ -118,6 +122,14 @@ void SignalsStep(void) {
             exit(EXIT_FAILURE);
         }
 
+		if(DATA.SignalData.SIG_INT.enabledCustomTasks) {
+			for(int i = 0; i < DATA.SignalData.SIG_INT.customTasksNumber; i++) {
+				if(DATA.SignalData.SIG_INT.customTasks[i] != NULL) {
+					DATA.SignalData.SIG_INT.customTasks[i]();
+				}
+			}
+		}
+
         if (DATA.SignalData.SIG_INT.enabledESClibTasks) {
             CloseTui();
         }
@@ -131,6 +143,14 @@ void SignalsStep(void) {
 	
     if (DATA.SignalData.SIG_WINCH.triggered == 1 && DATA.SignalData.SIG_WINCH.enabled == true) {
         DATA.SignalData.SIG_WINCH.triggered = 0;
+
+		if(DATA.SignalData.SIG_WINCH.enabledCustomTasks) {
+			for(int i = 0; i < DATA.SignalData.SIG_WINCH.customTasksNumber; i++) {
+				if(DATA.SignalData.SIG_WINCH.customTasks[i] != NULL) {
+					DATA.SignalData.SIG_WINCH.customTasks[i]();
+				}
+			}
+		}
 
         if (DATA.SignalData.SIG_WINCH.enabledESClibTasks) {
         	DATA.TuiData.termdimm = GetTuiDimmentionsForReal();
@@ -161,6 +181,15 @@ void SignalsStep(void) {
 }
 
 void SignalsCleanup(void) {
+	if(DATA.SignalData.SIG_INT.customTasks != NULL) {
+		free(DATA.SignalData.SIG_INT.customTasks);
+		DATA.SignalData.SIG_INT.customTasks = NULL;
+	}
+	if(DATA.SignalData.SIG_WINCH.customTasks != NULL) {
+		free(DATA.SignalData.SIG_WINCH.customTasks);
+		DATA.SignalData.SIG_WINCH.customTasks = NULL;
+	}
+
 #if defined(unix) || defined(__unix) || defined(__unix__)
 	
     sigaction(SIGINT, &DATA.SignalData.SIG_INT.old, NULL);

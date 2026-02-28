@@ -8,7 +8,7 @@ typedef void (*TesterFn)(void);
 
 typedef struct {
 	const char* name;
-	TesterFn	fn;
+	TesterFn fn;
 	const char* description;
 } TesterEntry;
 

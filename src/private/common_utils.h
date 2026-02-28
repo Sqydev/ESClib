@@ -9,5 +9,6 @@ typedef enum {
 } UniWriteTarget;
 
 int UniWrite(UniWriteTarget target, const void* buf, size_t n);
+int UniWriteLen(UniWriteTarget target, const void* buf);
 
 #endif

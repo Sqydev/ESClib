@@ -8,6 +8,8 @@
 #elif defined(_WIN32) || defined(_WIN64)
 #endif
 
+#include <string.h>
+
 // TODO: DO return codes here
 int UniWrite(UniWriteTarget target, const void* buf, size_t n) {
 #if defined(unix) || defined(__unix) || defined(__unix__)
@@ -43,4 +45,8 @@ int UniWrite(UniWriteTarget target, const void* buf, size_t n) {
 	return (int)written;
 
 #endif
+}
+
+int UniWriteLen(UniWriteTarget target, const void* buf) {
+	return UniWrite(target, buf, strlen(buf));
 }
