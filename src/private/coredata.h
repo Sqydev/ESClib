@@ -40,6 +40,8 @@ typedef struct {
 			bool enabledESClibTasks;
 			bool enabledCustomTasks;
 			bool enabledBuildInTasks;
+			void (**customTasks)(void);
+			int customTasksNumber;
 		} SIG_INT;
 
 		struct {
@@ -54,6 +56,8 @@ typedef struct {
 			bool enabledESClibTasks;
 			bool enabledCustomTasks;
 			bool enabledBuildInTasks;
+			void (**customTasks)(void);
+			int customTasksNumber;
 		} SIG_WINCH;
 	} SignalData;
 } CoreData;

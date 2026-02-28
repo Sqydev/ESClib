@@ -25,19 +25,13 @@ void InitTui(int targetFps) {
 	SetTargetFps(targetFps);
 
 	// Start chainging things
-	UniWrite(UNI_WRITE_TARGET_STDOUT, "\033[?1049h", 8);
+	UniWriteLen(UNI_WRITE_TARGET_STDOUT, "\033[?1049h");
 }
 
 void CloseTui(void) {
-	UniWrite(UNI_WRITE_TARGET_STDOUT, "Greetings from CloseTui()!\n", 27);
-}
+	UniWriteLen(UNI_WRITE_TARGET_STDOUT, "Greetings from CloseTui()!\n");
 
-size_t GetBackbuffSize(void) {
-	return GetBackbuffCellCount() * sizeof(SBCell);
-}
-
-size_t GetBackbuffCellCount(void) {
-	return DATA.TuiData.termdimm.x * DATA.TuiData.termdimm.y;
+	SignalsCleanup();
 }
 
 size_t WriteToBackbuff(const SBCell* content, size_t cellCount) {

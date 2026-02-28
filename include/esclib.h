@@ -58,8 +58,6 @@ typedef struct {
 RLAPI void InitTui(int targetFps);
 RLAPI void CloseTui(void);
 
-RLAPI size_t GetBackbuffSize(void);
-RLAPI size_t GetBackbuffCellCount(void);
 RLAPI size_t WriteToBackbuff(const SBCell* content, size_t cellCount);
 
 // ESIGNALS
@@ -72,6 +70,13 @@ RLAPI int EnableSignalCustomTasks(int signal);
 RLAPI int DisableSignalCustomTasks(int signal);
 RLAPI int EnableSignalBuildInTasks(int signal);
 RLAPI int DisableSignalBuildInTasks(int signal);
+
+// Add Custom Task To Signal Tasks. If index < 0 Than It Will Add Task To The End. Will Return Index Of Added Task And -1 if failed
+RLAPI int AddSignalTask(int signal, void (*taskFunction)(void), int index);
+// Remove Custom Signal Task From Signal. If index < 0 Than It Will Remove Task From The End. Will Return 0 If Removed Succesfuly And -1 Of Failed
+RLAPI int RemoveSignalTask(int signal, int index);
+// Compress Signal Tasks. By This I Mean If CustomTask = 1,NULL,...,6 Than CompressSignalTasks() Will Make It 1,6 To Reduce Memory Usadge :). If from < 0 Than It Will Compress From The Start And If to < 0 Than It Will Compress To The End Will Return New TaskCount If Compresson Was Succesful And -1 If Failed
+RLAPI int CompressSignalTasks(int signal, int from, int to);
 
 // ESETS
 
@@ -86,8 +91,18 @@ RLAPI Vector2i* GetTuiDimmensionsPtrInPixels(void);
 RLAPI Vector2i GetTuiDimmentionsForReal(void);
 RLAPI Vector2i GetTuiDimmensionsInPixelsForReal(void);
 
+RLAPI size_t GetBackbuffSize(void);
+RLAPI size_t GetBackbuffCellCount(void);
+
+// Will Return Pointer To DATA.SignalData.SIGNAL.customTasks. If Failed Than It Will Return NULL
+RLAPI void (**GetCustomSignalTasks(int signal))(void);
+// Get Custom Signal Tasks Count. If Failed Than It Will Return -1
+RLAPI int GetCustomSignalTasksCount(int signal);
+// Get Custom Signal Tasks Size In Bytes I Think. If Failed Than It Will Return -1
+RLAPI size_t GetCustomSignalTasksSize(int signal);
+
 // EUTILS
 
-void ESleep(int sec, int ms, long ns);
+RLAPI void ESleep(int sec, int ms, long ns);
 
 #endif
