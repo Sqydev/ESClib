@@ -17,3 +17,5 @@ void SignalTester_SIGWINCH(void);
 void SignalESClibTasksTester_SIGWINCH(void);
 void SignalCustomTasksTester_SIGWINCH(void);
 void SignalBuildInTasksTester_SIGWINCH(void);
+
+void BackbuffDump();

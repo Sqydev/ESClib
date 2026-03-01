@@ -1,7 +1,6 @@
 #include "../../../include/esclib.h"
 
 #include <unistd.h>
-#include <time.h>
 
 void InitCloseTuiTester() {
 	InitTui(0);
