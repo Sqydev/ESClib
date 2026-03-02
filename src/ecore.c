@@ -8,7 +8,6 @@
 #elif defined(_WIN32) || defined(_WIN64)
 #endif
 
-#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
@@ -22,6 +21,11 @@ void InitTui(int targetFps) {
 	DATA.TuiData.termdimm = GetTuiDimmentionsForReal();
 	DATA.TuiData.termdimmInPixels = GetTuiDimmensionsInPixelsForReal();
 
+	DATA.Buffers.backbuff = NULL;
+	DATA.Buffers.backbuff = realloc(DATA.Buffers.backbuff, GetBackbuffSize());
+	DATA.Buffers.frontbuff = NULL;
+	DATA.Buffers.frontbuff = realloc(DATA.Buffers.frontbuff, GetBackbuffSize());
+
 	SetTargetFps(targetFps);
 
 	// Start chainging things
@@ -31,25 +35,12 @@ void InitTui(int targetFps) {
 void CloseTui(void) {
 	UniWriteLen(UNI_WRITE_TARGET_STDOUT, "Greetings from CloseTui()!\n");
 
+	free(DATA.Buffers.backbuff);
+	DATA.Buffers.backbuff = NULL;
+
+	free(DATA.Buffers.frontbuff);
+	DATA.Buffers.frontbuff = NULL;
+
 	SignalsCleanup();
 }
 
-size_t WriteToBackbuff(const SBCell* content, size_t cellCount) {
-	if(!content) { return 0; }
-
-	size_t maxCells = GetBackbuffCellCount();
-
-	if(DATA.Buffers.backbuffOffset >= maxCells) { return 0; }
-
-	if(cellCount > maxCells - DATA.Buffers.backbuffOffset) {
-		cellCount = maxCells - DATA.Buffers.backbuffOffset;
-	}
-
-	size_t bytesToWrite = cellCount * sizeof(SBCell);
-
-	memcpy(DATA.Buffers.backbuff + DATA.Buffers.backbuffOffset, content, bytesToWrite);
-
-	DATA.Buffers.backbuffOffset += cellCount;
-
-	return bytesToWrite;
-}

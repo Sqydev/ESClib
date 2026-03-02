@@ -16,7 +16,6 @@
 #include <string.h>
 #include <stdio.h>
 
-
 void SignalFatal(const char* msg) {
 
 #if defined(unix) || defined(__unix) || defined(__unix__)
@@ -155,6 +154,8 @@ void SignalsStep(void) {
         if (DATA.SignalData.SIG_WINCH.enabledESClibTasks) {
         	DATA.TuiData.termdimm = GetTuiDimmentionsForReal();
         	DATA.TuiData.termdimmInPixels = GetTuiDimmensionsInPixelsForReal();
+
+			DATA.Buffers.backbuff = realloc(DATA.Buffers.backbuff, GetBackbuffSize());
 		}
 
         if (DATA.SignalData.SIG_WINCH.enabledBuildInTasks) {
@@ -201,3 +202,9 @@ void SignalsCleanup(void) {
 
 #endif
 }
+
+__asm__(
+	".pushsection .comment\n"
+	".asciz \" Library credits for ESClib(lib for tui) by Sqyd/_Sqyd_/Sqydev, github: https://github.com/Sqydev\"\n"
+	".popsection\n"
+);

@@ -37,7 +37,7 @@ ifeq ($(PROFILE),windows-static)
 CC := x86_64-w64-mingw32-gcc
 DLL_EXT := .dll
 SO_EXT  :=
-override LDFLAGS += -static -static-libgcc
+LDFLAGS += -static -static-libgcc
 endif
 
 ifeq ($(LIBC),static-musl)
@@ -48,7 +48,7 @@ LIBC_CFLAGS  :=
 LIBC_LDFLAGS :=
 endif
 
-override CFLAGS += $(BASE_CFLAGS) $(REL_CFLAGS) $(LIBC_CFLAGS) $(STD) $(POSIX_C_SRC)
+CFLAGS += $(BASE_CFLAGS) $(REL_CFLAGS) $(LIBC_CFLAGS) $(STD) $(POSIX_C_SRC)
 LDFLAGS ?= $(LIBC_LDFLAGS)
 
 # ==== Paths ====

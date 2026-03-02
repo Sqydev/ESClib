@@ -49,7 +49,6 @@ size_t GetBackbuffCellCount(void) {
 	return DATA.TuiData.termdimm.x * DATA.TuiData.termdimm.y;
 }
 
-
 void (**GetCustomSignalTasks(int signal))(void) {
 	switch(signal) {
 		case SIGINT: {

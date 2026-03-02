@@ -58,8 +58,6 @@ typedef struct {
 RLAPI void InitTui(int targetFps);
 RLAPI void CloseTui(void);
 
-RLAPI size_t WriteToBackbuff(const SBCell* content, size_t cellCount);
-
 // ESIGNALS
 
 RLAPI int EnableSignal(int signal);

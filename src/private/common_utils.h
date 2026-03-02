@@ -1,6 +1,8 @@
 #ifndef ESCLIB_PRIVATE_COMMON_UTILS_H
 #define ESCLIB_PRIVATE_COMMON_UTILS_H
 
+#include "../../include/esclib.h"
+
 #include <stddef.h>
 
 typedef enum {
@@ -10,5 +12,6 @@ typedef enum {
 
 int UniWrite(UniWriteTarget target, const void* buf, size_t n);
 int UniWriteLen(UniWriteTarget target, const void* buf);
+size_t WriteToBackbuff(const SBCell* content, size_t cellCount);
 
 #endif

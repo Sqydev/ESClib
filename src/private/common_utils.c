@@ -1,6 +1,6 @@
 #include "../../include/esclib.h"
-#include <stdlib.h>
 
+#include "./coredata.h"
 #include "./common_utils.h"
 
 #if defined(unix) || defined(__unix) || defined(__unix__)
@@ -9,6 +9,7 @@
 #endif
 
 #include <string.h>
+#include <stdlib.h>
 
 // TODO: DO return codes here
 int UniWrite(UniWriteTarget target, const void* buf, size_t n) {
@@ -49,4 +50,24 @@ int UniWrite(UniWriteTarget target, const void* buf, size_t n) {
 
 int UniWriteLen(UniWriteTarget target, const void* buf) {
 	return UniWrite(target, buf, strlen(buf));
+}
+
+size_t WriteToBackbuff(const SBCell* content, size_t cellCount) {
+	if(!content) { return 0; }
+
+	size_t maxCells = GetBackbuffCellCount();
+
+	if(DATA.Buffers.backbuffOffset >= maxCells) { return 0; }
+
+	if(cellCount > maxCells - DATA.Buffers.backbuffOffset) {
+		cellCount = maxCells - DATA.Buffers.backbuffOffset;
+	}
+
+	size_t bytesToWrite = cellCount * sizeof(SBCell);
+
+	memcpy(DATA.Buffers.backbuff + DATA.Buffers.backbuffOffset, content, bytesToWrite);
+
+	DATA.Buffers.backbuffOffset += cellCount;
+
+	return bytesToWrite;
 }
