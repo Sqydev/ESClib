@@ -55,4 +55,6 @@ void RunSignalTester(int signo, const char* signame, int (*disableFn)(int), int 
 
 	printf("TESTER: Ending test\n");
 	fflush(stdout);
+
+	CloseTui();
 }

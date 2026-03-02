@@ -11,7 +11,7 @@ void InitCloseTuiTester() {
 
 	write(STDOUT_FILENO, "TESTER: Closing Tui\n", 20);
 
-	CloseTui();
-
 	write(STDOUT_FILENO, "TESTER: Ending test\n", 20);
+
+	CloseTui();
 }
