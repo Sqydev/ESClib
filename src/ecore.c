@@ -50,5 +50,7 @@ void CloseTui(void) {
 	DATA.Buffers.frontbuff = NULL;
 
 	SignalsCleanup();
+
+	UniWriteLen(UNI_WRITE_TARGET_STDOUT, "\033[?1049l");
 }
 
