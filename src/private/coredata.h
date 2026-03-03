@@ -21,6 +21,8 @@ typedef struct {
 	struct {
 		Vector2i termdimm;
 		Vector2i termdimmInPixels;
+		
+		boot closed // TUI MUST DIE
 	} TuiData;
 
 	struct {
