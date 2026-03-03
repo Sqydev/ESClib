@@ -21,6 +21,8 @@ void InitTui(int targetFps) {
 	DATA.TuiData.termdimm = GetTuiDimmentionsForReal();
 	DATA.TuiData.termdimmInPixels = GetTuiDimmensionsInPixelsForReal();
 
+	DATA.TuiData.closed = false;
+
 	DATA.Buffers.backbuff = NULL;
 	DATA.Buffers.backbuff = realloc(DATA.Buffers.backbuff, GetBackbuffSize());
 	DATA.Buffers.frontbuff = NULL;
@@ -33,6 +35,12 @@ void InitTui(int targetFps) {
 }
 
 void CloseTui(void) {
+	if(DATA.TuiData.closed) {
+		return;
+	}
+	
+	DATA.TuiData.closed = true;
+	
 	UniWriteLen(UNI_WRITE_TARGET_STDOUT, "Greetings from CloseTui()!\n");
 
 	free(DATA.Buffers.backbuff);
