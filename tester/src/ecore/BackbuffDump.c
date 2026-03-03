@@ -7,6 +7,8 @@
 void BackbuffDump() {
 	InitTui(0);
 
+	printf("\033[?1049l");
+
 	int times = 10;
 	int filled = 0;
 	SBCell filler;
