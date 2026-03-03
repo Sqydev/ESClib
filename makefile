@@ -55,7 +55,7 @@ LDFLAGS ?= $(LIBC_LDFLAGS)
 
 SRC_DIR := src
 OBJ_DIR := obj
-BIN_DIR := compiled
+BIN_DIR := lib
 
 OBJ_SUBDIR := $(OBJ_DIR)/$(PROFILE)-$(LIBC)
 BIN_SUBDIR := $(PROFILE)

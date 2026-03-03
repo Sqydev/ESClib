@@ -1,2 +1,3 @@
 - When you'll do loop call SignalsStep
 - When I'll do tester for sighandling ever again remamber to do fflush when you'll thest it with printf:)
+- DON'T USE GETCHAR()!!!!!! Use your own function that uses read for linux and something else for windows
