@@ -7,25 +7,27 @@
 
 #include <errno.h>
 
-void ESleep(int sec, int ms, long ns) {
-    struct timespec required, remaining;
+void ESleep(unsigned long sec, unsigned long ms, unsigned long ns) {
+	struct timespec required, remaining;
 
-    required.tv_sec = sec + (ms / 1000);
-    required.tv_nsec = (long)(ms % 1000) * 1000000L + ns;
+	required.tv_sec = (time_t)(sec + (ms / 1000));
 
-    if(required.tv_nsec >= 1000000000L) {
-        required.tv_sec += required.tv_nsec / 1000000000L;
-        required.tv_nsec = required.tv_nsec % 1000000000L;
-    }
+	unsigned long total_ns = (ms % 1000UL) * 1000000UL + ns;
+	if (total_ns >= 1000000000UL) {
+		required.tv_sec += (time_t)(total_ns / 1000000000UL);
+		total_ns %= 1000000000UL;
+	}
+	required.tv_nsec = (long)total_ns;
 
-    while(nanosleep(&required, &remaining) == -1) {
-        if(errno == EINTR) {
-            if(DATA.SignalData.SIG_INT.enabled && DATA.SignalData.SIG_INT.triggered) {
-                break; 
-            }
-            required = remaining;
-        } else {
-            break;
-        }
-    }
+	while(nanosleep(&required, &remaining) == -1) {
+		if(errno == EINTR) {
+			if(DATA.SignalData.SIG_INT.enabled && DATA.SignalData.SIG_INT.triggered) {
+				break; 
+			}
+			required = remaining;
+		}
+		else {
+			break;
+		}
+	}
 }

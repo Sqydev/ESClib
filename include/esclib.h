@@ -58,6 +58,9 @@ typedef struct {
 RLAPI void InitTui(int targetFps);
 RLAPI void CloseTui(void);
 
+RLAPI void BeginDrawing(void);
+RLAPI void EndDrawing(void);
+
 // ESIGNALS
 
 RLAPI int EnableSignal(int signal);
@@ -99,8 +102,10 @@ RLAPI int GetCustomSignalTasksCount(int signal);
 // Get Custom Signal Tasks Size In Bytes I Think. If Failed Than It Will Return -1
 RLAPI size_t GetCustomSignalTasksSize(int signal);
 
+RLAPI double GetTime(void);
+
 // EUTILS
 
-RLAPI void ESleep(int sec, int ms, long ns);
+void ESleep(unsigned long sec, unsigned long ms, unsigned long ns);
 
 #endif

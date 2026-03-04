@@ -5,6 +5,7 @@
 #if defined(unix) || defined(__unix) || defined(__unix__)
 	#include <unistd.h>
 	#include <sys/ioctl.h>
+	#include <time.h>
 #elif defined(_WIN32) || defined(_WIN64)
 #endif
 
@@ -98,4 +99,43 @@ size_t GetCustomSignalTasksSize(int signal) {
 			return -1;
 		}
 	}
+}
+
+double GetTime(void) {
+#if defined(__APPLE__) || defined(__linux__)
+	
+	static struct timespec start = {0, 0};
+	static int initialized = 0;
+
+	struct timespec now;
+	clock_gettime(CLOCK_MONOTONIC, &now);
+
+	if (!initialized) {
+		start = now;
+		initialized = 1;
+	}
+
+	double sec = (double)(now.tv_sec  - start.tv_sec);
+	double nsec = (double)(now.tv_nsec - start.tv_nsec) / 1e9;
+	return sec + nsec;
+
+#elif defined(_WIN32) || defined(_WIN64)
+	
+	static LARGE_INTEGER frequency = {0};
+	static LARGE_INTEGER start = {0};
+	static int initialized = 0;
+
+	if (!initialized) {
+		QueryPerformanceFrequency(&frequency);
+		QueryPerformanceCounter(&start);
+		initialized = 1;
+	}
+
+	LARGE_INTEGER now;
+	QueryPerformanceCounter(&now);
+
+	LONGLONG elapsed = now.QuadPart - start.QuadPart;
+	return (double)elapsed / (double)frequency.QuadPart;
+
+#endif
 }

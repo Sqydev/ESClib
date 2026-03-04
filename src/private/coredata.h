@@ -14,6 +14,7 @@
 typedef struct {
 	struct {
 		SBCell* frontbuff;
+		size_t frontbuffOffset;
 		
 		SBCell* backbuff;
 		size_t backbuffOffset;
@@ -41,6 +42,10 @@ typedef struct {
 	struct {
 		int targetFps;
 		double target;
+
+		double current;
+		double previous;
+		double delta;
 	} Time;
 
 	struct {
