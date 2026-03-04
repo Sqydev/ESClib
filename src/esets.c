@@ -7,7 +7,7 @@
 #endif
 
 void SetTargetFps(int targetFps) {
-	if(targetFps < 1) {
+	if(targetFps < 0) {
 		DATA.Time.targetFps = 0;
 		DATA.Time.target = 0.0;
 	}
