@@ -1,6 +1,6 @@
-#ifndef ESCLIB_PRIVATE_RENDERFRAME_H
-#define ESCLIB_PRIVATE_RENDERFRAME_H
+#ifndef ESCLIB_PRIVATE_RENDERFRAME_UTILS_H
+#define ESCLIB_PRIVATE_RENDERFRAME_UTILS_H
 
-int RenderFrame(void);
+void RenderFrame(void);
 
 #endif

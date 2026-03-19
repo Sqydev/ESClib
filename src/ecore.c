@@ -68,9 +68,7 @@ void BeginDrawing(void) {
 
 // TODO: Make here better error handling
 void EndDrawing(void) {
-	if(RenderFrame() == -1) {
-		UniWriteLen(UNI_WRITE_TARGET_STDERR, "ERROR: RenderFrame() FUCKING EXPLODED\n");
-	}
+	RenderFrame();
 
 	DATA.Time.previous = DATA.Time.current;
 	DATA.Time.current = GetTime();
