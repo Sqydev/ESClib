@@ -61,6 +61,8 @@ RLAPI void CloseTui(void);
 RLAPI void BeginDrawing(void);
 RLAPI void EndDrawing(void);
 
+RLAPI void ClearBackground(Color BgColor, Color FgColor);
+
 // ESIGNALS
 
 RLAPI int EnableSignal(int signal);
@@ -94,6 +96,8 @@ RLAPI Vector2i GetTuiDimmensionsInPixelsForReal(void);
 
 RLAPI size_t GetBackbuffSize(void);
 RLAPI size_t GetBackbuffCellCount(void);
+RLAPI size_t GetCharbuffSize(void);
+RLAPI size_t GetCharbuffCellCount(void);
 
 // Will Return Pointer To DATA.SignalData.SIGNAL.customTasks. If Failed Than It Will Return NULL
 RLAPI void (**GetCustomSignalTasks(int signal))(void);

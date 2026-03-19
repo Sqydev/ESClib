@@ -19,3 +19,5 @@ void SignalCustomTasksTester_SIGWINCH(void);
 void SignalBuildInTasksTester_SIGWINCH(void);
 
 void BackbuffDump();
+
+void EndDrawingTest();

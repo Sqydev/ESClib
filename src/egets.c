@@ -50,6 +50,14 @@ size_t GetBackbuffCellCount(void) {
 	return DATA.TuiData.termdimm.x * DATA.TuiData.termdimm.y;
 }
 
+size_t GetCharbuffSize(void) {
+	return GetCharbuffCellCount() * 64 + 1000;
+}
+
+size_t GetCharbuffCellCount(void) {
+	return DATA.TuiData.termdimm.x * DATA.TuiData.termdimm.y;
+}
+
 void (**GetCustomSignalTasks(int signal))(void) {
 	switch(signal) {
 		case SIGINT: {

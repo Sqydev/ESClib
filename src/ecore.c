@@ -28,8 +28,13 @@ void InitTui(int targetFps) {
 
 	DATA.Buffers.backbuff = NULL;
 	DATA.Buffers.backbuff = realloc(DATA.Buffers.backbuff, GetBackbuffSize());
+	DATA.Buffers.backbuffOffset = 0;
 	DATA.Buffers.frontbuff = NULL;
 	DATA.Buffers.frontbuff = realloc(DATA.Buffers.frontbuff, GetBackbuffSize());
+	DATA.Buffers.frontbuffOffset = 0;
+
+	DATA.Buffers.charbuffer = NULL;
+	DATA.Buffers.charbuffer = realloc(DATA.Buffers.charbuffer, GetCharbuffSize());
 
 	SetTargetFps(targetFps);
 
@@ -50,6 +55,9 @@ void CloseTui(void) {
 	free(DATA.Buffers.frontbuff);
 	DATA.Buffers.frontbuff = NULL;
 
+	free(DATA.Buffers.charbuffer);
+	DATA.Buffers.charbuffer = NULL;
+
 	DisableRawMode();
 
 	SignalsCleanup();
@@ -60,7 +68,7 @@ void CloseTui(void) {
 void BeginDrawing(void) {
 	SignalsStep();
 
-	DATA.Buffers.frontbuff = DATA.Buffers.backbuff;
+	memcpy(DATA.Buffers.frontbuff, DATA.Buffers.backbuff, GetBackbuffSize());
 
 	DATA.Buffers.backbuffOffset = 0;
 	DATA.Buffers.frontbuffOffset = 0;
@@ -96,5 +104,14 @@ void EndDrawing(void) {
 			DATA.Time.current = GetTime();
 			DATA.Time.delta = DATA.Time.current - DATA.Time.previous;
 		}
+	}
+}
+
+void ClearBackground(Color BgColor, Color FgColor) {
+	for(size_t i = 0; i < GetBackbuffCellCount(); i++) {
+		memset(DATA.Buffers.backbuff[i].Char, ' ', 4 * sizeof(char));
+		DATA.Buffers.backbuff[i].CharLen = 1;
+		DATA.Buffers.backbuff[i].fgColor = FgColor;
+		DATA.Buffers.backbuff[i].bgColor = BgColor;
 	}
 }
