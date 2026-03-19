@@ -24,6 +24,8 @@ const TesterEntry testers[] = {
 	{"SBT_SIGWINCH", SignalBuildInTasksTester_SIGWINCH, "SignalBuildInTasksTester_SIGWINCH"},
 
 	{"BBD", BackbuffDump, "BackbuffDump"},
+
+	{"EDT", EndDrawingTest, "EndDrawingTest"},
 };
 
 void PrintUsage(const char* prog) {
