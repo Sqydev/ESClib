@@ -18,6 +18,9 @@ typedef struct {
 		
 		SBCell* backbuff;
 		size_t backbuffOffset;
+
+		char* charbuffer;
+		size_t charbufferOffset;
 	} Buffers;
 
 	struct {
