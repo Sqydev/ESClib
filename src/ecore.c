@@ -29,9 +29,12 @@ void InitTui(int targetFps) {
 	DATA.Buffers.backbuff = NULL;
 	DATA.Buffers.backbuff = realloc(DATA.Buffers.backbuff, GetBackbuffSize());
 	DATA.Buffers.backbuffOffset = 0;
+	memset(DATA.Buffers.backbuff, 0, GetBackbuffSize());
+
 	DATA.Buffers.frontbuff = NULL;
 	DATA.Buffers.frontbuff = realloc(DATA.Buffers.frontbuff, GetBackbuffSize());
 	DATA.Buffers.frontbuffOffset = 0;
+	memset(DATA.Buffers.frontbuff, 0, GetBackbuffSize());
 
 	DATA.Buffers.charbuffer = NULL;
 	DATA.Buffers.charbuffer = realloc(DATA.Buffers.charbuffer, GetCharbuffSize());
@@ -68,7 +71,7 @@ void CloseTui(void) {
 void BeginDrawing(void) {
 	SignalsStep();
 
-	memcpy(DATA.Buffers.frontbuff, DATA.Buffers.backbuff, GetBackbuffSize());
+	memcpy(DATA.Buffers.backbuff, DATA.Buffers.frontbuff, GetBackbuffSize());
 
 	DATA.Buffers.backbuffOffset = 0;
 	DATA.Buffers.frontbuffOffset = 0;
@@ -109,7 +112,8 @@ void EndDrawing(void) {
 
 void ClearBackground(Color BgColor, Color FgColor) {
 	for(size_t i = 0; i < GetBackbuffCellCount(); i++) {
-		memset(DATA.Buffers.backbuff[i].Char, ' ', 4 * sizeof(char));
+		memset(DATA.Buffers.backbuff[i].Char, 0, 4 * sizeof(char));
+		DATA.Buffers.backbuff[i].Char[0] = ' ';
 		DATA.Buffers.backbuff[i].CharLen = 1;
 		DATA.Buffers.backbuff[i].fgColor = FgColor;
 		DATA.Buffers.backbuff[i].bgColor = BgColor;
