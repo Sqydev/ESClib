@@ -21,8 +21,8 @@ void InitTui(int targetFps) {
 
 	EnableRawMode();
 
-	DATA.TuiData.termdimm = GetTuiDimmentionsForReal();
-	DATA.TuiData.termdimmInPixels = GetTuiDimmensionsInPixelsForReal();
+	DATA.TuiData.termdimm = GetTuiDimensionsForReal();
+	DATA.TuiData.termdimmInPixels = GetTuiDimensionsInPixelsForReal();
 
 	DATA.TuiData.initiated = true;
 

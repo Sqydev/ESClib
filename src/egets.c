@@ -11,12 +11,12 @@
 
 #include <errno.h>
 
-Vector2i GetTuiDimmensions(void) { return DATA.TuiData.termdimm; }
-Vector2i GetTuiDimmensionsInPixels(void) { return DATA.TuiData.termdimmInPixels; }
-Vector2i* GetTuiDimmensionsPtr(void) { return &DATA.TuiData.termdimm; }
-Vector2i* GetTuiDimmensionsPtrInPixels(void) { return &DATA.TuiData.termdimmInPixels; }
+Vector2i GetTuiDimensions(void) { return DATA.TuiData.termdimm; }
+Vector2i GetTuiDimensionsInPixels(void) { return DATA.TuiData.termdimmInPixels; }
+Vector2i* GetTuiDimensionsPtr(void) { return &DATA.TuiData.termdimm; }
+Vector2i* GetTuiDimensionsPtrInPixels(void) { return &DATA.TuiData.termdimmInPixels; }
 
-Vector2i GetTuiDimmentionsForReal(void) {
+Vector2i GetTuiDimensionsForReal(void) {
 #if defined(unix) || defined(__unix) || defined(__unix__)
 
 	struct winsize termdimm;
@@ -29,7 +29,7 @@ Vector2i GetTuiDimmentionsForReal(void) {
 #endif
 }
 
-Vector2i GetTuiDimmensionsInPixelsForReal(void) {
+Vector2i GetTuiDimensionsInPixelsForReal(void) {
 #if defined(unix) || defined(__unix) || defined(__unix__)
 
 	struct winsize termdimm;

@@ -152,8 +152,8 @@ void SignalsStep(void) {
 		}
 
         if (DATA.SignalData.SIG_WINCH.enabledESClibTasks) {
-        	DATA.TuiData.termdimm = GetTuiDimmentionsForReal();
-        	DATA.TuiData.termdimmInPixels = GetTuiDimmensionsInPixelsForReal();
+        	DATA.TuiData.termdimm = GetTuiDimensionsForReal();
+        	DATA.TuiData.termdimmInPixels = GetTuiDimensionsInPixelsForReal();
 
 			DATA.Buffers.backbuff = realloc(DATA.Buffers.backbuff, GetBackbuffSize());
 			DATA.Buffers.frontbuff = realloc(DATA.Buffers.frontbuff, GetBackbuffSize());

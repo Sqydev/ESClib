@@ -28,11 +28,7 @@ void RenderFrame(void) {
 			SBCell* front = &DATA.Buffers.frontbuff[index];
 
 			// NOTE: Or is it?
-			bool different = false;
-
-			if(back->CharLen != front->CharLen || memcmp(back->Char, front->Char, back->CharLen) != 0 || memcmp(&back->fgColor, &front->fgColor, sizeof(Color)) != 0 || memcmp(&back->bgColor, &front->bgColor, sizeof(Color)) != 0) {
-				different = true;
-			}
+			bool different = (back->CharLen != front->CharLen || memcmp(back->Char, front->Char, back->CharLen) != 0 || memcmp(&back->fgColor, &front->fgColor, sizeof(Color)) != 0 || memcmp(&back->bgColor, &front->bgColor, sizeof(Color)) != 0);
 
 			if(different) {
 				if (cursorY != y || cursorX != x) {
@@ -43,12 +39,24 @@ void RenderFrame(void) {
 				cursorY = y;
 
 				if(forceColorUpdate || memcmp(&back->fgColor, &lastFg, sizeof(Color)) != 0) {
-					DATA.Buffers.charbufferOffset += sprintf(DATA.Buffers.charbuffer + DATA.Buffers.charbufferOffset, "\033[38;2;%d;%d;%dm", back->fgColor.r, back->fgColor.g, back->fgColor.b);
+					if(back->fgColor.trueColor) {
+						DATA.Buffers.charbufferOffset += sprintf(DATA.Buffers.charbuffer + DATA.Buffers.charbufferOffset, "\033[38;2;%d;%d;%dm", back->fgColor.r, back->fgColor.g, back->fgColor.b);
+					}
+					else {
+						int paletteIdx = (int)back->fgColor.r + back->fgColor.g + back->fgColor.b;
+						DATA.Buffers.charbufferOffset += sprintf(DATA.Buffers.charbuffer + DATA.Buffers.charbufferOffset, "\033[38;5;%dm", paletteIdx);
+					}
 					lastFg = back->fgColor;
 				}
 
 				if(forceColorUpdate || memcmp(&back->bgColor, &lastBg, sizeof(Color)) != 0) {
-					DATA.Buffers.charbufferOffset += sprintf(DATA.Buffers.charbuffer + DATA.Buffers.charbufferOffset, "\033[48;2;%d;%d;%dm", back->bgColor.r, back->bgColor.g, back->bgColor.b);
+					if(back->bgColor.trueColor) {
+						DATA.Buffers.charbufferOffset += sprintf(DATA.Buffers.charbuffer + DATA.Buffers.charbufferOffset, "\033[48;2;%d;%d;%dm", back->bgColor.r, back->bgColor.g, back->bgColor.b);
+					}
+					else {
+						int paletteIdx = (int)back->bgColor.r + back->bgColor.g + back->bgColor.b;
+                        DATA.Buffers.charbufferOffset += sprintf(DATA.Buffers.charbuffer + DATA.Buffers.charbufferOffset, "\033[48;5;%dm", paletteIdx);
+					}
 					lastBg = back->bgColor;
 				}
 
