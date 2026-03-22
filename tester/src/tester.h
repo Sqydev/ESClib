@@ -22,3 +22,5 @@ void BackbuffDump();
 
 void EndDrawingTest();
 void RenderLoopStressTest();
+
+void TextTest();

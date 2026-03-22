@@ -28,6 +28,8 @@ const TesterEntry testers[] = {
 	{"EDT", EndDrawingTest, "EndDrawingTest"},
 
 	{"RLST", RenderLoopStressTest, "RenderLoopStressTest"},
+
+	{"TT", TextTest, "TextTest"},
 };
 
 void PrintUsage(const char* prog) {

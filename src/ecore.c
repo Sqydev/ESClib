@@ -44,7 +44,7 @@ void InitTui(int targetFps) {
 	SetTargetFps(targetFps);
 
 	// Start chainging things
-	UniWriteLen(UNI_WRITE_TARGET_STDOUT, "\033[?1049h\033[H");
+	UniWriteLen(UNI_WRITE_TARGET_STDOUT, "\033[?1049h\033[H\033[?7l");
 }
 
 void CloseTui(void) {
@@ -67,7 +67,7 @@ void CloseTui(void) {
 
 	SignalsCleanup();
 
-	UniWriteLen(UNI_WRITE_TARGET_STDOUT, "\033[2J\033[?1049l");
+	UniWriteLen(UNI_WRITE_TARGET_STDOUT, "\033[2J\033[?1049l\033[?7h");
 }
 
 void BeginDrawing(void) {
@@ -112,7 +112,7 @@ void EndDrawing(void) {
 	}
 }
 
-void ClearBackground(Color BgColor, Color FgColor) {
+void ClearTui(Color BgColor, Color FgColor) {
 	for(size_t i = 0; i < GetBackbuffCellCount(); i++) {
 		memset(DATA.Buffers.backbuff[i].Char, 0, 4 * sizeof(char));
 		DATA.Buffers.backbuff[i].Char[0] = ' ';

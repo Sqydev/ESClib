@@ -61,7 +61,7 @@ RLAPI void CloseTui(void);
 RLAPI void BeginDrawing(void);
 RLAPI void EndDrawing(void);
 
-RLAPI void ClearBackground(Color BgColor, Color FgColor);
+RLAPI void ClearTui(Color BgColor, Color FgColor);
 
 // ESIGNALS
 
@@ -110,6 +110,12 @@ RLAPI double GetTime(void);
 
 // EUTILS
 
-void ESleep(unsigned long sec, unsigned long ms, unsigned long ns);
+RLAPI void ESleep(unsigned long sec, unsigned long ms, unsigned long ns);
+RLAPI int GetCharWidth(const char* character);
+
+// ETEXT
+
+RLAPI void DrawChar(const char* character, int x, int y, Color color);
+RLAPI void DrawCharEx(const char* character, int x, int y, Color* fg, Color* bg);
 
 #endif
