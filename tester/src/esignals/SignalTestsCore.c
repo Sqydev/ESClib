@@ -14,7 +14,7 @@ void WaitAndReact(int seconds) {
 }
 
 void RunSignalTester(int signo, const char* signame, int (*disableFn)(int), int (*enableFn)(int), const char* typeDesc) {
-	InitTui(60);
+	InitTui(60, TUI_DYNAMIC);
 
 	printf("CustomTaskCount = %d\n", GetCustomSignalTasksCount(signo));
 	printf("CustomTaskSize = %lu\n", GetCustomSignalTasksSize(signo));

@@ -14,12 +14,14 @@
 
 CoreData DATA;
 
-void InitTui(int targetFps) {
+void InitTui(int targetFps, TuiType type) {
 	atexit(CloseTui);
 
 	SignalsSetup();
 
 	EnableRawMode();
+
+	DATA.TuiData.type = type;
 
 	DATA.TuiData.termdimm = GetTuiDimensionsForReal();
 	DATA.TuiData.termdimmInPixels = GetTuiDimensionsInPixelsForReal();

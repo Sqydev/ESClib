@@ -1,22 +1,10 @@
 #include "../../../include/esclib.h"
 
-#include <stdio.h>
-#include <unistd.h>
+void StaticTuiTester() {
+	InitTui(60, TUI_STATIC);
 
-void TextTest() {
-	InitTui(165, TUI_DYNAMIC);
-
-	printf("Drawing this in patern:\n");
-	printf("@@@@@@@@@\n");
-	printf("@#  #  #@\n");
-	printf("@       @\n");
-	printf("@#     #@\n");
-	printf("@       @\n");
-	printf("@#  #  #@\n");
-	printf("@@@@@@@@@\n");
-	fflush(stdout);
-
-	sleep(1);
+	// Should be cube
+	SetTuiDimentions(60, 30);
 
 	while(1) {
 		BeginDrawing();
