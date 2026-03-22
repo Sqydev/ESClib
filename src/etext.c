@@ -3,6 +3,8 @@
 #include "./private/coredata.h"
 #include "./private/common_utils.h"
 
+#include <math.h>
+
 #include <stdlib.h>
 #include <string.h>
 
@@ -93,11 +95,11 @@ void DrawText(const char* text, int x, int y, Color color) {
 }
 
 void DrawTextEx(const char* text, int x, int y, Color* fg, Color* bg) {
-	DrawTextPro(text, x, y, fg, bg, 0, false);
+	DrawTextPro(text, x, y, fg, bg, 0, 0);
 }
 
-// TODO: MAKE DrawTextPro take angle and not only IsVertical for retarded things
-void DrawTextPro(const char* text, int x, int y, Color* fg, Color* bg, int spaceing, bool vertical) {
+// TODO: Fix non like straight angle.
+void DrawTextPro(const char* text, int x, int y, Color* fg, Color* bg, int spaceing, float angle) {
 	if(text == NULL) {
 		UniWriteLen(UNI_WRITE_TARGET_STDERR, "Text is NULL\n");
 		return;
@@ -132,13 +134,8 @@ void DrawTextPro(const char* text, int x, int y, Color* fg, Color* bg, int space
 
 		DrawCharEx(tmpChar, curX, curY, fg, bg);
 
-		if(!vertical) {
-			int vWidth = GetCharWidth(ptrr);
-			curX += vWidth + spaceing;
-		}
-		else {
-			curY += 1 + spaceing;
-		}
+		curX += (int)(cosf(angle) * (spaceing + 1));
+		curY += (int)(sinf(angle) * (spaceing + 1));
 
 		ptrr += len;
 	}

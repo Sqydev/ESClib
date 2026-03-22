@@ -28,6 +28,18 @@
 #include <stddef.h>
 #include <stdbool.h>
 
+#ifndef PI
+	#define PI 3.14159265358979323846f
+#endif
+
+#ifndef DEG2RAD
+    #define DEG2RAD (PI/180.0f)
+#endif
+
+#ifndef RAD2DEG
+    #define RAD2DEG (180.0f/PI)
+#endif
+
 typedef struct {
 	unsigned char r;
 	unsigned char g;
@@ -126,6 +138,6 @@ RLAPI void DrawCharEx(const char* character, int x, int y, Color* fg, Color* bg)
 
 RLAPI void DrawText(const char* text, int x, int y, Color color);
 RLAPI void DrawTextEx(const char* text, int x, int y, Color* fg, Color* bg);
-RLAPI void DrawTextPro(const char* text, int x, int y, Color* fg, Color* bg, int spaceing, bool vertical);
+RLAPI void DrawTextPro(const char* text, int x, int y, Color* fg, Color* bg, int spaceing, float angle);
 
 #endif
