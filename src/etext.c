@@ -96,6 +96,7 @@ void DrawTextEx(const char* text, int x, int y, Color* fg, Color* bg) {
 	DrawTextPro(text, x, y, fg, bg, 0, false);
 }
 
+// TODO: MAKE DrawTextPro take angle and not only IsVertical for retarded things
 void DrawTextPro(const char* text, int x, int y, Color* fg, Color* bg, int spaceing, bool vertical) {
 	if(text == NULL) {
 		UniWriteLen(UNI_WRITE_TARGET_STDERR, "Text is NULL\n");
