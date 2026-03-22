@@ -66,11 +66,11 @@ size_t UniWriteLen(UniWriteTarget target, const void* buf) {
 
 void WriteToBackbuff(const SBCell cell, size_t x, size_t y) {
 	if(x > (size_t)DATA.TuiData.termdimm.x * DATA.TuiData.termdimm.y) {
-		UniWriteLen(UNI_WRITE_TARGET_STDERR, "ERROR: X is out of bounce\n");
+		UniWriteLen(UNI_WRITE_TARGET_STDERR, "WARNING: X is out of bounce\n");
 		return;
 	}
 	if(y > (size_t)DATA.TuiData.termdimm.y) {
-		UniWriteLen(UNI_WRITE_TARGET_STDERR, "ERROR: Y is out of bounce\n");
+		UniWriteLen(UNI_WRITE_TARGET_STDERR, "WARNING: Y is out of bounce\n");
 		return;
 	}
 

@@ -2,10 +2,16 @@
 
 #if defined(unix) || defined(__unix) || defined(__unix__)
 	#include <time.h>
+	#include <wchar.h>
+	#include <locale.h>
+
+	extern int wcwidth (wchar_t __c);
+
 #elif defined(_WIN32) || defined(_WIN64)
 #endif
 
 #include <errno.h>
+#include <stdlib.h>
 
 void ESleep(unsigned long sec, unsigned long ms, unsigned long ns) {
 	struct timespec required, remaining;
@@ -30,4 +36,26 @@ void ESleep(unsigned long sec, unsigned long ms, unsigned long ns) {
 			break;
 		}
 	}
+}
+
+int GetCharWidth(const char* character) {
+#if defined(unix) || defined(__unix) || defined(__unix__)
+
+    static int locale_initialized = 0;
+    if(!locale_initialized) {
+        setlocale(LC_ALL, ""); 
+        locale_initialized = 1;
+    }
+
+    wchar_t wc;
+    int len = mbtowc(&wc, character, 4);
+    
+    if(len <= 0) return 0;
+
+    int width = wcwidth(wc);
+    
+    return (width < 0) ? 0 : width;
+
+#elif defined(_WIN32) || defined(_WIN64)
+#endif
 }

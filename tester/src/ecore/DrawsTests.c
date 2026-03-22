@@ -21,7 +21,7 @@ void EndDrawingTest() {
 
 	BeginDrawing();
 
-	ClearBackground((Color){ 0,0,0,0 }, (Color){ 255,255,255,1 });
+	ClearTui((Color){ 0,0,0,0 }, (Color){ 255,255,255,1 });
 
 	for(int i = 0; i < times; i++) {
 		WriteToBackbuff(filler, i, 0);
