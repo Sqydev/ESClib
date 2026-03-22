@@ -87,12 +87,12 @@ RLAPI void SetTargetFps(int targetFps);
 
 // EGETS
 
-RLAPI Vector2i GetTuiDimmentions(void);
-RLAPI Vector2i GetTuiDimmensionsInPixels(void);
-RLAPI Vector2i* GetTuiDimmensionsPtr(void);
-RLAPI Vector2i* GetTuiDimmensionsPtrInPixels(void);
-RLAPI Vector2i GetTuiDimmentionsForReal(void);
-RLAPI Vector2i GetTuiDimmensionsInPixelsForReal(void);
+RLAPI Vector2i GetTuiDimensions(void);
+RLAPI Vector2i GetTuiDimensionsInPixels(void);
+RLAPI Vector2i* GetTuiDimensionsPtr(void);
+RLAPI Vector2i* GetTuiDimensionsPtrInPixels(void);
+RLAPI Vector2i GetTuiDimensionsForReal(void);
+RLAPI Vector2i GetTuiDimensionsInPixelsForReal(void);
 
 RLAPI size_t GetBackbuffSize(void);
 RLAPI size_t GetBackbuffCellCount(void);

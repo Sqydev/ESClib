@@ -7,6 +7,7 @@
 	#include <unistd.h>
 	#include <fcntl.h>
 	#include <termios.h>
+	#include <errno.h>
 #elif defined(_WIN32) || defined(_WIN64)
 	#include <windows.h>
 #endif
@@ -15,43 +16,51 @@
 #include <stdlib.h>
 
 // TODO: DO return codes here
-int UniWrite(UniWriteTarget target, const void* buf, size_t n) {
+size_t UniWrite(UniWriteTarget target, const void* buf, size_t n) {
 #if defined(unix) || defined(__unix) || defined(__unix__)
 
-	switch((int)target) {
-		case UNI_WRITE_TARGET_STDOUT: {
-			return (int)write(STDOUT_FILENO, buf, n);
+	int fd = (target == UNI_WRITE_TARGET_STDOUT) ? STDOUT_FILENO : STDERR_FILENO;
+	size_t total_written = 0;
+	const char* ptr = (const char*)buf;
+
+	while(total_written < n) {
+		ssize_t written = write(fd, ptr + total_written, n - total_written);
+
+		if (written == -1) {
+			if(errno == EINTR) {
+				continue;
+			}
+			if(errno == EAGAIN || errno == EWOULDBLOCK) {
+				continue;
+			}
+			return -1;
 		}
-		case UNI_WRITE_TARGET_STDERR: {
-			return (int)write(STDERR_FILENO, buf, n);
-		}
-		default: {
-			return EXIT_FAILURE;
-		}
+		total_written += written;
 	}
+
+	return total_written;
 
 #elif defined(_WIN32) || defined(_WIN64)
 
-	HANDLE h;
-	switch (target) {
-		case UNI_WRITE_TARGET_STDOUT:
-			h = GetStdHandle(STD_OUTPUT_HANDLE);
-			break;
-		case UNI_WRITE_TARGET_STDERR:
-			h = GetStdHandle(STD_ERROR_HANDLE);
-			break;
-		default:
-			return -1;
-	}
-	DWORD written = 0;
-	if (!WriteFile(h, buf, (DWORD)n, &written, NULL)) return -1;
-			
-	return (int)written;
+	HANDLE h = (target == UNI_WRITE_TARGET_STDOUT) ? GetStdHandle(STD_OUTPUT_HANDLE) : GetStdHandle(STD_ERROR_HANDLE);
+    if (h == INVALID_HANDLE_VALUE) return -1;
+
+    DWORD total_written = 0;
+    const char* ptr = (const char*)buf;
+
+    while (total_written < n) {
+        DWORD written = 0;
+        if (!WriteFile(h, ptr + total_written, (DWORD)(n - total_written), &written, NULL)) {
+            return -1;
+        }
+        total_written += written;
+    }
+    return (int)total_written;
 
 #endif
 }
 
-int UniWriteLen(UniWriteTarget target, const void* buf) {
+size_t UniWriteLen(UniWriteTarget target, const void* buf) {
 	return UniWrite(target, buf, strlen(buf));
 }
 

@@ -11,8 +11,8 @@ void EndDrawingTest() {
 
 	int times = 10;
 	SBCell filler;
-	filler.bgColor = (Color){0,0,0,0};
-	filler.fgColor = (Color){255,255,255,0};
+	filler.bgColor = (Color){ 0, 0, 0, 0};
+	filler.fgColor = (Color){ 2, 3, 100, 0};
 	filler.Char[0] = 'q';
 	filler.Char[1] = 0;
 	filler.Char[2] = 0;
@@ -37,7 +37,7 @@ void EndDrawingTest() {
 }
 
 void RenderLoopStressTest() {
-	InitTui(60);
+	InitTui(165);
 
 	printf("It's real epilepsy EPILEPSY WARNING");
 	fflush(stdout);
@@ -52,7 +52,7 @@ void RenderLoopStressTest() {
 				&(SBCell){
         			.bgColor = (Color){ rand() % 255, rand() % 255, rand() % 255, 1 },
         			.fgColor = (Color){ rand() % 255, rand() % 255, rand() % 255, 1 },
-					.Char[0] = 'q',
+					.Char[0] = (rand() % (126 - 32 + 1)) + 32,
 					.CharLen = 1,
     			}, 1);
 		}
