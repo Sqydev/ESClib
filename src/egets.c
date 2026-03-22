@@ -17,6 +17,8 @@ Vector2i* GetTuiDimensionsPtr(void) { return &DATA.TuiData.termdimm; }
 Vector2i* GetTuiDimensionsPtrInPixels(void) { return &DATA.TuiData.termdimmInPixels; }
 
 Vector2i GetTuiDimensionsForReal(void) {
+	if(DATA.TuiData.type == TUI_STATIC) { return DATA.TuiData.termdimm; }
+
 #if defined(unix) || defined(__unix) || defined(__unix__)
 
 	struct winsize termdimm;
@@ -30,6 +32,8 @@ Vector2i GetTuiDimensionsForReal(void) {
 }
 
 Vector2i GetTuiDimensionsInPixelsForReal(void) {
+	if(DATA.TuiData.type == TUI_STATIC) { return DATA.TuiData.termdimmInPixels; }
+
 #if defined(unix) || defined(__unix) || defined(__unix__)
 
 	struct winsize termdimm;

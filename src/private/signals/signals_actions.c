@@ -152,7 +152,7 @@ void SignalsStep(void) {
 			}
 		}
 
-        if (DATA.SignalData.SIG_WINCH.enabledESClibTasks) {
+        if (DATA.SignalData.SIG_WINCH.enabledESClibTasks && DATA.TuiData.type != TUI_STATIC) {
         	DATA.TuiData.termdimm = GetTuiDimensionsForReal();
         	DATA.TuiData.termdimmInPixels = GetTuiDimensionsInPixelsForReal();
 

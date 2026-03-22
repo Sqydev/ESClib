@@ -53,9 +53,14 @@ typedef struct {
 	int y;
 } Vector2i;
 
+typedef enum {
+	TUI_STATIC,
+	TUI_DYNAMIC
+} TuiType;
+
 // ECORE
 
-RLAPI void InitTui(int targetFps);
+RLAPI void InitTui(int targetFps, TuiType type);
 RLAPI void CloseTui(void);
 
 RLAPI void BeginDrawing(void);
@@ -84,6 +89,7 @@ RLAPI int CompressSignalTasks(int signal, int from, int to);
 // ESETS
 
 RLAPI void SetTargetFps(int targetFps);
+RLAPI void SetTuiDimentions(int x, int y);
 
 // EGETS
 

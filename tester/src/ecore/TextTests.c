@@ -4,7 +4,7 @@
 #include <unistd.h>
 
 void TextTest() {
-	InitTui(165);
+	InitTui(165, TUI_DYNAMIC);
 
 	printf("Drawing this in patern:\n");
 	printf("@@@@@@@@@\n");
@@ -30,7 +30,7 @@ void TextTest() {
 		DrawChar("ą", 0, GetTuiDimensions().y / 2, (Color){ 255, 255, 255, 1 });
 		DrawChar("q", GetTuiDimensions().x / 2, 0, (Color){ 255, 255, 255, 1 });
 		DrawChar("→", GetTuiDimensions().x, GetTuiDimensions().y / 2, (Color){ 255, 255, 255, 1 });
-		DrawChar("f", GetTuiDimensions().x / 2, GetTuiDimensions().y / 2, (Color){ 255, 255, 255, 1 });
+		DrawChar("⠟", GetTuiDimensions().x / 2, GetTuiDimensions().y / 2, (Color){ 255, 255, 255, 1 });
 		DrawChar("🔥", GetTuiDimensions().x / 2, GetTuiDimensions().y, (Color){ 255, 255, 255, 1 });
 
 		EndDrawing();

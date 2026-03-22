@@ -24,3 +24,5 @@ void EndDrawingTest();
 void RenderLoopStressTest();
 
 void TextTest();
+
+void StaticTuiTester();

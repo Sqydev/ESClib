@@ -24,6 +24,8 @@ typedef struct {
 	} Buffers;
 
 	struct {
+		TuiType type;
+
 		Vector2i termdimm;
 		Vector2i termdimmInPixels;
 		
