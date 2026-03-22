@@ -26,6 +26,8 @@ const TesterEntry testers[] = {
 	{"BBD", BackbuffDump, "BackbuffDump"},
 
 	{"EDT", EndDrawingTest, "EndDrawingTest"},
+
+	{"RLST", RenderLoopStressTest, "RenderLoopStressTest"},
 };
 
 void PrintUsage(const char* prog) {

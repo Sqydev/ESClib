@@ -39,10 +39,12 @@ void InitTui(int targetFps) {
 	DATA.Buffers.charbuffer = NULL;
 	DATA.Buffers.charbuffer = realloc(DATA.Buffers.charbuffer, GetCharbuffSize());
 
+	DATA.Cursor.pos = (Vector2i){ 0, 0 };
+
 	SetTargetFps(targetFps);
 
 	// Start chainging things
-	UniWriteLen(UNI_WRITE_TARGET_STDOUT, "\033[?1049h");
+	UniWriteLen(UNI_WRITE_TARGET_STDOUT, "\033[?1049h\033[H");
 }
 
 void CloseTui(void) {
@@ -65,7 +67,7 @@ void CloseTui(void) {
 
 	SignalsCleanup();
 
-	UniWriteLen(UNI_WRITE_TARGET_STDOUT, "\033[?1049l");
+	UniWriteLen(UNI_WRITE_TARGET_STDOUT, "\033[2J\033[?1049l");
 }
 
 void BeginDrawing(void) {

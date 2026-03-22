@@ -84,6 +84,10 @@ typedef struct {
 			int customTasksNumber;
 		} SIG_WINCH;
 	} SignalData;
+
+	struct {
+		Vector2i pos;
+	} Cursor;
 } CoreData;
 
 extern CoreData DATA;

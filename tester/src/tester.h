@@ -21,3 +21,4 @@ void SignalBuildInTasksTester_SIGWINCH(void);
 void BackbuffDump();
 
 void EndDrawingTest();
+void RenderLoopStressTest();
