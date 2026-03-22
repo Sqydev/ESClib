@@ -124,4 +124,8 @@ RLAPI int GetCharWidth(const char* character);
 RLAPI void DrawChar(const char* character, int x, int y, Color color);
 RLAPI void DrawCharEx(const char* character, int x, int y, Color* fg, Color* bg);
 
+RLAPI void DrawText(const char* text, int x, int y, Color color);
+RLAPI void DrawTextEx(const char* text, int x, int y, Color* fg, Color* bg);
+RLAPI void DrawTextPro(const char* text, int x, int y, Color* fg, Color* bg, int spaceing, bool vertical);
+
 #endif
