@@ -23,6 +23,7 @@ void BackbuffDump();
 void EndDrawingTest();
 void RenderLoopStressTest();
 
+void CharTest();
 void TextTest();
 
 void StaticTuiTester();

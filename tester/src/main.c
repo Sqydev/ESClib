@@ -29,6 +29,7 @@ const TesterEntry testers[] = {
 
 	{"RLST", RenderLoopStressTest, "RenderLoopStressTest"},
 
+	{"CT", CharTest, "CharTest"},
 	{"TT", TextTest, "TextTest"},
 
 	{"STT", StaticTuiTester, "StaticTuiTester"},
