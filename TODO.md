@@ -1,2 +1,2 @@
 // TODO: MAKE DRAWTEXTFORMAT
-// TODO: MAKE DrawTextPro take angle and not only IsVertical for retarded things
+// TODO: Fix non like straight angle. I'm going to sleep

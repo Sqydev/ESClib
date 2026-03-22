@@ -48,8 +48,10 @@ void TextTest() {
 		ClearTui((Color){ 0,0,0,0 }, (Color){ 255, 0, 0, 0});
 
 		DrawText("To jest OGIE🔥ń", 0, 0, (Color){ 255, 255, 255, 1 });
-		DrawTextPro("To jest kurczaczki rozprzesterzenny OGIE🔥ń", 0, 1, &(Color){ 255, 255, 255, 1 }, NULL, 1, false);
-		DrawTextPro("A to jest vertivcal OGIE🔥ń", 0, 3, &(Color){ 255, 255, 255, 1 }, NULL, 0, true);
+		DrawTextPro("To jest kurczaczki rozprzesterzenny OGIE🔥ń", 0, 1, &(Color){ 255, 255, 255, 1 }, NULL, 1, 0);
+		DrawTextPro("A to jest vertivcal OGIE🔥ń", 0, 3, &(Color){ 255, 255, 255, 1 }, NULL, 0, PI / 2);
+
+		DrawTextPro("A to jest PI/3 OGIE🔥ń", 5, 5, &(Color){ 255, 255, 255, 1 }, NULL, 0, PI / 3);
 
 		EndDrawing();
 	}
