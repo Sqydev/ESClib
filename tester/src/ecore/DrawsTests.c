@@ -24,7 +24,7 @@ void EndDrawingTest() {
 	ClearBackground((Color){ 0,0,0,0 }, (Color){ 255,255,255,1 });
 
 	for(int i = 0; i < times; i++) {
-		WriteToBackbuff(&filler, 1);
+		WriteToBackbuff(filler, i, 0);
 	}
 
 	EndDrawing();
@@ -49,12 +49,12 @@ void RenderLoopStressTest() {
 
 		for(size_t i = 0; i < GetBackbuffCellCount(); i++) {
 			WriteToBackbuff(
-				&(SBCell){
+				(SBCell){
         			.bgColor = (Color){ rand() % 255, rand() % 255, rand() % 255, 1 },
         			.fgColor = (Color){ rand() % 255, rand() % 255, rand() % 255, 1 },
 					.Char[0] = (rand() % (126 - 32 + 1)) + 32,
 					.CharLen = 1,
-    			}, 1);
+    			}, i, 0);
 		}
 
 		EndDrawing();

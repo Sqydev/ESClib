@@ -64,27 +64,22 @@ size_t UniWriteLen(UniWriteTarget target, const void* buf) {
 	return UniWrite(target, buf, strlen(buf));
 }
 
-size_t WriteToBackbuff(const SBCell* content, size_t cellCount) {
-	if(!content) { return 0; }
-
-	size_t maxCells = GetBackbuffCellCount();
-
-	if(DATA.Buffers.backbuffOffset >= maxCells) { return 0; }
-
-	if(cellCount > maxCells - DATA.Buffers.backbuffOffset) {
-		cellCount = maxCells - DATA.Buffers.backbuffOffset;
+void WriteToBackbuff(const SBCell cell, size_t x, size_t y) {
+	if(x > (size_t)DATA.TuiData.termdimm.x * DATA.TuiData.termdimm.y) {
+		UniWriteLen(UNI_WRITE_TARGET_STDERR, "ERROR: X is out of bounce\n");
+		return;
+	}
+	if(y > (size_t)DATA.TuiData.termdimm.y) {
+		UniWriteLen(UNI_WRITE_TARGET_STDERR, "ERROR: Y is out of bounce\n");
+		return;
 	}
 
-	size_t bytesToWrite = cellCount * sizeof(SBCell);
+    size_t index = y * DATA.TuiData.termdimm.x + x;
 
-	memcpy(DATA.Buffers.backbuff + DATA.Buffers.backbuffOffset, content, bytesToWrite);
+	if(index > DATA.Buffers.backbuffOffset) { DATA.Buffers.backbuffOffset = index; }
 
-	DATA.Buffers.backbuffOffset += cellCount;
-
-	return bytesToWrite;
+    DATA.Buffers.backbuff[index] = cell;
 }
-
-
 
 void EnableRawMode(void) {
 #if defined(unix) || defined(__unix) || defined(__unix__)
