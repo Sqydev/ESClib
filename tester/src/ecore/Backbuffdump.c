@@ -24,7 +24,7 @@ void BackbuffDump() {
 	printf("TESTER: Backbuff sizeof: %lu\n", GetBackbuffSize());
 
 	for(int i = 0; i < times; i++) {
-		filled = WriteToBackbuff(&filler, 1);
+		WriteToBackbuff(filler, (size_t)i, 0);
 	}
 
 	printf("TESTER: Backbuff cell count: %lu\n", GetBackbuffCellCount());

@@ -12,7 +12,7 @@ typedef enum {
 
 size_t UniWrite(UniWriteTarget target, const void* buf, size_t n);
 size_t UniWriteLen(UniWriteTarget target, const void* buf);
-size_t WriteToBackbuff(const SBCell* content, size_t cellCount);
+void WriteToBackbuff(const SBCell cell, size_t x, size_t y);
 
 void EnableRawMode(void);
 void DisableRawMode(void);
