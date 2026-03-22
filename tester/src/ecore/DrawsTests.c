@@ -3,6 +3,7 @@
 #include "../../../src/private/common_utils.h"
 
 #include <stdio.h>
+#include <stdlib.h>
 #include <unistd.h>
 
 void EndDrawingTest() {
@@ -31,6 +32,33 @@ void EndDrawingTest() {
 	sleep(5);
 
 	printf("TESTER: Ending EndDrawingTest\n");
+
+	CloseTui();
+}
+
+void RenderLoopStressTest() {
+	InitTui(60);
+
+	printf("It's real epilepsy EPILEPSY WARNING");
+	fflush(stdout);
+
+	sleep(5);
+
+	while(1) {
+		BeginDrawing();
+
+		for(size_t i = 0; i < GetBackbuffCellCount(); i++) {
+			WriteToBackbuff(
+				&(SBCell){
+        			.bgColor = (Color){ rand() % 255, rand() % 255, rand() % 255, 1 },
+        			.fgColor = (Color){ rand() % 255, rand() % 255, rand() % 255, 1 },
+					.Char[0] = 'q',
+					.CharLen = 1,
+    			}, 1);
+		}
+
+		EndDrawing();
+	}
 
 	CloseTui();
 }

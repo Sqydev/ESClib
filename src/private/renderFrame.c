@@ -4,7 +4,7 @@
 #include <stdio.h>
 #include <string.h>
 
-// TODO: Make it not stdio.h dependent
+// TODO: Make it not stdio.h dependent. becouse it's slow and yk
 // Make it take trueColor into considiration
 void RenderFrame(void) {
 	if(DATA.Buffers.backbuff == NULL || DATA.Buffers.frontbuff == NULL || DATA.Buffers.charbuffer == NULL) { return; }
@@ -15,9 +15,10 @@ void RenderFrame(void) {
 
 	Color lastFg = {0, 0, 0, false};
 	Color lastBg = {0, 0, 0, false};
-	bool firstPixel = true;
+	bool forceColorUpdate = true;
 
-	DATA.Buffers.charbufferOffset += sprintf(DATA.Buffers.charbuffer + DATA.Buffers.charbufferOffset, "\033[J\033[H");
+	int cursorX = -1;
+	int cursorY = -1;
 
 	for(int y = 0; y < DATA.TuiData.termdimm.y; y++) {
 		for(int x = 0; x < DATA.TuiData.termdimm.x; x++) {
@@ -26,22 +27,27 @@ void RenderFrame(void) {
 			SBCell* back = &DATA.Buffers.backbuff[index];
 			SBCell* front = &DATA.Buffers.frontbuff[index];
 
-			// NOTE: Is it?
+			// NOTE: Or is it?
 			bool different = false;
-
-			DATA.Buffers.charbufferOffset += sprintf(DATA.Buffers.charbuffer + DATA.Buffers.charbufferOffset, "\033[%d;%dH", y + 1, x + 1);
 
 			if(back->CharLen != front->CharLen || memcmp(back->Char, front->Char, back->CharLen) != 0 || memcmp(&back->fgColor, &front->fgColor, sizeof(Color)) != 0 || memcmp(&back->bgColor, &front->bgColor, sizeof(Color)) != 0) {
 				different = true;
 			}
 
 			if(different) {
-				if(firstPixel || memcmp(&back->fgColor, &lastFg, sizeof(Color)) != 0) {
+				if (cursorY != y || cursorX != x) {
+					DATA.Buffers.charbufferOffset += sprintf(DATA.Buffers.charbuffer + DATA.Buffers.charbufferOffset, "\033[%d;%dH", y + 1, x + 1);
+				}
+
+				cursorX = x + 1;
+				cursorY = y;
+
+				if(forceColorUpdate || memcmp(&back->fgColor, &lastFg, sizeof(Color)) != 0) {
 					DATA.Buffers.charbufferOffset += sprintf(DATA.Buffers.charbuffer + DATA.Buffers.charbufferOffset, "\033[38;2;%d;%d;%dm", back->fgColor.r, back->fgColor.g, back->fgColor.b);
 					lastFg = back->fgColor;
 				}
 
-				if(firstPixel || memcmp(&back->bgColor, &lastBg, sizeof(Color)) != 0) {
+				if(forceColorUpdate || memcmp(&back->bgColor, &lastBg, sizeof(Color)) != 0) {
 					DATA.Buffers.charbufferOffset += sprintf(DATA.Buffers.charbuffer + DATA.Buffers.charbufferOffset, "\033[48;2;%d;%d;%dm", back->bgColor.r, back->bgColor.g, back->bgColor.b);
 					lastBg = back->bgColor;
 				}
@@ -51,13 +57,13 @@ void RenderFrame(void) {
 					DATA.Buffers.charbufferOffset += back->CharLen;
 				}
 
-				firstPixel = false;
+				forceColorUpdate = false;
 				*front = *back;
 			}
 		}
 	}
 
-	DATA.Buffers.charbufferOffset += sprintf(DATA.Buffers.charbuffer + DATA.Buffers.charbufferOffset, "\033[%d;%dH", DATA.TuiData.termdimm.y, DATA.TuiData.termdimm.x);
+	DATA.Buffers.charbufferOffset += sprintf(DATA.Buffers.charbuffer + DATA.Buffers.charbufferOffset, "\033[%d;%dH", DATA.Cursor.pos.x, DATA.Cursor.pos.y);
 
 	if(DATA.Buffers.charbufferOffset > 0) {
 		UniWrite(UNI_WRITE_TARGET_STDOUT, DATA.Buffers.charbuffer, DATA.Buffers.charbufferOffset * sizeof(char));

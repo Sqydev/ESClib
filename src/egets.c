@@ -23,7 +23,7 @@ Vector2i GetTuiDimmentionsForReal(void) {
 
 	ioctl(STDOUT_FILENO, TIOCGWINSZ, &termdimm);
 
-	return (Vector2i){termdimm.ws_row, termdimm.ws_col};
+	return (Vector2i){termdimm.ws_col, termdimm.ws_row};
 
 #elif defined(_WIN32) || defined(_WIN64)
 #endif
