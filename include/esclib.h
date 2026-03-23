@@ -105,11 +105,22 @@ RLAPI void SetTuiDimentions(int x, int y);
 
 // EGETS
 
+// Returns last index of screen. So GetLastTuiIndex().x for TUI with GetTuiDimensions().x == 10 is == 9
+RLAPI Vector2i GetLastTuiIndex(void);
+// Same as GetLastTuiIndex() but returns pointer to the variable so you don't have to check for resize or smf
+RLAPI Vector2i* GetLastTuiIndexPtr(void);
+
+// Returns the number of places in TUI. DO NOT confuse with GetLastTuiIndex() becouse 1 is not first place but secound(arrays)
 RLAPI Vector2i GetTuiDimensions(void);
+// Same as GetTuiDimensions() but in pixels
 RLAPI Vector2i GetTuiDimensionsInPixels(void);
+// Same as GetTuiDimensions() but returns pointer to the variable so you don't have to check for resize or smf
 RLAPI Vector2i* GetTuiDimensionsPtr(void);
+// Same as GetTuiDimensionsInPixels() but returns pointer to the variable so you don't have to check for resize or smf
 RLAPI Vector2i* GetTuiDimensionsPtrInPixels(void);
+// Same as GetTuiDimensions() but accualy asks the kernel
 RLAPI Vector2i GetTuiDimensionsForReal(void);
+// Same as GetTuiDimensionsInPixels() but accualy asks the kernel
 RLAPI Vector2i GetTuiDimensionsInPixelsForReal(void);
 
 RLAPI size_t GetBackbuffSize(void);

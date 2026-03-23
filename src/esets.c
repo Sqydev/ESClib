@@ -24,6 +24,8 @@ void SetTuiDimentions(int x, int y) {
 	DATA.TuiData.termdimm.x = x;
 	DATA.TuiData.termdimm.y = y;
 
+    DATA.TuiData.lastIndex.x = DATA.TuiData.termdimm.x - 1;
+    DATA.TuiData.lastIndex.y = DATA.TuiData.termdimm.y - 1;
 	
 	DATA.Buffers.backbuff = NULL;
 	DATA.Buffers.backbuff = realloc(DATA.Buffers.backbuff, GetBackbuffSize());
