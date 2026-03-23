@@ -16,6 +16,9 @@ Vector2i GetTuiDimensionsInPixels(void) { return DATA.TuiData.termdimmInPixels; 
 Vector2i* GetTuiDimensionsPtr(void) { return &DATA.TuiData.termdimm; }
 Vector2i* GetTuiDimensionsPtrInPixels(void) { return &DATA.TuiData.termdimmInPixels; }
 
+Vector2i GetLastTuiIndex(void) { return DATA.TuiData.lastIndex; }
+Vector2i* GetLastTuiIndexPtr(void) { return &DATA.TuiData.lastIndex; }
+
 Vector2i GetTuiDimensionsForReal(void) {
 	if(DATA.TuiData.type == TUI_STATIC) { return DATA.TuiData.termdimm; }
 

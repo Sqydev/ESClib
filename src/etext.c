@@ -44,17 +44,17 @@ void DrawCharEx(const char* character, int x, int y, Color* fg, Color* bg) {
 	int vWidth = GetCharWidth(character);
 
 	if(x < 0) {
-		x = 0;
+		return;
 	}
 	if(x >= DATA.TuiData.termdimm.x - (vWidth - 1)) {
-		x = DATA.TuiData.termdimm.x - vWidth;
+		return;
 	}
 
 	if(y < 0) {
-		y = 0;
+		return;
 	}
 	if(y >= DATA.TuiData.termdimm.y) {
-		y = DATA.TuiData.termdimm.y - 1;
+		return;
 	}
 
 	size_t index = y * DATA.TuiData.termdimm.x + x;
@@ -98,7 +98,6 @@ void DrawTextEx(const char* text, int x, int y, Color* fg, Color* bg) {
 	DrawTextPro(text, x, y, fg, bg, 0, 0);
 }
 
-// TODO: FIX IT FOR REVERSED ANGLE WHEN GetTuiDImentions AND FIX MULTI SPACE CHARACTERS
 void DrawTextPro(const char* text, int x, int y, Color* fg, Color* bg, int spaceing, float angle) {
 	if(text == NULL) {
 		UniWriteLen(UNI_WRITE_TARGET_STDERR, "Text is NULL\n");
@@ -118,10 +117,10 @@ void DrawTextPro(const char* text, int x, int y, Color* fg, Color* bg, int space
 		int dir_idx = (qi % 4 + 4) % 4;
 
 		switch(dir_idx) {
-			case 0: { dir.x =  1.0f; dir.y =  0.0f; break; }
-			case 1: { dir.x =  0.0f; dir.y =  1.0f; break; }
-			case 2: { dir.x =  -1.0f; dir.y =  0.0f; break; }
-			case 4: { dir.x =  0.0f; dir.y =  -1.0f; break; }
+			case 0: { dir.x = 1.0f; dir.y = 0.0f; break; }
+			case 1: { dir.x = 0.0f; dir.y = 1.0f; break; }
+			case 2: { dir.x = -1.0f; dir.y = 0.0f; break; }
+			case 4: { dir.x = 0.0f; dir.y = -1.0f; break; }
 		}
 	}
 	else {

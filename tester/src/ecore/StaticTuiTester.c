@@ -12,14 +12,14 @@ void StaticTuiTester() {
 		ClearTui((Color){ 0,0,0,0 }, (Color){ 255, 0, 0, 0});
 
 		DrawChar("q", 0, 0, (Color){ 255, 255, 255, 1 });
-		DrawChar("ą", GetTuiDimensions().x, 0, (Color){ 255, 255, 255, 1 });
-		DrawChar("→", 0, GetTuiDimensions().y, (Color){ 255, 255, 255, 1 });
-		DrawChar("🔥", GetTuiDimensions().x, GetTuiDimensions().y, (Color){ 255, 255, 255, 1 });
-		DrawChar("ą", 0, GetTuiDimensions().y / 2, (Color){ 255, 255, 255, 1 });
-		DrawChar("q", GetTuiDimensions().x / 2, 0, (Color){ 255, 255, 255, 1 });
-		DrawChar("→", GetTuiDimensions().x, GetTuiDimensions().y / 2, (Color){ 255, 255, 255, 1 });
-		DrawChar("⠟", GetTuiDimensions().x / 2, GetTuiDimensions().y / 2, (Color){ 255, 255, 255, 1 });
-		DrawChar("🔥", GetTuiDimensions().x / 2, GetTuiDimensions().y, (Color){ 255, 255, 255, 1 });
+		DrawChar("ą", GetLastTuiIndex().x, 0, (Color){ 255, 255, 255, 1 });
+		DrawChar("→", 0, GetLastTuiIndex().y, (Color){ 255, 255, 255, 1 });
+		DrawChar("🔥", GetLastTuiIndex().x, GetLastTuiIndex().y, (Color){ 255, 255, 255, 1 });
+		DrawChar("ą", 0, GetLastTuiIndex().y / 2, (Color){ 255, 255, 255, 1 });
+		DrawChar("q", GetLastTuiIndex().x / 2, 0, (Color){ 255, 255, 255, 1 });
+		DrawChar("→", GetLastTuiIndex().x, GetLastTuiIndex().y / 2, (Color){ 255, 255, 255, 1 });
+		DrawChar("⠟", GetLastTuiIndex().x / 2, GetLastTuiIndex().y / 2, (Color){ 255, 255, 255, 1 });
+		DrawChar("🔥", GetLastTuiIndex().x / 2, GetLastTuiIndex().y, (Color){ 255, 255, 255, 1 });
 
 		EndDrawing();
 	}

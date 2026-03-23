@@ -156,6 +156,9 @@ void SignalsStep(void) {
         	DATA.TuiData.termdimm = GetTuiDimensionsForReal();
         	DATA.TuiData.termdimmInPixels = GetTuiDimensionsInPixelsForReal();
 
+        	DATA.TuiData.lastIndex.x = DATA.TuiData.termdimm.x - 1;
+        	DATA.TuiData.lastIndex.y = DATA.TuiData.termdimm.y - 1;
+
 			DATA.Buffers.backbuff = realloc(DATA.Buffers.backbuff, GetBackbuffSize());
 			DATA.Buffers.frontbuff = realloc(DATA.Buffers.frontbuff, GetBackbuffSize());
 
