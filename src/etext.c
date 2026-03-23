@@ -98,15 +98,42 @@ void DrawTextEx(const char* text, int x, int y, Color* fg, Color* bg) {
 	DrawTextPro(text, x, y, fg, bg, 0, 0);
 }
 
-// TODO: Fix non like straight angle.
+// TODO: FIX IT FOR REVERSED ANGLE WHEN GetTuiDImentions AND FIX MULTI SPACE CHARACTERS
 void DrawTextPro(const char* text, int x, int y, Color* fg, Color* bg, int spaceing, float angle) {
 	if(text == NULL) {
 		UniWriteLen(UNI_WRITE_TARGET_STDERR, "Text is NULL\n");
 		return;
 	}
 
-	int curX = x;
-	int curY = y;
+	float curX = x;
+	float curY = y;
+
+	Vecrot2 dir = {0};
+
+	// NOTE: Check if angle is multiplicity of PI / 2. Accounding for float errors
+	float q = angle / (PI / 2.0f);
+	int qi = (int)roundf(q);
+	if(fabsf(q - qi) < 0.001f) {
+		// NOTE: Somehow get dir
+		int dir_idx = (qi % 4 + 4) % 4;
+
+		switch(dir_idx) {
+			case 0: { dir.x =  1.0f; dir.y =  0.0f; break; }
+			case 1: { dir.x =  0.0f; dir.y =  1.0f; break; }
+			case 2: { dir.x =  -1.0f; dir.y =  0.0f; break; }
+			case 4: { dir.x =  0.0f; dir.y =  -1.0f; break; }
+		}
+	}
+	else {
+		dir.x = cosf(angle);
+		dir.y = sinf(angle);
+
+		float maxDir = fmaxf(fabsf(dir.x), fabsf(dir.y));
+	    if (maxDir > 0.0f) {
+	        dir.x /= maxDir;
+	        dir.y /= maxDir;
+	    }
+	}
 
 	const char* ptrr = text;
 
@@ -132,10 +159,10 @@ void DrawTextPro(const char* text, int x, int y, Color* fg, Color* bg, int space
 		char tmpChar[5] = {0};
 		memcpy(tmpChar, ptrr, len);
 
-		DrawCharEx(tmpChar, curX, curY, fg, bg);
+		DrawCharEx(tmpChar, (int)roundf(curX), (int)roundf(curY), fg, bg);
 
-		curX += (int)(cosf(angle) * (spaceing + 1));
-		curY += (int)(sinf(angle) * (spaceing + 1));
+		curX += dir.x * (spaceing + 1);
+		curY += dir.y * (spaceing + 1);
 
 		ptrr += len;
 	}

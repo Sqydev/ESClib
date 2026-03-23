@@ -53,6 +53,12 @@ void TextTest() {
 
 		DrawTextPro("A to jest PI/3 OGIE🔥ń", 5, 5, &(Color){ 255, 255, 255, 1 }, NULL, 0, PI / 3);
 
+		DrawTextPro("A to jest 45 * DEG2RAD OGIE🔥ń", 20, 8, &(Color){ 255, 255, 255, 1 }, NULL, 0, 45 * DEG2RAD);
+
+		DrawTextPro("A to jest 45 * DEG2RAD z spaceingiem i BG fioletowym OGIE🔥ń", 30, 8, &(Color){ 255, 255, 255, 1 }, &(Color){ 255, 0, 255, 1 }, 1, 45 * DEG2RAD);
+
+		DrawTextPro("A to jest ODWROTNY OGIE🔥ń", GetTuiDimensions().x, 8, &(Color){ 255, 255, 255, 1 }, NULL, 0, -PI);
+
 		EndDrawing();
 	}
 
