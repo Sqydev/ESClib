@@ -9,9 +9,9 @@ void CharTest() {
 	printf("Drawing this in patern:\n");
 	printf("@@@@@@@@@\n");
 	printf("@#  #  #@\n");
-	printf("@       @\n");
-	printf("@#     #@\n");
-	printf("@       @\n");
+	printf("@   ##  @\n");
+	printf("@#  #  #@\n");
+	printf("@    #  @\n");
 	printf("@#  #  #@\n");
 	printf("@@@@@@@@@\n");
 	fflush(stdout);
@@ -33,6 +33,12 @@ void CharTest() {
 		DrawChar("⠟", GetLastTuiIndex().x / 2, GetLastTuiIndex().y / 2, (Color){ 255, 255, 255, 1 });
 		DrawChar("🔥", GetLastTuiIndex().x / 2, GetLastTuiIndex().y, (Color){ 255, 255, 255, 1 });
 
+		// NOTE: If it writes on something else. DO NOT panic. It's just wierd division. yk / 2.2. It only tests if it's overrided by one another
+		DrawChar("🔥", GetLastTuiIndex().x / 2, GetLastTuiIndex().y - (GetLastTuiIndex().y / 2.2), (Color){ 255, 255, 255, 1 });
+		DrawChar("🔥", GetLastTuiIndex().x / 2 + 1, GetLastTuiIndex().y - (GetLastTuiIndex().y / 2.2), (Color){ 255, 255, 255, 1 });
+		DrawChar("A", GetLastTuiIndex().x / 2, GetLastTuiIndex().y / 2.2, (Color){ 255, 255, 255, 1 });
+		DrawChar("🔥", GetLastTuiIndex().x / 2 + 1, GetLastTuiIndex().y / 2.2, (Color){ 255, 255, 255, 1 });
+
 		EndDrawing();
 	}
 
@@ -48,16 +54,18 @@ void TextTest() {
 		ClearTui((Color){ 0,0,0,0 }, (Color){ 255, 0, 0, 0});
 
 		DrawText("To jest OGIE🔥ń", 0, 0, (Color){ 255, 255, 255, 1 });
-		DrawTextPro("To jest kurczaczki rozprzesterzenny OGIE🔥ń", 0, 1, &(Color){ 255, 255, 255, 1 }, NULL, 1, 0);
-		DrawTextPro("A to jest vertivcal OGIE🔥ń", 0, 3, &(Color){ 255, 255, 255, 1 }, NULL, 0, PI / 2);
+		DrawTextPro("To jest kurczaczki rozprzesterzenny OGIE🔥ń", 0, 1, 0, 0, &(Color){ 255, 255, 255, 1 }, NULL, 1, 0);
+		DrawTextPro("A to jest vertivcal OGIE🔥ń", 0, 3, 0, 0, &(Color){ 255, 255, 255, 1 }, NULL, 0, PI / 2);
 
-		DrawTextPro("A to jest PI/3 OGIE🔥ń", 5, 5, &(Color){ 255, 255, 255, 1 }, NULL, 0, PI / 3);
+		DrawTextPro("A to jest PI/3 OGIE🔥ń", 5, 5, 0, 0, &(Color){ 255, 255, 255, 1 }, NULL, 0, PI / 3);
 
-		DrawTextPro("A to jest 45 * DEG2RAD OGIE🔥ń", 20, 8, &(Color){ 255, 255, 255, 1 }, NULL, 0, 45 * DEG2RAD);
+		DrawTextPro("A to jest 45 * DEG2RAD OGIE🔥ń", 20, 8, 0, 0, &(Color){ 255, 255, 255, 1 }, NULL, 0, 45 * DEG2RAD);
 
-		DrawTextPro("(Ukryte w połowie)A to jest 45 * DEG2RAD z spaceingiem i BG fioletowym OGIE🔥ń", 30, 8, &(Color){ 255, 255, 255, 1 }, &(Color){ 255, 0, 255, 1 }, 1, 45 * DEG2RAD);
+		DrawTextPro("(Ukryte w połowie)A to jest 45 * DEG2RAD z spaceingiem i BG fioletowym OGIE🔥ń", 30, 8, 0, 0, &(Color){ 255, 255, 255, 1 }, &(Color){ 255, 0, 255, 1 }, 1, 45 * DEG2RAD);
 
-		DrawTextPro("A to jest ODWROTNY OGIE🔥ń", GetLastTuiIndex().x, 8, &(Color){ 255, 255, 255, 1 }, NULL, 0, -PI);
+		DrawTextPro("A to jest ODWROTNY OGIE🔥ń", GetLastTuiIndex().x, 8, 0, 0, &(Color){ 255, 255, 255, 1 }, NULL, 0, -PI);
+
+		DrawTextPro("A to jest origin 5, 0 z rotacją 45 stopni OGIE🔥ń", 20, 8, 5, 0, &(Color){ 255, 255, 255, 1 }, NULL, 0, 45 * DEG2RAD);
 
 		EndDrawing();
 	}

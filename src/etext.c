@@ -8,8 +8,16 @@
 #include <stdlib.h>
 #include <string.h>
 
+void DrawCharV(const char* character, Vector2i pos, Color color) {
+	DrawChar(character, pos.x, pos.y, color);
+}
+
 void DrawChar(const char* character, int x, int y, Color color) {
 	DrawCharEx(character, x, y, &color, NULL);
+}
+
+void DrawCharExV(const char* character, Vector2i pos, Color* fg, Color* bg) {
+	DrawCharEx(character, pos.x, pos.y, fg, bg);
 }
 
 void DrawCharEx(const char* character, int x, int y, Color* fg, Color* bg) {
@@ -46,7 +54,7 @@ void DrawCharEx(const char* character, int x, int y, Color* fg, Color* bg) {
 	if(x < 0) {
 		return;
 	}
-	if(x >= DATA.TuiData.termdimm.x - (vWidth - 1)) {
+	if(x >= DATA.TuiData.termdimm.x) {
 		return;
 	}
 
@@ -55,6 +63,11 @@ void DrawCharEx(const char* character, int x, int y, Color* fg, Color* bg) {
 	}
 	if(y >= DATA.TuiData.termdimm.y) {
 		return;
+	}
+
+	// NOTE: If last char is big than instead of ghosting it just force it into place
+	if(x >= DATA.TuiData.termdimm.x - (vWidth - 1)) {
+		x -= vWidth - 1;
 	}
 
 	size_t index = y * DATA.TuiData.termdimm.x + x;
@@ -90,23 +103,35 @@ void DrawCharEx(const char* character, int x, int y, Color* fg, Color* bg) {
     }
 }
 
+void DrawTextV(const char* text, Vector2i pos, Color color) {
+	DrawChar(text, pos.x, pos.y, color);
+}
+
 void DrawText(const char* text, int x, int y, Color color) {
 	DrawTextEx(text, x, y, &color, NULL);
 }
 
-void DrawTextEx(const char* text, int x, int y, Color* fg, Color* bg) {
-	DrawTextPro(text, x, y, fg, bg, 0, 0);
+void DrawTextExV(const char* text, Vector2i pos, Color* fg, Color* bg) {
+	DrawTextEx(text, pos.x, pos.y, fg, bg);
 }
 
-void DrawTextPro(const char* text, int x, int y, Color* fg, Color* bg, int spaceing, float angle) {
+void DrawTextEx(const char* text, int x, int y, Color* fg, Color* bg) {
+	DrawTextPro(text, x, y, 0, 0, fg, bg, 0, 0);
+}
+
+void DrawTextProV(const char* text, Vector2i pos, Vector2i origin, Color* fg, Color* bg, int spaceing, float angle) {
+	DrawTextPro(text, pos.x, pos.y, origin.x, origin.y, fg, bg, spaceing, angle);
+}
+
+// NOTE: Btw. I still don't know what origin does. I got that exuacion(or however you spell it) from the internet
+void DrawTextPro(const char* text, int x, int y, int originX, int originY, Color* fg, Color* bg, int spaceing, float angle) {
 	if(text == NULL) {
 		UniWriteLen(UNI_WRITE_TARGET_STDERR, "Text is NULL\n");
 		return;
 	}
 
-	float curX = x;
-	float curY = y;
-
+	float cos = 0.0f;
+    float sin = 0.0f;
 	Vecrot2 dir = {0};
 
 	// NOTE: Check if angle is multiplicity of PI / 2. Accounding for float errors
@@ -117,15 +142,21 @@ void DrawTextPro(const char* text, int x, int y, Color* fg, Color* bg, int space
 		int dir_idx = (qi % 4 + 4) % 4;
 
 		switch(dir_idx) {
-			case 0: { dir.x = 1.0f; dir.y = 0.0f; break; }
-			case 1: { dir.x = 0.0f; dir.y = 1.0f; break; }
-			case 2: { dir.x = -1.0f; dir.y = 0.0f; break; }
-			case 4: { dir.x = 0.0f; dir.y = -1.0f; break; }
+			case 0: { cos = 1.0f; sin = 0.0f; break; }
+			case 1: { cos = 0.0f; sin = 1.0f; break; }
+			case 2: { cos = -1.0f; sin = 0.0f; break; }
+			case 3: { cos = 0.0f; sin = -1.0f; break; }
 		}
+
+		dir.x = cos;
+		dir.y = sin;
 	}
 	else {
-		dir.x = cosf(angle);
-		dir.y = sinf(angle);
+		cos = cosf(angle);
+		sin = sinf(angle);
+
+		dir.x = cos;
+		dir.y = sin;
 
 		float maxDir = fmaxf(fabsf(dir.x), fabsf(dir.y));
 	    if (maxDir > 0.0f) {
@@ -133,6 +164,10 @@ void DrawTextPro(const char* text, int x, int y, Color* fg, Color* bg, int space
 	        dir.y /= maxDir;
 	    }
 	}
+
+	// NOTE: Calc startpos with origin!
+	float curX = x - (originX * cos) + (originY * sin);
+	float curY = y - (originX * sin) - (originY * cos);
 
 	const char* ptrr = text;
 
@@ -168,3 +203,5 @@ void DrawTextPro(const char* text, int x, int y, Color* fg, Color* bg, int space
 }
 
 // TODO: MAKE DRAWTEXTFORMAT
+// Make if so like this DrawTextF(4, 7, "%d, %fg, %bg, %sp, %ag", 6, foreground, background, spaceing, angle);
+// And make version with origin

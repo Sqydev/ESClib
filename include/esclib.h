@@ -144,11 +144,16 @@ RLAPI int GetCharWidth(const char* character);
 
 // ETEXT
 
+RLAPI void DrawCharV(const char* character, Vector2i pos, Color color);
 RLAPI void DrawChar(const char* character, int x, int y, Color color);
+RLAPI void DrawCharExV(const char* character, Vector2i pos, Color* fg, Color* bg);
 RLAPI void DrawCharEx(const char* character, int x, int y, Color* fg, Color* bg);
 
+RLAPI void DrawTextV(const char* text, Vector2i pos, Color color);
 RLAPI void DrawText(const char* text, int x, int y, Color color);
+RLAPI void DrawTextExV(const char* text, Vector2i pos, Color* fg, Color* bg);
 RLAPI void DrawTextEx(const char* text, int x, int y, Color* fg, Color* bg);
-RLAPI void DrawTextPro(const char* text, int x, int y, Color* fg, Color* bg, int spaceing, float angle);
+RLAPI void DrawTextProV(const char* text, Vector2i pos, Vector2i origin, Color* fg, Color* bg, int spaceing, float angle);
+RLAPI void DrawTextPro(const char* text, int x, int y, int originX, int originY, Color* fg, Color* bg, int spaceing, float angle);
 
 #endif
