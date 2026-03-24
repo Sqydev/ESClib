@@ -100,12 +100,6 @@ void SignalsSetup(void) {
 #endif
 }
 
-// TODO: Make that thing that you can add your own tasks to it. Plain for this:
-// fun AddTask...(some function); <- and it like adds this function to DATA.SignalData.SIGNAL.UserTasks?[and here nex place in array]
-// and it execs when DATA.SignalData.SIGNAL.enabledCustomTasks == true
-// and you can remove that fn with like function RemoveTask(INDEX) and if INDEX == NULL than that removes latest fn and is INDEX != NULL than it removes function: DATA.SignalData.SIGNAL.UserTasks?[INDEX]
-// And don't forget, thoes functions(like AddTask...(some function) and RemoveTask(INDEX) ARE IN esignals NOT HERE YOU DUMBASS!!!!!
-// Oh, and if INDEX is NULL than AddTask returns the index that the fn will get
 void SignalsStep(void) {
 #if defined(unix) || defined(__unix) || defined(__unix__)
 
@@ -173,8 +167,7 @@ void SignalsStep(void) {
 			memset(DATA.Buffers.backbuff, 0, GetBackbuffSize());
 			memset(DATA.Buffers.frontbuff, 0, GetBackbuffSize());
 	
-			UniWriteLen(UNI_WRITE_TARGET_STDOUT, "\033[2J");
-			// NOTE: When } is here than it 'works'
+			UniWriteLen(UNI_WRITE_TARGET_STDOUT, "\033[0m\033[2J");
 		}
 
         if (DATA.SignalData.SIG_WINCH.enabledBuildInTasks) {
