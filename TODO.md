@@ -1,5 +1,3 @@
-// TODO: FIX STATIC TUIS
-
 // TODO: MAKE DRAWTEXTFORMAT
 // NOTE: Ok. So the plan is to make this in phases. po polsku bo mi się nie chce. Że są fazy. Pierwsza faza to że robi się buffor i tam jest pierwszy prass czyli zmienienie zmiennych typu %d i %f itd jak w printf w sumie to można to spróbować zkopiować z printf bo czemu nie i 2 faza to prasowanie żeczy tui czyli kolory, spaceing, kąt itd. i pisanie do backbuffora. czyli pisze już stringa z zmiennymi podmienionymi i jak jest np. %fg to to pomija i daje foreground na kolor zaspecyfikowany
 
