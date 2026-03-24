@@ -26,7 +26,11 @@ typedef struct {
 	struct {
 		TuiType type;
 
-		Vector2i lastIndex;
+		Vector2i lastTuiIndex;
+		Vector2i tuidimm;
+		Vector2i tuidimmInPixels;
+
+		Vector2i lastTermIndex;
 		Vector2i termdimm;
 		Vector2i termdimmInPixels;
 		

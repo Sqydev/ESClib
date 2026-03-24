@@ -123,7 +123,6 @@ void DrawTextProV(const char* text, Vector2i pos, Vector2i origin, Color* fg, Co
 	DrawTextPro(text, pos.x, pos.y, origin.x, origin.y, fg, bg, spaceing, angle);
 }
 
-// NOTE: Btw. I still don't know what origin does. I got that exuacion(or however you spell it) from the internet
 void DrawTextPro(const char* text, int x, int y, int originX, int originY, Color* fg, Color* bg, int spaceing, float angle) {
 	if(text == NULL) {
 		UniWriteLen(UNI_WRITE_TARGET_STDERR, "Text is NULL\n");

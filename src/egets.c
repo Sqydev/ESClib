@@ -11,17 +11,23 @@
 
 #include <errno.h>
 
-Vector2i GetTuiDimensions(void) { return DATA.TuiData.termdimm; }
-Vector2i GetTuiDimensionsInPixels(void) { return DATA.TuiData.termdimmInPixels; }
-Vector2i* GetTuiDimensionsPtr(void) { return &DATA.TuiData.termdimm; }
-Vector2i* GetTuiDimensionsPtrInPixels(void) { return &DATA.TuiData.termdimmInPixels; }
+Vector2i GetTuiDimensions(void) { return DATA.TuiData.tuidimm; }
+Vector2i GetTuiDimensionsInPixels(void) { return DATA.TuiData.tuidimmInPixels; }
+Vector2i* GetTuiDimensionsPtr(void) { return &DATA.TuiData.tuidimm; }
+Vector2i* GetTuiDimensionsPtrInPixels(void) { return &DATA.TuiData.tuidimmInPixels; }
 
-Vector2i GetLastTuiIndex(void) { return DATA.TuiData.lastIndex; }
-Vector2i* GetLastTuiIndexPtr(void) { return &DATA.TuiData.lastIndex; }
+Vector2i GetLastTuiIndex(void) { return DATA.TuiData.lastTuiIndex; }
+Vector2i* GetLastTuiIndexPtr(void) { return &DATA.TuiData.lastTuiIndex; }
 
-Vector2i GetTuiDimensionsForReal(void) {
-	if(DATA.TuiData.type == TUI_STATIC) { return DATA.TuiData.termdimm; }
+Vector2i GetTerminalDimensions(void) { return DATA.TuiData.termdimm; }
+Vector2i GetTerminalDimensionsInPixels(void) { return DATA.TuiData.termdimmInPixels; }
+Vector2i* GetTerminalDimensionsPtr(void) { return &DATA.TuiData.termdimm; }
+Vector2i* GetTerminalDimensionsPtrInPixels(void) { return &DATA.TuiData.termdimmInPixels; }
 
+Vector2i GetLastTerminalIndex(void) { return DATA.TuiData.lastTermIndex; }
+Vector2i* GetLastTerminalIndexPtr(void) { return &DATA.TuiData.lastTermIndex; }
+
+Vector2i GetTerminalDimensionsForReal(void) {
 #if defined(unix) || defined(__unix) || defined(__unix__)
 
 	struct winsize termdimm;
@@ -34,9 +40,7 @@ Vector2i GetTuiDimensionsForReal(void) {
 #endif
 }
 
-Vector2i GetTuiDimensionsInPixelsForReal(void) {
-	if(DATA.TuiData.type == TUI_STATIC) { return DATA.TuiData.termdimmInPixels; }
-
+Vector2i GetTerminalDimensionsInPixelsForReal(void) {
 #if defined(unix) || defined(__unix) || defined(__unix__)
 
 	struct winsize termdimm;

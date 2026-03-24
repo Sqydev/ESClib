@@ -23,11 +23,15 @@ void InitTui(int targetFps, TuiType type) {
 
 	DATA.TuiData.type = type;
 
-	DATA.TuiData.termdimm = GetTuiDimensionsForReal();
-	DATA.TuiData.termdimmInPixels = GetTuiDimensionsInPixelsForReal();
+	DATA.TuiData.termdimm = GetTerminalDimensionsForReal();
+	DATA.TuiData.termdimmInPixels = GetTerminalDimensionsInPixelsForReal();
+    DATA.TuiData.lastTermIndex.x = DATA.TuiData.termdimm.x - 1;
+    DATA.TuiData.lastTermIndex.y = DATA.TuiData.termdimm.y - 1;
 
-    DATA.TuiData.lastIndex.x = DATA.TuiData.termdimm.x - 1;
-    DATA.TuiData.lastIndex.y = DATA.TuiData.termdimm.y - 1;
+	DATA.TuiData.tuidimm = DATA.TuiData.termdimm;
+	DATA.TuiData.tuidimmInPixels = DATA.TuiData.termdimmInPixels;
+    DATA.TuiData.lastTuiIndex.x = DATA.TuiData.termdimm.x - 1;
+    DATA.TuiData.lastTuiIndex.y = DATA.TuiData.termdimm.y - 1;
 
 	DATA.TuiData.initiated = true;
 
