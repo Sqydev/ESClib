@@ -37,12 +37,21 @@ void EndDrawingTest() {
 }
 
 void RenderLoopStressTest() {
-	InitTui(165, TUI_DYNAMIC);
-
-	printf("It's real epilepsy EPILEPSY WARNING");
+	printf("It's real epilepsy EPILEPSY WARNING\n");
+	printf("Write 63 to continue: ");
 	fflush(stdout);
 
-	sleep(5);
+	int a = 0;
+	scanf("%d", &a);
+
+	if(a != 63) { return; }
+
+	printf("Write fps: ");
+	fflush(stdout);
+
+	scanf("%d", &a);
+
+	InitTui(a, TUI_DYNAMIC);
 
 	while(1) {
 		BeginDrawing();
