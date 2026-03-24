@@ -171,6 +171,26 @@ void DrawTextPro(const char* text, int x, int y, int originX, int originY, Color
 	const char* ptrr = text;
 
 	while(*ptrr != '\0') {
+		if(curX < 0) {
+			return;
+		}
+		if(curX >= DATA.TuiData.tuidimm.x) {
+			return;
+		}
+
+		if(curY < 0) {
+			return;
+		}
+		if(curY >= DATA.TuiData.tuidimm.y) {
+			return;
+		}
+		
+		int vWidth = GetCharWidth(ptrr);
+		
+		if(curX >= DATA.TuiData.tuidimm.x - (vWidth - 1)) {
+			curX -= vWidth - 1;
+		}
+
 		int len = 0;
 		if((*ptrr & 0x80) == 0) {
 			len = 1;
