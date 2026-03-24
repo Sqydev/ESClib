@@ -1,0 +1,25 @@
+In polish:
+
+Dobra. to definicje DrawTextf mają być IDENTYCZNE jak DrawText tylko że z f na końcu(czyli DrawTextf -> DrawTextExf(lub inna nazwa) -> DrawTextProf(lub inna nazwa)). I bierze DOKŁADNIE TE SAME ARGUMENTY.
+
+I tak. nic nie allocuje ani nie używa DrawText.
+
+Robi to co DrawText tylko że co znak sprawdza czy znak to nie '%' oraz czy przed '%' nie ma '\' i czy przed '\' nie ma '\':
+% jest nie ma \: format
+% jest \ jest: nie format
+% jest \ i przed \ jest jeszcze \: formatuje i pisze to \
+i tak dalej i tak dalej
+
+A. I to też oczywiste ale wszystko piszę. jak jest format to patrzy co jest po % i potem patrzy co jest po tym co jest po % itd aż się nie będzie zgadzać(koniec i można stwierdzić co zrobić)
+
+Formaty(że wszystkie możliwości(%d, %f, %f.02, huj wie ile tego i jakie) podpierdol z glibc.
+
+I jak jest DrawTextProf(nazwa robicza) to te argumenty to jest startowy stan formatu(czyli angle == 0 np z startu bez %an(czy jakoś tak) na początku). I o to chodzi że bez brania pod uwagę formatu to tak w sumie to DrawText();
+
+I pracuj bez robiczego buffora. Od razu pracuj na DATA.Buffors.backbuff; jak jest np. %fg to poprostu zmienia fg z argumentu i skipuje "render" do końca %fg.
+
+A. I to też oczywiste ale z podmianą %coś na np. 100 to rób fora szybkiego wewnącz i tam piszesz pokoleji do backbuffa to tam też zmieniaj curX i curY o tyle kroków o ile jest długie to 100 i też render skipnij o długość %d(nie wyformatowanego)
+
+I mówiąc render skipnij o długość to mi chodzi o to żeby ptrr(z DrawText jak jest tyko ptrr ale z DrawTextf) zwiększyć o tą długość
+
+I mówiąc żeby zmienić curX i Y o ilość kroków to chodzi mi o to że jest angle i spaceing więc zwiększenie o liczbę nie zadzała
