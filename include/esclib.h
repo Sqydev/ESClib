@@ -105,23 +105,35 @@ RLAPI void SetTuiDimentions(int x, int y);
 
 // EGETS
 
-// Returns last index of screen. So GetLastTuiIndex().x for TUI with GetTuiDimensions().x == 10 is == 9
+// Returns last index of tui buff. So GetLastTuiIndex().x for TUI with GetTuiDimensions().x == 10 is == 9
 RLAPI Vector2i GetLastTuiIndex(void);
 // Same as GetLastTuiIndex() but returns pointer to the variable so you don't have to check for resize or smf
 RLAPI Vector2i* GetLastTuiIndexPtr(void);
-
 // Returns the number of places in TUI. DO NOT confuse with GetLastTuiIndex() becouse 1 is not first place but secound(arrays)
 RLAPI Vector2i GetTuiDimensions(void);
-// Same as GetTuiDimensions() but in pixels
-RLAPI Vector2i GetTuiDimensionsInPixels(void);
 // Same as GetTuiDimensions() but returns pointer to the variable so you don't have to check for resize or smf
 RLAPI Vector2i* GetTuiDimensionsPtr(void);
+// Same as GetTuiDimensions() but in pixels
+RLAPI Vector2i GetTuiDimensionsInPixels(void);
 // Same as GetTuiDimensionsInPixels() but returns pointer to the variable so you don't have to check for resize or smf
 RLAPI Vector2i* GetTuiDimensionsPtrInPixels(void);
-// Same as GetTuiDimensions() but accualy asks the kernel
-RLAPI Vector2i GetTuiDimensionsForReal(void);
-// Same as GetTuiDimensionsInPixels() but accualy asks the kernel
-RLAPI Vector2i GetTuiDimensionsInPixelsForReal(void);
+
+// Returns last index of screen. So GetLastTerminalIndex().x for terminal with GetTerminalDimensions().x == 10 is == 9
+RLAPI Vector2i GetLastTerminalIndex(void);
+// Same as GetLastTerminalIndex() but returns pointer to the variable so you don't have to check for resize or smf
+RLAPI Vector2i* GetLastTerminalIndexPtr(void);
+// Returns the number of places in terminal. DO NOT confuse with GetLastTerminalIndex() becouse 1 is not first place but secound(arrays)
+RLAPI Vector2i GetTerminalDimensions(void);
+// Same as GetTerminalDimensions() but returns pointer to the variable so you don't have to check for resize or smf
+RLAPI Vector2i* GetTerminalDimensionsPtr(void);
+// Same as GetTerminalDimensions() but in pixels
+RLAPI Vector2i GetTerminalDimensionsInPixels(void);
+// Same as GetTerminalDimensionsInPixels() but returns pointer to the variable so you don't have to check for resize or smf
+RLAPI Vector2i* GetTerminalDimensionsPtrInPixels(void);
+// Same as GetTerminalDimensions() but it acualy checks
+Vector2i GetTerminalDimensionsForReal(void);
+// Same as GetTerminalDimensionsInPixels() but it accualy checks
+Vector2i GetTerminalDimensionsInPixelsForReal(void);
 
 RLAPI size_t GetBackbuffSize(void);
 RLAPI size_t GetBackbuffCellCount(void);

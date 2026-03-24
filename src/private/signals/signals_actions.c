@@ -152,22 +152,28 @@ void SignalsStep(void) {
 			}
 		}
 
-        if (DATA.SignalData.SIG_WINCH.enabledESClibTasks && DATA.TuiData.type != TUI_STATIC) {
-        	DATA.TuiData.termdimm = GetTuiDimensionsForReal();
-        	DATA.TuiData.termdimmInPixels = GetTuiDimensionsInPixelsForReal();
+        if (DATA.SignalData.SIG_WINCH.enabledESClibTasks) {
+        	DATA.TuiData.termdimm = GetTerminalDimensionsForReal();
+        	DATA.TuiData.termdimmInPixels = GetTerminalDimensionsInPixelsForReal();
+        	DATA.TuiData.lastTermIndex.x = DATA.TuiData.termdimm.x - 1;
+        	DATA.TuiData.lastTermIndex.y = DATA.TuiData.termdimm.y - 1;
 
-        	DATA.TuiData.lastIndex.x = DATA.TuiData.termdimm.x - 1;
-        	DATA.TuiData.lastIndex.y = DATA.TuiData.termdimm.y - 1;
+			if(DATA.TuiData.type != TUI_STATIC) {
+        		DATA.TuiData.tuidimm = DATA.TuiData.termdimm;
+	        	DATA.TuiData.tuidimmInPixels = DATA.TuiData.termdimmInPixels;
+    	    	DATA.TuiData.lastTuiIndex.x = DATA.TuiData.tuidimm.x - 1;
+        		DATA.TuiData.lastTuiIndex.y = DATA.TuiData.tuidimm.y - 1;
 
-			DATA.Buffers.backbuff = realloc(DATA.Buffers.backbuff, GetBackbuffSize());
-			DATA.Buffers.frontbuff = realloc(DATA.Buffers.frontbuff, GetBackbuffSize());
-
-			DATA.Buffers.charbuffer = realloc(DATA.Buffers.charbuffer, GetCharbuffSize());
-
-			memset(DATA.Buffers.backbuff, 0, GetBackbuffSize());
-			memset(DATA.Buffers.frontbuff, 0, GetBackbuffSize());
-
-			UniWriteLen(UNI_WRITE_TARGET_STDOUT, "\033[2J");
+				DATA.Buffers.backbuff = realloc(DATA.Buffers.backbuff, GetBackbuffSize());
+				DATA.Buffers.frontbuff = realloc(DATA.Buffers.frontbuff, GetBackbuffSize());
+	
+				DATA.Buffers.charbuffer = realloc(DATA.Buffers.charbuffer, GetCharbuffSize());
+	
+				memset(DATA.Buffers.backbuff, 0, GetBackbuffSize());
+				memset(DATA.Buffers.frontbuff, 0, GetBackbuffSize());
+	
+				UniWriteLen(UNI_WRITE_TARGET_STDOUT, "\033[2J");
+			}
 		}
 
         if (DATA.SignalData.SIG_WINCH.enabledBuildInTasks) {
