@@ -21,8 +21,8 @@ void SetTargetFps(int targetFps) {
 }
 
 void SetTuiDimentions(int x, int y) {
-	DATA.TuiData.termdimm.x = x;
-	DATA.TuiData.termdimm.y = y;
+	DATA.TuiData.tuidimm.x = x;
+	DATA.TuiData.tuidimm.y = y;
 
     DATA.TuiData.lastTuiIndex.x = DATA.TuiData.tuidimm.x - 1;
     DATA.TuiData.lastTuiIndex.y = DATA.TuiData.tuidimm.y - 1;

@@ -8,7 +8,7 @@
 void RenderFrame(void) {
 	if(DATA.Buffers.backbuff == NULL || DATA.Buffers.frontbuff == NULL || DATA.Buffers.charbuffer == NULL) { return; }
 
-	if(DATA.TuiData.termdimm.x <= 0 || DATA.TuiData.termdimm.y <= 0) { return; }
+	if(DATA.TuiData.tuidimm.x <= 0 || DATA.TuiData.tuidimm.y <= 0 || DATA.TuiData.termdimm.x <= 0 || DATA.TuiData.termdimm.y <= 0) { return; }
 
 	DATA.Buffers.charbufferOffset = 0;
 
@@ -19,9 +19,9 @@ void RenderFrame(void) {
 	int cursorX = -1;
 	int cursorY = -1;
 
-	for(int y = 0; y < DATA.TuiData.termdimm.y; y++) {
-		for(int x = 0; x < DATA.TuiData.termdimm.x; x++) {
-			size_t index = y * DATA.TuiData.termdimm.x + x;
+	for(int y = 0; y < DATA.TuiData.tuidimm.y; y++) {
+		for(int x = 0; x < DATA.TuiData.tuidimm.x; x++) {
+			size_t index = y * DATA.TuiData.tuidimm.x + x;
 
 			SBCell* back = &DATA.Buffers.backbuff[index];
 			SBCell* front = &DATA.Buffers.frontbuff[index];

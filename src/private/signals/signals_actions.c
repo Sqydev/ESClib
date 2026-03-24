@@ -168,12 +168,12 @@ void SignalsStep(void) {
 				DATA.Buffers.frontbuff = realloc(DATA.Buffers.frontbuff, GetBackbuffSize());
 	
 				DATA.Buffers.charbuffer = realloc(DATA.Buffers.charbuffer, GetCharbuffSize());
-	
-				memset(DATA.Buffers.backbuff, 0, GetBackbuffSize());
-				memset(DATA.Buffers.frontbuff, 0, GetBackbuffSize());
-	
-				UniWriteLen(UNI_WRITE_TARGET_STDOUT, "\033[2J");
 			}
+	
+			memset(DATA.Buffers.backbuff, 0, GetBackbuffSize());
+			memset(DATA.Buffers.frontbuff, 0, GetBackbuffSize());
+	
+			UniWriteLen(UNI_WRITE_TARGET_STDOUT, "\033[2J");
 		}
 
         if (DATA.SignalData.SIG_WINCH.enabledBuildInTasks) {
