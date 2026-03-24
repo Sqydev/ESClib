@@ -174,6 +174,7 @@ void SignalsStep(void) {
 			memset(DATA.Buffers.frontbuff, 0, GetBackbuffSize());
 	
 			UniWriteLen(UNI_WRITE_TARGET_STDOUT, "\033[2J");
+			// NOTE: When } is here than it 'works'
 		}
 
         if (DATA.SignalData.SIG_WINCH.enabledBuildInTasks) {
