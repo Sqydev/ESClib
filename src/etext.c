@@ -54,23 +54,23 @@ void DrawCharEx(const char* character, int x, int y, Color* fg, Color* bg) {
 	if(x < 0) {
 		return;
 	}
-	if(x >= DATA.TuiData.termdimm.x) {
+	if(x >= DATA.TuiData.tuidimm.x) {
 		return;
 	}
 
 	if(y < 0) {
 		return;
 	}
-	if(y >= DATA.TuiData.termdimm.y) {
+	if(y >= DATA.TuiData.tuidimm.y) {
 		return;
 	}
 
 	// NOTE: If last char is big than instead of ghosting it just force it into place
-	if(x >= DATA.TuiData.termdimm.x - (vWidth - 1)) {
+	if(x >= DATA.TuiData.tuidimm.x - (vWidth - 1)) {
 		x -= vWidth - 1;
 	}
 
-	size_t index = y * DATA.TuiData.termdimm.x + x;
+	size_t index = y * DATA.TuiData.tuidimm.x + x;
 
 	DATA.Buffers.backbuff[index].CharLen = len;
 	memcpy(DATA.Buffers.backbuff[index].Char, character, len);
@@ -85,7 +85,7 @@ void DrawCharEx(const char* character, int x, int y, Color* fg, Color* bg) {
 	for (int i = 1; i < vWidth; i++) {
         size_t nextIndex = index + i;
         
-        if (x + i >= DATA.TuiData.termdimm.x) break;
+        if (x + i >= DATA.TuiData.tuidimm.x) break;
 
         DATA.Buffers.backbuff[nextIndex].CharLen = 0; 
         memset(DATA.Buffers.backbuff[nextIndex].Char, 0, 5);
