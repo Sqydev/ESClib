@@ -20,15 +20,15 @@ void BackbuffDump() {
 	filler.Char[3] = 0;
 	filler.CharLen = 4;
 
-	printf("TESTER: Backbuff cell count: %lu\n", GetBackbuffCellCount());
-	printf("TESTER: Backbuff sizeof: %lu\n", GetBackbuffSize());
+	printf("TESTER: Backbuff cell count: %zu\n", GetBackbuffCellCount());
+	printf("TESTER: Backbuff sizeof: %zu\n", GetBackbuffSize());
 
 	for(int i = 0; i < times; i++) {
 		WriteToBackbuff(filler, (size_t)i, 0);
 	}
 
-	printf("TESTER: Backbuff cell count: %lu\n", GetBackbuffCellCount());
-	printf("TESTER: Backbuff sizeof: %lu\n", GetBackbuffSize());
+	printf("TESTER: Backbuff cell count: %zu\n", GetBackbuffCellCount());
+	printf("TESTER: Backbuff sizeof: %zu\n", GetBackbuffSize());
 	printf("TESTER: Filled(should be %d): %d\n", times, filled);
 	
 	printf("TESTER: Ending BackbuffDump\n");
