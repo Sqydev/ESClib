@@ -60,6 +60,8 @@ size_t UniWrite(UniWriteTarget target, const void* buf, size_t n) {
 #endif
 }
 
+// TODO: LIBCSITTYFNSINDEPENDENCE
+// strlen
 size_t UniWriteLen(UniWriteTarget target, const void* buf) {
 	return UniWrite(target, buf, strlen(buf));
 }

@@ -20,6 +20,8 @@ void SetTargetFps(int targetFps) {
 	}
 }
 
+// TODO: LIBCSITTYFNSINDEPENDENCE
+// memset
 void SetTuiDimentions(int x, int y) {
 	DATA.TuiData.tuidimm.x = x;
 	DATA.TuiData.tuidimm.y = y;

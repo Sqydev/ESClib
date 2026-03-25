@@ -4,7 +4,8 @@
 #include <stdio.h>
 #include <string.h>
 
-// TODO: Make it not stdio.h dependent. becouse it's slow and yk
+// TODO: LIBCSITTYFNSINDEPENDENCE
+// sprintf memcpy and memcmp
 void RenderFrame(void) {
 	if(DATA.Buffers.backbuff == NULL || DATA.Buffers.frontbuff == NULL || DATA.Buffers.charbuffer == NULL) { return; }
 
