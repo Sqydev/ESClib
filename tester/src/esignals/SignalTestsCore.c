@@ -17,14 +17,14 @@ void RunSignalTester(int signo, const char* signame, int (*disableFn)(int), int 
 	InitTui(60, TUI_DYNAMIC);
 
 	printf("CustomTaskCount = %d\n", GetCustomSignalTasksCount(signo));
-	printf("CustomTaskSize = %lu\n", GetCustomSignalTasksSize(signo));
+	printf("CustomTaskSize = %zu\n", GetCustomSignalTasksSize(signo));
 
 	AddSignalTask(signo, CTask1, 0);
 	AddSignalTask(signo, CTask2, 1);
 	AddSignalTask(signo, CTask3, 2);
 
 	printf("After adding CustomTaskCount = %d\n", GetCustomSignalTasksCount(signo));
-	printf("After adding CustomTaskSize = %lu\n", GetCustomSignalTasksSize(signo));
+	printf("After adding CustomTaskSize = %zu\n", GetCustomSignalTasksSize(signo));
 
 	RemoveSignalTask(signo, 0);
 	AddSignalTask(signo, CTask1, -1);
@@ -34,12 +34,12 @@ void RunSignalTester(int signo, const char* signame, int (*disableFn)(int), int 
 	AddSignalTask(signo, CTask3, 20);
 
 	printf("After Shuffle CustomTaskCount = %d\n", GetCustomSignalTasksCount(signo));
-	printf("After Shuffle CustomTaskSize = %lu\n", GetCustomSignalTasksSize(signo));
+	printf("After Shuffle CustomTaskSize = %zu\n", GetCustomSignalTasksSize(signo));
 
 	CompressSignalTasks(signo, -1, -1);
 
 	printf("After Compresson CustomTaskCount = %d\n", GetCustomSignalTasksCount(signo));
-	printf("After Compresson CustomTaskSize = %lu\n", GetCustomSignalTasksSize(signo));
+	printf("After Compresson CustomTaskSize = %zu\n", GetCustomSignalTasksSize(signo));
 
 	disableFn(signo);
 	printf("TESTER: Disabled %s (%s type) waiting 5 sec\n", signame, typeDesc);
