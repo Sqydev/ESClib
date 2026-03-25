@@ -6,6 +6,8 @@ Jednak zapomniałem że musi być jeszcze ten argument do formatu. Że to va_lis
 
 I tak. nic nie allocuje ani nie używa DrawText.
 
+Jednak z fg bg itd to jest $ a nie %
+
 Robi to co DrawText tylko że co znak sprawdza czy znak to nie '%' oraz czy przed '%' nie ma '\' i czy przed '\' nie ma '\':
 % jest nie ma \: format
 % jest \ jest: nie format
