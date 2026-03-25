@@ -14,6 +14,8 @@
 
 CoreData DATA;
 
+// TODO: LIBCSITTYFNSINDEPENDENCE
+// memset
 void InitTui(int targetFps, TuiType type) {
 	atexit(CloseTui);
 
@@ -78,7 +80,8 @@ void CloseTui(void) {
 
 	UniWriteLen(UNI_WRITE_TARGET_STDOUT, "\033[2J\033[?1049l\033[?7h");
 }
-
+// TODO: LIBCSITTYFNSINDEPENDENCE
+// memcpy
 void BeginDrawing(void) {
 	SignalsStep();
 

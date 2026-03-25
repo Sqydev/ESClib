@@ -13,6 +13,7 @@
 #include <errno.h>
 #include <stdlib.h>
 
+// TODO: Make returns not be EXIT_SUCCESS or EXIT_FAILURE
 int EnableSignal(int signal) {
 	switch(signal) {
 		case SIGINT: {
@@ -35,6 +36,7 @@ int EnableSignal(int signal) {
 	return EXIT_SUCCESS;
 }
 
+// TODO: Make returns not be EXIT_SUCCESS or EXIT_FAILURE
 int DisableSignal(int signal) {
 	switch(signal) {
 		case SIGINT: {
@@ -57,6 +59,7 @@ int DisableSignal(int signal) {
 	return EXIT_SUCCESS;
 }
 
+// TODO: Make returns not be EXIT_SUCCESS or EXIT_FAILURE
 int EnableSignalESClibTasks(int signal) {
 	switch(signal) {
 		case SIGINT: {
@@ -79,6 +82,7 @@ int EnableSignalESClibTasks(int signal) {
 	return EXIT_SUCCESS;
 }
 
+// TODO: Make returns not be EXIT_SUCCESS or EXIT_FAILURE
 int DisableSignalESClibTasks(int signal) {
 	switch(signal) {
 		case SIGINT: {
@@ -101,6 +105,7 @@ int DisableSignalESClibTasks(int signal) {
 	return EXIT_SUCCESS;
 }
 
+// TODO: Make returns not be EXIT_SUCCESS or EXIT_FAILURE
 int EnableSignalCustomTasks(int signal) {
 	switch(signal) {
 		case SIGINT: {
@@ -123,6 +128,7 @@ int EnableSignalCustomTasks(int signal) {
 	return EXIT_SUCCESS;
 }
 
+// TODO: Make returns not be EXIT_SUCCESS or EXIT_FAILURE
 int DisableSignalCustomTasks(int signal) {
 	switch(signal) {
 		case SIGINT: {
@@ -145,6 +151,7 @@ int DisableSignalCustomTasks(int signal) {
 	return EXIT_SUCCESS;
 }
 
+// TODO: Make returns not be EXIT_SUCCESS or EXIT_FAILURE
 int EnableSignalBuildInTasks(int signal) {
 	switch(signal) {
 		case SIGINT: {
@@ -167,6 +174,7 @@ int EnableSignalBuildInTasks(int signal) {
 	return EXIT_SUCCESS;
 }
 
+// TODO: Make returns not be EXIT_SUCCESS or EXIT_FAILURE
 int DisableSignalBuildInTasks(int signal) {
 	switch(signal) {
 		case SIGINT: {
