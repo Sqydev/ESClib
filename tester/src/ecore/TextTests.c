@@ -72,3 +72,19 @@ void TextTest() {
 
 	CloseTui();
 }
+
+void TextTestf() {
+	InitTui(165, TUI_DYNAMIC);
+
+	while(1) {
+		BeginDrawing();
+
+		ClearTui((Color){ 0,0,0,0 }, (Color){ 255, 0, 0, 0});
+
+		DrawTextf("🔥 5 == %d, 3.1 == %f, q == q, qwe == qwe", 0, 0, (Color){ 255, 255, 255, 1 }, 5, 3.1f, 'q', "qwe");
+
+		EndDrawing();
+	}
+
+	CloseTui();
+}

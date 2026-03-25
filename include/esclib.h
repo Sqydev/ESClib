@@ -21,12 +21,18 @@
 	#endif
 #endif
 
+// NOTE: I think it makes c++ work
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #ifndef RLAPI
     #define RLAPI
 #endif
 
 #include <stddef.h>
 #include <stdbool.h>
+#include <stdarg.h>
 
 #ifndef PI
 	#define PI 3.14159265358979323846f
@@ -167,5 +173,17 @@ RLAPI void DrawTextExV(const char* text, Vector2i pos, Color* fg, Color* bg);
 RLAPI void DrawTextEx(const char* text, int x, int y, Color* fg, Color* bg);
 RLAPI void DrawTextProV(const char* text, Vector2i pos, Vector2i origin, Color* fg, Color* bg, int spaceing, float angle);
 RLAPI void DrawTextPro(const char* text, int x, int y, int originX, int originY, Color* fg, Color* bg, int spaceing, float angle);
+
+RLAPI void DrawTextfV(const char* text, Vector2i pos, Color color, ...);
+RLAPI void DrawTextf(const char* text, int x, int y, Color color, ...);
+RLAPI void DrawTextfExV(const char* text, Vector2i pos, Color* fg, Color* bg, ...);
+RLAPI void DrawTextfEx(const char* text, int x, int y, Color* fg, Color* bg, ...);
+RLAPI void DrawTextfProV(const char* text, Vector2i pos, Vector2i origin, Color* fg, Color* bg, int spaceing, double angle, ...);
+RLAPI void DrawTextfPro(const char* text, int x, int y, int originX, int originY, Color* fg, Color* bg, int spaceing, double angle, ...);
+RLAPI void DrawTextfCORE(const char* text, int x, int y, int originX, int originY, Color* fg, Color* bg, int spaceing, double angle, va_list va);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif
