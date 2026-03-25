@@ -282,9 +282,8 @@ void DrawTextfPro(const char* text, int x, int y, int originX, int originY, Colo
 }
 
 // TODO: LIBCSITTYFNSINDEPENDENCE
-// memcpy, sprintf
+// memcpy
 // TODO: MAKE IT BETTER AND FASTER
-// TODO: Make the %fg %bg %smf codes
 void DrawTextfCORE(const char* text, int x, int y, int originX, int originY, Color* fg, Color* bg, int spaceing, double angle, va_list va) {
 	if(text == NULL) {
 		UniWriteLen(UNI_WRITE_TARGET_STDERR, "Text is NULL\n");
@@ -341,6 +340,15 @@ void DrawTextfCORE(const char* text, int x, int y, int originX, int originY, Col
 	const char* ptrr = text;
 
 	while(*ptrr != '\0') {
+		// TODO: Make \ logic
+		// TODO: Make this
+		if(*ptrr == '$') {
+			switch(*(ptrr + 1)) {
+				case 'f': {
+				}
+			}
+		}
+
 		if(curX < 0) {
 			return;
 		}
@@ -388,5 +396,7 @@ void DrawTextfCORE(const char* text, int x, int y, int originX, int originY, Col
 		curY += dir.y * (spaceing + 1);
 
 		ptrr += len;
+
+		inx++;
 	}
 }
