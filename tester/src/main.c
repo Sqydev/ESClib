@@ -31,6 +31,7 @@ const TesterEntry testers[] = {
 
 	{"CT", CharTest, "CharTest"},
 	{"TT", TextTest, "TextTest"},
+	{"TTf", TextTestf, "TextTestf"},
 
 	{"STT", StaticTuiTester, "StaticTuiTester"},
 };

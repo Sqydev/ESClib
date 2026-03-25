@@ -43,7 +43,7 @@ int GetCharWidth(const char* character) {
 
     static int locale_initialized = 0;
     if(!locale_initialized) {
-        setlocale(LC_ALL, ""); 
+        setlocale(LC_CTYPE, ""); 
         locale_initialized = 1;
     }
 
