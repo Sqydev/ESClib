@@ -1,2 +1,0 @@
-- DON'T USE GETCHAR()!!!!!! Use your own function that uses read for linux and something else for windows
-- Use %zu instead of %lu becouse on alphine for example size_t is unsigned int not unsigned long so %lu breakes for alphine and isn't portable but %zu is good and portable becouse why not

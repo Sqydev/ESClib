@@ -1,7 +1,43 @@
+/*
+* Copyright (c) 2025-present Wojciech Kaptur ( _Sqyd_ / Sqydev )
+* Github: https://github.com/Sqydev
+* GPG Fingerprint: 6DC2516B0DFDA9C59661650722F7B8A777F33B56
+* 
+* This software is provided "as-is", without any express or implied warranty. In no event
+* will the authors be held liable for any damages arising from the use of this software.
+* 
+* Permission is granted to anyone to use this software for any purpose, including commercial
+* applications, and to alter it and redistribute it freely, subject to the following restrictions:
+* 
+* 1. Non-Misrepresentation: The origin of this software must not be misrepresented; 
+*    you must not claim that you wrote the original software. An acknowledgment in 
+*    product documentation is appreciated but not required.
+* 
+* 2. Source-Level Copyleft: Any altered versions (forks) of this software's source code, 
+*    or files containing significant portions of this code, must be distributed under 
+*    these same license terms. Such modified source code must be made publicly available 
+*    to any recipient, even if used over a network (SaaS).
+* 
+* 3. Proprietary Integration: This software may be integrated into, linked with, or 
+*    used as a component of proprietary and closed-source products. In such cases, 
+*    the surrounding proprietary application code does not need to be disclosed, 
+*    provided that the original or modified source code of THIS software remains 
+*    available under the terms of Section 2.
+* 
+* 4. Persistent Metadata: All original credits, including those in the source code headers 
+*    and binary metadata (e.g., ELF .comment section, PE StringFileInfo, or equivalent), 
+*    must not be removed. You may add your own credits to forks, provided the original 
+*    authorship remains clearly identified.
+* 
+* 5. Notice Retention: This license notice may not be removed or altered from any 
+*    source or binary distribution.
+*/
+
 #include "../include/esclib.h"
 
 #include "./private/coredata.h"
 #include "./private/common_utils.h"
+#include "./private/drawTextfCORE.h"
 
 #include <math.h>
 
@@ -279,124 +315,4 @@ void DrawTextfPro(const char* text, int x, int y, int originX, int originY, Colo
 	va_start(va, angle);
 	DrawTextfPro_va(text, x, y, originX, originY, fg, bg, spacing, angle, va);
 	va_end(va);
-}
-
-// TODO: LIBCSITTYFNSINDEPENDENCE
-// memcpy
-// TODO: MAKE IT BETTER AND FASTER
-void DrawTextfCORE(const char* text, int x, int y, int originX, int originY, Color* fg, Color* bg, int spaceing, double angle, va_list va) {
-	if(text == NULL) {
-		UniWriteLen(UNI_WRITE_TARGET_STDERR, "Text is NULL\n");
-		return;
-	}
-
-	va_list va2;
-	va_copy(va2, va);
-	int len = vsnprintf(NULL, 0, text, va);
-	char* buf = malloc(len + 1);
-	vsnprintf(buf, len + 1, text, va2);
-	va_end(va2);
-	text = buf;
-
-	float cos = 0.0f;
-	float sin = 0.0f;
-	Vecrot2 dir = {0};
-
-	// NOTE: Check if angle is multiplicity of PI / 2. Accounding for float errors
-	float q = angle / (PI / 2.0f);
-	int qi = (int)roundf(q);
-	if(fabsf(q - qi) < 0.001f) {
-		// NOTE: Somehow get dir
-		int dir_idx = (qi % 4 + 4) % 4;
-
-		switch(dir_idx) {
-			case 0: { cos = 1.0f; sin = 0.0f; break; }
-			case 1: { cos = 0.0f; sin = 1.0f; break; }
-			case 2: { cos = -1.0f; sin = 0.0f; break; }
-			case 3: { cos = 0.0f; sin = -1.0f; break; }
-		}
-
-		dir.x = cos;
-		dir.y = sin;
-	}
-	else {
-		cos = cosf(angle);
-		sin = sinf(angle);
-
-		dir.x = cos;
-		dir.y = sin;
-
-		float maxDir = fmaxf(fabsf(dir.x), fabsf(dir.y));
-		if (maxDir > 0.0f) {
-			dir.x /= maxDir;
-			dir.y /= maxDir;
-		}
-	}
-
-	// NOTE: Calc startpos with origin!
-	float curX = x - (originX * cos) + (originY * sin);
-	float curY = y - (originX * sin) - (originY * cos);
-
-	const char* ptrr = text;
-
-	while(*ptrr != '\0') {
-		// TODO: Make \ logic
-		// TODO: Make this
-		if(*ptrr == '$') {
-			switch(*(ptrr + 1)) {
-				case 'f': {
-				}
-			}
-		}
-
-		if(curX < 0) {
-			return;
-		}
-		if(curX >= DATA.TuiData.tuidimm.x) {
-			return;
-		}
-
-		if(curY < 0) {
-			return;
-		}
-		if(curY >= DATA.TuiData.tuidimm.y) {
-			return;
-		}
-
-		int vWidth = GetCharWidth(ptrr);
-		
-		if(curX >= DATA.TuiData.tuidimm.x - (vWidth - 1)) {
-			curX -= vWidth - 1;
-		}
-
-		int len = 0;
-		if((*ptrr & 0x80) == 0) {
-			len = 1;
-		}
-		else if((*ptrr & 0xE0) == 0xC0) {
-			len = 2;
-		}
-		else if((*ptrr & 0xF0) == 0xE0) {
-			len = 3;
-		}
-		else if((*ptrr & 0xF8) == 0xF0) {
-			len = 4;
-		}
-		else {
-			ptrr++;
-			continue;
-		}
-
-		char tmpChar[5] = {0};
-		memcpy(tmpChar, ptrr, len);
-
-		DrawCharEx(tmpChar, (int)roundf(curX), (int)roundf(curY), fg, bg);
-
-		curX += dir.x * (spaceing + 1);
-		curY += dir.y * (spaceing + 1);
-
-		ptrr += len;
-
-		inx++;
-	}
 }

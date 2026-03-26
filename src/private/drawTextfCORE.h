@@ -33,23 +33,11 @@
 *    source or binary distribution.
 */
 
-#ifndef ESCLIB_PRIVATE_SIGNALS_ACTIONS_H
-#define ESCLIB_PRIVATE_SIGNALS_ACTIONS_H
+#ifndef ESCLIB_PRIVATE_DRAWTEXTFCORE_H
+#define ESCLIB_PRIVATE_DRAWTEXTFCORE_H
 
-#include "../coredata.h"
+#include "../../include/esclib.h"
 
-void SignalsSetup(void);
-void SignalsStep(void);
-void SignalsCleanup(void);
-
-#if defined(unix) || defined(__unix) || defined(__unix__)
-
-void Install(int sig, struct sigaction* old, void (*handler)(int));
-
-#elif defined(_WIN32) || defined(_WIN64)
-
-BOOL WINAPI ConsoleHandler(DWORD type);
-
-#endif
+void DrawTextfCORE(const char* text, int x, int y, int originX, int originY, Color* fg, Color* bg, int spaceing, double angle, va_list va);
 
 #endif
