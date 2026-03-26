@@ -8,4 +8,6 @@
 
 // TODO: Jak będzie ci się nudzić to zrób że DrawChar i DrawText ma faktyczny parametr fontsize i ma czcionki. i czcionka to używany charset i jak będzie ci się jeszcze bardziej nudzić to jeszcze vectory itd
 
-//TODO: Make optional shaders support
+// TODO: Make optional shaders support
+
+// TODO: Fix makefile

@@ -1,2 +1,0 @@
-:args **/*.c **/*.h
-:argdo %s/old/new/g | update
