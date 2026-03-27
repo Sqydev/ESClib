@@ -106,6 +106,44 @@ typedef struct {
 	int y;
 } Vector2i;
 
+typedef struct {
+	double x;
+	double y;
+} Vector2d;
+
+typedef struct {
+	long x;
+	long y;
+} Vector2l;
+
+typedef struct {
+	float x;
+	float y;
+	float width;
+	float height;
+} Rectangle;
+
+typedef struct {
+	int x;
+	int y;
+	int width;
+	int height;
+} Rectanglei;
+
+typedef struct {
+	double x;
+	double y;
+	double width;
+	double height;
+} Rectangled;
+
+typedef struct {
+	long x;
+	long y;
+	long width;
+	long height;
+} Rectanglel;
+
 typedef enum {
 	TUI_STATIC,
 	TUI_DYNAMIC
@@ -215,6 +253,18 @@ RLAPI void DrawTextfExV(const char* text, Vector2i pos, Color* fg, Color* bg, ..
 RLAPI void DrawTextfEx(const char* text, int x, int y, Color* fg, Color* bg, ...);
 RLAPI void DrawTextfProV(const char* text, Vector2i pos, Vector2i origin, Color* fg, Color* bg, int spaceing, double angle, ...);
 RLAPI void DrawTextfPro(const char* text, int x, int y, int originX, int originY, Color* fg, Color* bg, int spaceing, double angle, ...);
+
+// ESHAPES
+
+RLAPI void DrawRectangleRec(Rectanglei rec, Color color);
+RLAPI void DrawRectangleV(Vector2i pos, Vector2i dimms, Color color);
+RLAPI void DrawRectangle(int x, int y, int width, int height, Color color);
+RLAPI void DrawRectangleExRec(char* character, Rectanglei rec, Color fg, Color bg);
+RLAPI void DrawRectangleExV(char* character, Vector2i pos, Vector2i dimms, Color fg, Color bg);
+RLAPI void DrawRectangleEx(char* character, int x, int y, int width, int height, Color fg, Color bg);
+RLAPI void DrawRectangleProRec(char* character, Rectanglei rec, Vector2i origin, Color fg, Color bg, double rotation, float roundness);
+RLAPI void DrawRectangleProV(char* character, Vector2i pos, Vector2i dimms, Vector2i origin, Color fg, Color bg, double rotation, float roundness);
+RLAPI void DrawRectanglePro(char* character, int x, int y, int width, int height, int originX, int originY, Color fg, Color bg, double rotation, float roundness);
 
 #ifdef __cplusplus
 }
