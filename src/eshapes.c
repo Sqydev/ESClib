@@ -44,41 +44,47 @@ void DrawRectangleV(Vector2i pos, Vector2i dimms, Color color) {
 }
 
 void DrawRectangle(int x, int y, int width, int height, Color color) {
-	DrawRectangleEx(" ", x, y, width, height, color, color);
+	DrawRectangleEx(" ", x, y, width, height, &color, &color);
 }
 
-void DrawRectangleExRec(char* character, Rectanglei rec, Color fg, Color bg) {
+void DrawRectangleExRec(char* character, Rectanglei rec, Color* fg, Color* bg) {
 	DrawRectangleExV(character, (Vector2i){ rec.x, rec.y }, (Vector2i){ rec.width, rec.height }, fg, bg);
 }
 
-void DrawRectangleExV(char* character, Vector2i pos, Vector2i dimms, Color fg, Color bg) {
+void DrawRectangleExV(char* character, Vector2i pos, Vector2i dimms, Color* fg, Color* bg) {
 	DrawRectangleEx(character, pos.x, pos.y, dimms.x, dimms.y, fg, bg);
 }
 
-void DrawRectangleEx(char* character, int x, int y, int width, int height, Color fg, Color bg) {
+void DrawRectangleEx(char* character, int x, int y, int width, int height, Color* fg, Color* bg) {
 	DrawRectanglePro(character, x, y, width, height, 0, 0, fg, bg, 0, 0);
 }
 
-void DrawRectangleProRec(char* character, Rectanglei rec, Vector2i origin, Color fg, Color bg, double rotation, float roundness) {
+void DrawRectangleProRec(char* character, Rectanglei rec, Vector2i origin, Color* fg, Color* bg, double rotation, float roundness) {
 	DrawRectangleProV(character, (Vector2i){ rec.x, rec.y }, origin, (Vector2i){ rec.width, rec.height }, fg, bg, rotation, roundness);
 }
 
-void DrawRectangleProV(char* character, Vector2i pos, Vector2i dimms, Vector2i origin, Color fg, Color bg, double rotation, float roundness) {
+void DrawRectangleProV(char* character, Vector2i pos, Vector2i dimms, Vector2i origin, Color* fg, Color* bg, double rotation, float roundness) {
 	DrawRectanglePro(character, pos.x, pos.y, dimms.x, dimms.y, origin.x, origin.y, fg, bg, rotation, roundness);
 }
 
-void DrawRectanglePro(char* character, int x, int y, int width, int height, int originX, int originY, Color fg, Color bg, double rotation, float roundness) {
-	(void)character;
-	(void)x;
-	(void)y;
-	(void)width;
-	(void)height;
+// NOTE: DO NOT FLOPING REMOVE Color*. Think about the people that want to make the graphicks with @ that have transparent backgrounds
+void DrawRectanglePro(char* character, int posX, int posY, int width, int height, int originX, int originY, Color* fg, Color* bg, double rotation, float roundness) {
 	(void)originX;
 	(void)originY;
-	(void)fg;
-	(void)bg;
 	(void)rotation;
 	(void)roundness;
+
+	Vector2i lastIndex = GetLastTuiIndex();
+
+	// NOTE: I'm so smart. Becouse that's 2 cpu cycles less :)))
+	int maxX = posX + width;
+	int maxY = posY + height;
+
+	for(int y = posY; y < maxY && y < lastIndex.y; y++) {
+		for(int x = posX; x < maxX && x < lastIndex.x; x++) {
+			DrawCharEx(character, x, y, fg, bg);
+		}
+	}
 }
 
 /*

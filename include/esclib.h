@@ -259,12 +259,12 @@ RLAPI void DrawTextfPro(const char* text, int x, int y, int originX, int originY
 RLAPI void DrawRectangleRec(Rectanglei rec, Color color);
 RLAPI void DrawRectangleV(Vector2i pos, Vector2i dimms, Color color);
 RLAPI void DrawRectangle(int x, int y, int width, int height, Color color);
-RLAPI void DrawRectangleExRec(char* character, Rectanglei rec, Color fg, Color bg);
-RLAPI void DrawRectangleExV(char* character, Vector2i pos, Vector2i dimms, Color fg, Color bg);
-RLAPI void DrawRectangleEx(char* character, int x, int y, int width, int height, Color fg, Color bg);
-RLAPI void DrawRectangleProRec(char* character, Rectanglei rec, Vector2i origin, Color fg, Color bg, double rotation, float roundness);
-RLAPI void DrawRectangleProV(char* character, Vector2i pos, Vector2i dimms, Vector2i origin, Color fg, Color bg, double rotation, float roundness);
-RLAPI void DrawRectanglePro(char* character, int x, int y, int width, int height, int originX, int originY, Color fg, Color bg, double rotation, float roundness);
+RLAPI void DrawRectangleExRec(char* character, Rectanglei rec, Color* fg, Color* bg);
+RLAPI void DrawRectangleExV(char* character, Vector2i pos, Vector2i dimms, Color* fg, Color* bg);
+RLAPI void DrawRectangleEx(char* character, int x, int y, int width, int height, Color* fg, Color* bg);
+RLAPI void DrawRectangleProRec(char* character, Rectanglei rec, Vector2i origin, Color* fg, Color* bg, double rotation, float roundness);
+RLAPI void DrawRectangleProV(char* character, Vector2i pos, Vector2i dimms, Vector2i origin, Color* fg, Color* bg, double rotation, float roundness);
+RLAPI void DrawRectanglePro(char* character, int x, int y, int width, int height, int originX, int originY, Color* fg, Color* bg, double rotation, float roundness);
 
 #ifdef __cplusplus
 }

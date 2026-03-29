@@ -34,6 +34,8 @@ const TesterEntry testers[] = {
 	{"TTf", TextTestf, "TextTestf"},
 
 	{"STT", StaticTuiTester, "StaticTuiTester"},
+
+	{"DRT", DrawRecTester, "DrawRecTester"},
 };
 
 void PrintUsage(const char* prog) {
