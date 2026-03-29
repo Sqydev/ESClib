@@ -28,3 +28,5 @@ void TextTest();
 void TextTestf();
 
 void StaticTuiTester();
+
+void DrawRecTester();

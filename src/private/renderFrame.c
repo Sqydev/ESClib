@@ -55,6 +55,8 @@ void RenderFrame(void) {
 	int cursorX = -1;
 	int cursorY = -1;
 
+	DATA.Buffers.charbufferOffset += sprintf(DATA.Buffers.charbuffer + DATA.Buffers.charbufferOffset, "\033[0m");
+
 	for(int y = 0; y < DATA.TuiData.tuidimm.y; y++) {
 		for(int x = 0; x < DATA.TuiData.tuidimm.x; x++) {
 			size_t index = y * DATA.TuiData.tuidimm.x + x;
@@ -62,7 +64,7 @@ void RenderFrame(void) {
 			SBCell* back = &DATA.Buffers.backbuff[index];
 			SBCell* front = &DATA.Buffers.frontbuff[index];
 
-			if (back->CharLen == 0 && x > 0) {
+			if(back->CharLen == 0 && x > 0) {
 			    *front = *back;
 			    continue; 
 			}
