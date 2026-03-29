@@ -81,6 +81,7 @@ extern "C" {
     #define RAD2DEG (180.0f/PI)
 #endif
 
+// If trueColor == true, rgb is rgb if trueColor == false than the color == r + g + b. WARNING: Many terminals have stupid thing that in trueColor if fg == 0, 0, 255 and bg == 255, 0, 0 than the terminal blends the fg to 255, 0, 255. If anyone knows how to turn this off than PLEASE tell me, but for now just keep that fact in mind
 typedef struct {
 	unsigned char r;
 	unsigned char g;
