@@ -1,10 +1,3 @@
-// TODO: Fix colors mixing by the terminal {
-	// NOTE: Rec that is $'s of color yellow and background blue BUT with roundness 5 BUT with 0 DEG
- 	DrawRectanglePro("$", 40, 55, 40, 10, 0, 0, &(Color){ 255, 255, 0, 1 }, &(Color){ 0, 0, 255, 1 }, 0, 5);
-
-    Here like it draws $ as white becouse 255, 255, 0 + 0, 0, 255 -> 255, 255, 255
-}
-
 // TODO: MAKE DRAWTEXTFORMAT
 
 // TODO: Fix Vecrot typeo to Vector
