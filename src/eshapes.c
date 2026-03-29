@@ -35,6 +35,8 @@
 
 #include "../include/esclib.h"
 
+#include <math.h>
+
 void DrawRectangleRec(Rectanglei rec, Color color) {
 	DrawRectangleV((Vector2i){ rec.x, rec.y }, (Vector2i){ rec.width, rec.height }, color);
 }
@@ -69,22 +71,41 @@ void DrawRectangleProV(char* character, Vector2i pos, Vector2i dimms, Vector2i o
 
 // NOTE: DO NOT FLOPING REMOVE Color*. Think about the people that want to make the graphicks with @ that have transparent backgrounds
 void DrawRectanglePro(char* character, int posX, int posY, int width, int height, int originX, int originY, Color* fg, Color* bg, double rotation, float roundness) {
-	(void)originX;
-	(void)originY;
-	(void)rotation;
 	(void)roundness;
 
-	Vector2i lastIndex = GetLastTuiIndex();
+    Vector2i lastIndex = GetLastTuiIndex();
 
-	// NOTE: I'm so smart. Becouse that's 2 cpu cycles less :)))
-	int maxX = posX + width;
-	int maxY = posY + height;
+    double cosA = cos(rotation);
+    double sinA = sin(rotation);
 
-	for(int y = posY; y < maxY && y < lastIndex.y; y++) {
-		for(int x = posX; x < maxX && x < lastIndex.x; x++) {
-			DrawCharEx(character, x, y, fg, bg);
-		}
-	}
+    double maxRadius = sqrt(width * width + height * height);
+    
+    int startX = posX - (int)maxRadius;
+    int endX = posX + (int)maxRadius;
+    int startY = posY - (int)maxRadius;
+    int endY = posY + (int)maxRadius;
+
+    if(startX < 0) startX = 0;
+    if(startY < 0) startY = 0;
+    if(endX >= lastIndex.x) endX = lastIndex.x - 1;
+    if(endY >= lastIndex.y) endY = lastIndex.y - 1;
+
+    for(int wy = startY; wy <= endY; wy++) {
+        for(int wx = startX; wx <= endX; wx++) {
+            double dx = wx - posX;
+            double dy = wy - posY;
+
+            double ox = (dx * cosA) + (dy * sinA);
+            double oy = -(dx * sinA) + (dy * cosA);
+
+            double srcX = ox + originX;
+            double srcY = oy + originY;
+
+            if(srcX >= 0.0 && srcX < (double)width && srcY >= 0.0 && srcY < (double)height) {
+                DrawCharEx(character, wx, wy, fg, bg);
+            }
+        }
+    }
 }
 
 /*
