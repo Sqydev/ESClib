@@ -30,3 +30,5 @@ void TextTestf();
 void StaticTuiTester();
 
 void DrawRecTester();
+
+void FuckedUpColorsTest();

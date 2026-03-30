@@ -75,8 +75,27 @@ void DrawRectanglePro(char* character, int posX, int posY, int width, int height
 
     Vector2i lastIndex = GetLastTuiIndex();
 
-    double cosA = cos(rotation);
-    double sinA = sin(rotation);
+    double cosA;
+    double sinA;
+
+	// NOTE: Check if angle is multiplicity of PI / 2. Accounding for float errors
+	float q = rotation / (PI / 2.0f);
+	int qi = (int)roundf(q);
+	if(fabsf(q - qi) < 0.001f) {
+		// NOTE: Somehow get dir
+		int dir_idx = (qi % 4 + 4) % 4;
+
+		switch(dir_idx) {
+			case 0: { cosA = 1.0f; sinA = 0.0f; break; }
+			case 1: { cosA = 0.0f; sinA = 1.0f; break; }
+			case 2: { cosA = -1.0f; sinA = 0.0f; break; }
+			case 3: { cosA = 0.0f; sinA = -1.0f; break; }
+		}
+	}
+	else {
+		cosA = cosf(rotation);
+		sinA = sinf(rotation);
+	}
 
     double maxRadius = sqrt(width * width + height * height);
     
