@@ -24,6 +24,12 @@ void DrawRecTester() {
 		// NOTE: Rec that is $'s of color purple and background blue BUT with roundness 5 BUT with 0 DEG
 	 	DrawRectanglePro("$", 40, 55, 40, 10, 0, 0, &(Color){ 255, 0, 0, 1 }, &(Color){ 0, 0, 255, 1 }, 0, 5);
 
+		// NOTE: Rec made of 🔥
+		DrawRectangleEx("🔥", 70, 5, 12, 4, NULL, NULL);
+
+		// NOTE: Rec with 45 DEG rotation that is made of 🔥 roundness 5
+	 	DrawRectanglePro("🔥", 100, 20, 20, 10, 0, 0, NULL, NULL, 45 * DEG2RAD, 0);
+
 		EndDrawing();
 	}
 

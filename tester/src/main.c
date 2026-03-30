@@ -36,6 +36,8 @@ const TesterEntry testers[] = {
 	{"STT", StaticTuiTester, "StaticTuiTester"},
 
 	{"DRT", DrawRecTester, "DrawRecTester"},
+
+	{"FUCT", FuckedUpColorsTest, "FuckedUpColorsTest"},
 };
 
 void PrintUsage(const char* prog) {
