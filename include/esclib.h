@@ -216,13 +216,17 @@ RLAPI Vector2i GetTerminalDimensionsForReal(void);
 RLAPI Vector2i GetTerminalDimensionsInPixelsForReal(void);
 
 // Returns proportions of the cells
-RLAPI Vector2i GetCellSizeProportions(void);
+RLAPI Vector2i GetCellProportions(void);
 // Return size of cells in pixels
 RLAPI Vector2i GetCellSizeInPixels(void);
 // Same as GetCellSizeProportions() but with ptr
-RLAPI Vector2i* GetCellSizeProportionsPtr(void);
+RLAPI Vector2i* GetCellProportionsPtr(void);
 // Same as GetCellSizeInPixels() but with ptr
 RLAPI Vector2i* GetCellSizeInPixelsPtr(void);
+// GetCellSizeProportions() for reals
+RLAPI Vector2i GetCellProportionsForReal(void);
+// GetCellSizeInPixels() for reals
+RLAPI Vector2i GetCellSizeInPixelsForReal(void);
 
 RLAPI size_t GetBackbuffSize(void);
 RLAPI size_t GetBackbuffCellCount(void);

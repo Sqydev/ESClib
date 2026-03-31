@@ -71,9 +71,10 @@ void DrawRectangleProV(char* character, Vector2i pos, Vector2i dimms, Vector2i o
 
 // NOTE: DO NOT FLOPING REMOVE Color*. Think about the people that want to make the graphicks with @ that have transparent backgrounds
 void DrawRectanglePro(char* character, int posX, int posY, int width, int height, int originX, int originY, Color* fg, Color* bg, double rotation, float roundness) {
-	(void)roundness;
-
     Vector2i lastIndex = GetLastTuiIndex();
+
+	// NOTE: Advanced technification. Short if statment
+    double aspectRatio = (GetCellProportions().x > 0 && GetCellProportions().y > 0) ? (double)GetCellProportions().x / (double)GetCellProportions().y : 0.5;
 
     double cosA;
     double sinA;
@@ -82,49 +83,84 @@ void DrawRectanglePro(char* character, int posX, int posY, int width, int height
 	float q = rotation / (PI / 2.0f);
 	int qi = (int)roundf(q);
 	if(fabsf(q - qi) < 0.001f) {
-		// NOTE: Somehow get dir
 		int dir_idx = (qi % 4 + 4) % 4;
-
 		switch(dir_idx) {
-			case 0: { cosA = 1.0f; sinA = 0.0f; break; }
-			case 1: { cosA = 0.0f; sinA = 1.0f; break; }
-			case 2: { cosA = -1.0f; sinA = 0.0f; break; }
-			case 3: { cosA = 0.0f; sinA = -1.0f; break; }
+			case 0: { cosA = 1.0; sinA = 0.0; break; }
+			case 1: { cosA = 0.0; sinA = 1.0; break; }
+			case 2: { cosA = -1.0; sinA = 0.0; break; }
+			case 3: { cosA = 0.0; sinA = -1.0; break; }
 		}
 	}
 	else {
-		cosA = cosf(rotation);
-		sinA = sinf(rotation);
+		cosA = cos(rotation);
+		sinA = sin(rotation);
 	}
 
-    double maxRadius = sqrt(width * width + height * height);
-    
+	// NOTE: X in pixels(px - pixelX)
+    double pw = width * aspectRatio;
+	// NOTE: sqrt(pw * pw + height * height) is like przekątna cuz I can't do english and we devide it by aspectRatio + 1(it somehow chainges it back into collumns(X) and + 1 is cuz why not
+    double maxRadius = sqrt(pw * pw + height * height) / aspectRatio + 1;
+
+	// NOTE: I don't remamber
     int startX = posX - (int)maxRadius;
     int endX = posX + (int)maxRadius;
     int startY = posY - (int)maxRadius;
     int endY = posY + (int)maxRadius;
 
-    if(startX < 0) startX = 0;
-    if(startY < 0) startY = 0;
-    if(endX >= lastIndex.x) endX = lastIndex.x - 1;
-    if(endY >= lastIndex.y) endY = lastIndex.y - 1;
+    if(startX < 0) { startX = 0; }
+    if(startY < 0) { startY = 0; }
+    if(endX >= lastIndex.x) { endX = lastIndex.x - 1; }
+    if(endY >= lastIndex.y) { endY = lastIndex.y - 1; }
+
+	double rpx = (double)GetCellSizeInPixels().x * width;
+    double rpy = (double)GetCellSizeInPixels().y * height;
+	// NOTE: Clamp
+    if(roundness < 0.0f)   roundness = 0.0f;
+	if(roundness > 100.0f) roundness = 100.0f;
+	// NOTE: From 0 to 100
+	double r = (roundness / 100.0) * fmin(rpx, rpy) / 2.0;
 
 	int vWidth = GetCharWidth(character);
 
-    for(int wy = startY; wy <= endY; wy++) {
-        for(int wx = startX; wx <= endX; wx += vWidth) {
-            double dx = wx - posX;
-            double dy = wy - posY;
+    for(int y = startY; y <= endY; y++) {
+        for(int x = startX; x <= endX; x += vWidth) {
+			// NOTE: collumns -> pixels
+            double dx = (x - posX) * aspectRatio;
+            double dy = (y - posY);
 
+			// NOTE: Do matrix math shennanygancs or however it's spelled
             double ox = (dx * cosA) + (dy * sinA);
             double oy = -(dx * sinA) + (dy * cosA);
 
-            double srcX = ox + originX;
+			// NOTE: Come back to cells again
+            double srcX = ox / aspectRatio + originX;
             double srcY = oy + originY;
 
-            if(srcX >= 0.0 && srcX < (double)width && srcY >= 0.0 && srcY < (double)height) {
-                DrawCharEx(character, wx, wy, fg, bg);
-            }
+			// NOTE: Skip if out of bounce
+			if(srcX < 0.0 || srcX >= (double)width || srcY < 0.0 || srcY >= (double)height) continue;
+
+			if(roundness > 0.0f) {
+				// NOTE: Pos of point in pixels
+            	double px = srcX * GetCellSizeInPixels().x;
+                double py = srcY * GetCellSizeInPixels().y;
+
+				// NOTE: I don't have a mind to expalin that here so here's chatgbt's explenation:
+				// // Find the center of the nearest rounded corner circle.
+				// Each corner circle center is at distance r from both edges (not at the corner itself).
+				// If we're in the corner zone (px < r or px > rpx-r), snap to that corner circle center.
+				// If we're in the middle, snap to px itself so distance will be 0 (always draw).
+                double cx = px < r ? r : (px > rpx - r ? rpx - r : px);
+                double cy = py < r ? r : (py > rpy - r ? rpy - r : py);
+
+				// NOTE: Distance from point to nearest corner circle center (squared, to avoid sqrt)
+                double ddx = px - cx;
+                double ddy = py - cy;
+
+				// NOTE: If distance > r, the point is outside the corner circle = outside the rounded rect
+                if(ddx * ddx + ddy * ddy > r * r) { continue; }
+			}
+            
+			DrawCharEx(character, x, y, fg, bg);
         }
     }
 }

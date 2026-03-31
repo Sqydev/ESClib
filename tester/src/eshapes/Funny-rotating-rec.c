@@ -16,7 +16,7 @@ void FunnyRottatingRec() {
 
 		EndDrawing();
 
-		rot += 1 * DEG2RAD;
+		rot += 5 * DEG2RAD;
 	}
 
 	CloseTui();
