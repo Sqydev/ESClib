@@ -70,6 +70,9 @@ void InitTui(int targetFps, TuiType type) {
     DATA.TuiData.lastTuiIndex.x = DATA.TuiData.termdimm.x - 1;
     DATA.TuiData.lastTuiIndex.y = DATA.TuiData.termdimm.y - 1;
 
+	DATA.TuiData.cellsDimms = GetCellSizeInPixelsForReal();
+	DATA.TuiData.cellsProp = GetCellProportionsForReal();
+
 	DATA.TuiData.initiated = true;
 
 	DATA.Buffers.backbuff = NULL;

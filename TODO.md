@@ -1,6 +1,6 @@
-// TODO: Make rotating rec be more non shape chainging. Like squere is still a squere. Like it chainges it's shape or something to make the shape be less shapeless(0: 20x10 90: 10x20) becouse now at 90 DEG it's 2x bigger in y than in x
+// TODO: Make roundness be good and not like 1 half is different than the other
 
-// TODO: Make roundness in DrawRecPro work
+// TODO: In FunnyRottatingRec when the angle chainge every frame is 10 * DEG2RAD than the fire emoji shows up under the center rec(on half the size of the terminal in the setup)
 
 // TODO: Fix Vecrot typeo to Vector
 
