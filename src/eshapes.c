@@ -123,10 +123,11 @@ void DrawRectanglePro(char* character, int posX, int posY, int width, int height
 	int vWidth = GetCharWidth(character);
 
     for(int y = startY; y <= endY; y++) {
-        for(int x = startX; x <= endX; x += vWidth) {
+        for(int x = startX; x <= endX; x++) {
 			// NOTE: collumns -> pixels
-            double dx = (x - posX) * aspectRatio;
-            double dy = (y - posY);
+			// IT'S TAKEING THIS FROM THE CENTER OF CELL AND NOT THE LEFT UP CORNER REMAMBERRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRR
+            double dx = (x + (vWidth / 2.0) - posX) * aspectRatio;
+            double dy = (y + 0.5 - posY);
 
 			// NOTE: Do matrix math shennanygancs or however it's spelled
             double ox = (dx * cosA) + (dy * sinA);
@@ -161,6 +162,7 @@ void DrawRectanglePro(char* character, int posX, int posY, int width, int height
 			}
             
 			DrawCharEx(character, x, y, fg, bg);
+			x += (vWidth - 1);
         }
     }
 }
