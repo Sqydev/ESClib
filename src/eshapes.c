@@ -109,8 +109,10 @@ void DrawRectanglePro(char* character, int posX, int posY, int width, int height
     if(endX >= lastIndex.x) endX = lastIndex.x - 1;
     if(endY >= lastIndex.y) endY = lastIndex.y - 1;
 
+	int vWidth = GetCharWidth(character);
+
     for(int wy = startY; wy <= endY; wy++) {
-        for(int wx = startX; wx <= endX; wx++) {
+        for(int wx = startX; wx <= endX; wx += vWidth) {
             double dx = wx - posX;
             double dy = wy - posY;
 

@@ -32,3 +32,5 @@ void StaticTuiTester();
 void DrawRecTester();
 
 void FuckedUpColorsTest();
+
+void FunnyRottatingRec();
