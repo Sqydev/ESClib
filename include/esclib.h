@@ -211,9 +211,18 @@ RLAPI Vector2i GetTerminalDimensionsInPixels(void);
 // Same as GetTerminalDimensionsInPixels() but returns pointer to the variable so you don't have to check for resize or smf
 RLAPI Vector2i* GetTerminalDimensionsPtrInPixels(void);
 // Same as GetTerminalDimensions() but it acualy checks
-Vector2i GetTerminalDimensionsForReal(void);
+RLAPI Vector2i GetTerminalDimensionsForReal(void);
 // Same as GetTerminalDimensionsInPixels() but it accualy checks
-Vector2i GetTerminalDimensionsInPixelsForReal(void);
+RLAPI Vector2i GetTerminalDimensionsInPixelsForReal(void);
+
+// Returns proportions of the cells
+RLAPI Vector2i GetCellSizeProportions(void);
+// Return size of cells in pixels
+RLAPI Vector2i GetCellSizeInPixels(void);
+// Same as GetCellSizeProportions() but with ptr
+RLAPI Vector2i* GetCellSizeProportionsPtr(void);
+// Same as GetCellSizeInPixels() but with ptr
+RLAPI Vector2i* GetCellSizeInPixelsPtr(void);
 
 RLAPI size_t GetBackbuffSize(void);
 RLAPI size_t GetBackbuffCellCount(void);
