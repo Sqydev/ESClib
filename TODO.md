@@ -1,6 +1,4 @@
-// TODO: Make roundness be good and not like 1 half is different than the other
-
-// TODO: In FunnyRottatingRec when the angle chainge every frame is 10 * DEG2RAD than the fire emoji shows up under the center rec(on half the size of the terminal in the setup)
+// TODO: Fix 🔥 rec with rotation beying just retarded. just look at it in DrawRecTester() IT'S FLOPING DESCE OR SMF
 
 // TODO: Fix Vecrot typeo to Vector
 

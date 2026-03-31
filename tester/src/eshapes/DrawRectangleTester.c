@@ -19,7 +19,7 @@ void DrawRecTester() {
 	 	DrawRectanglePro("$", 40, 30, 40, 10, 0, 0, &(Color){ 255, 0, 0, 1 }, &(Color){ 0, 0, 255, 1 }, 45 * DEG2RAD, 0);
 
 		// NOTE: Rec with 45 DEG rotation that is $'s of color purple and background blue BUT with roundness 5
-	 	DrawRectanglePro("$", 85, 30, 40, 10, 0, 0, &(Color){ 255, 0, 0, 1 }, &(Color){ 0, 0, 255, 1 }, 45 * DEG2RAD, 5);
+	 	DrawRectanglePro("$", 85, 30, 40, 10, 0, 0, &(Color){ 255, 0, 0, 1 }, &(Color){ 0, 0, 255, 1 }, 45 * DEG2RAD, 50);
 
 		// NOTE: Rec that is $'s of color purple and background blue BUT with roundness 70 BUT with 0 DEG
 	 	DrawRectanglePro("$", 40, 55, 40, 10, 0, 0, &(Color){ 255, 0, 0, 1 }, &(Color){ 0, 0, 255, 1 }, 0, 70);
