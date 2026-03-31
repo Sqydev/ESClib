@@ -1,4 +1,6 @@
-// TODO: Make DrawRec work with emois
+// TODO: Make rotating rec be more non shape chainging. Like squere is still a squere. Like it chainges it's shape or something to make the shape be less shapeless(0: 20x10 90: 10x20) becouse now at 90 DEG it's 2x bigger in y than in x
+
+// TODO: Make roundness in DrawRecPro work
 
 // TODO: Fix Vecrot typeo to Vector
 
