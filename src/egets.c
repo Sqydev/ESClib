@@ -62,6 +62,11 @@ Vector2i* GetTerminalDimensionsPtrInPixels(void) { return &DATA.TuiData.termdimm
 Vector2i GetLastTerminalIndex(void) { return DATA.TuiData.lastTermIndex; }
 Vector2i* GetLastTerminalIndexPtr(void) { return &DATA.TuiData.lastTermIndex; }
 
+Vector2i GetCellSizeProportions(void) { return DATA.TuiData.cellsProp; }
+Vector2i GetCellSizeInPixels(void) { return DATA.TuiData.cellsDimms; }
+Vector2i* GetCellSizeProportionsPtr(void) { return &DATA.TuiData.cellsProp; }
+Vector2i* GetCellSizeInPixelsPtr(void) { return &DATA.TuiData.cellsDimms; }
+
 Vector2i GetTerminalDimensionsForReal(void) {
 #if defined(unix) || defined(__unix) || defined(__unix__)
 
@@ -86,6 +91,30 @@ Vector2i GetTerminalDimensionsInPixelsForReal(void) {
 
 #elif defined(_WIN32) || defined(_WIN64)	
 #endif
+}
+
+Vector2i GetCellSizeProportionsForReal(void) {
+    if(DATA.TuiData.cellsDimms.x == 0 || DATA.TuiData.cellsDimms.y == 0) {
+    	return (Vector2i){ 0, 0 };
+	}
+
+    int a = DATA.TuiData.cellsDimms.x;
+	int b = DATA.TuiData.cellsDimms.y;
+    while(b != 0) {
+    	int t = b;
+    	b = a % b;
+    	a = t;
+	}
+
+	return (Vector2i){ DATA.TuiData.cellsDimms.x / a, DATA.TuiData.cellsDimms.y / a };
+}
+
+Vector2i GetCellSizeInPixelsForReal(void) {
+	if(DATA.TuiData.cellsDimms.x == 0) {
+		return (Vector2i){ 0, 0 };
+	}
+
+	return (Vector2i){ DATA.TuiData.termdimmInPixels.x / DATA.TuiData.termdimm.x, DATA.TuiData.termdimmInPixels.y / DATA.TuiData.termdimm.y };
 }
 
 size_t GetBackbuffSize(void) {

@@ -68,6 +68,9 @@ typedef struct {
 		Vector2i lastTermIndex;
 		Vector2i termdimm;
 		Vector2i termdimmInPixels;
+
+		Vector2i cellsDimms;
+		Vector2i cellsProp;
 		
 		bool initiated; // TUI MUST DIE
 		
