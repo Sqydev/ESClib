@@ -28,7 +28,7 @@ void DrawRecTester() {
 		DrawRectangleEx("🔥", 70, 5, 12, 4, NULL, NULL);
 
 		// NOTE: Rec with 45 DEG rotation that is made of 🔥 roundness 50
-	 	DrawRectanglePro("🔥", 100, 20, 20, 10, 0, 0, NULL, NULL, 45 * DEG2RAD, 50);
+	 	DrawRectanglePro("🔥", 100, 20, 20, 10, 10, 5, NULL, NULL, 45 * DEG2RAD, 50);
 
 		EndDrawing();
 	}
