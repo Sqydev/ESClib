@@ -71,32 +71,14 @@ void DrawRectangleProV(char* character, Vector2i pos, Vector2i dimms, Vector2i o
 
 // NOTE: DO NOT FLOPING REMOVE Color*. Think about the people that want to make the graphicks with @ that have transparent backgrounds
 void DrawRectanglePro(char* character, int posX, int posY, int width, int height, int originX, int originY, Color* fg, Color* bg, double rotation, float roundness) {
-    Vector2i lastIndex = GetLastTuiIndex();
-
 	// NOTE: Advanced technification. Short if statment
+	// aspectRatio is used to convert the like width from cells format to pixels format by doing(something * aspectRatio) and recovering by(something / aspectRatio)
     double aspectRatio = (GetCellProportions().x > 0 && GetCellProportions().y > 0) ? (double)GetCellProportions().x / (double)GetCellProportions().y : 0.5;
 
-    double cosA;
-    double sinA;
+	double cosA = ECos(rotation);
+	double sinA = ESin(rotation);
 
-	// NOTE: Check if angle is multiplicity of PI / 2. Accounding for float errors
-	float q = rotation / (PI / 2.0f);
-	int qi = (int)roundf(q);
-	if(fabsf(q - qi) < 0.001f) {
-		int dir_idx = (qi % 4 + 4) % 4;
-		switch(dir_idx) {
-			case 0: { cosA = 1.0; sinA = 0.0; break; }
-			case 1: { cosA = 0.0; sinA = 1.0; break; }
-			case 2: { cosA = -1.0; sinA = 0.0; break; }
-			case 3: { cosA = 0.0; sinA = -1.0; break; }
-		}
-	}
-	else {
-		cosA = cos(rotation);
-		sinA = sin(rotation);
-	}
-
-	// NOTE: X in pixels(px - pixelX)
+	// NOTE: Just width in pixels
     double pw = width * aspectRatio;
 	// NOTE: sqrt(pw * pw + height * height) is like przekątna cuz I can't do english and we devide it by aspectRatio + 1(it somehow chainges it back into collumns(X) and + 1 is cuz why not
     double maxRadius = sqrt(pw * pw + height * height) / aspectRatio + 1;
@@ -109,8 +91,8 @@ void DrawRectanglePro(char* character, int posX, int posY, int width, int height
 
     if(startX < 0) { startX = 0; }
     if(startY < 0) { startY = 0; }
-    if(endX >= lastIndex.x) { endX = lastIndex.x - 1; }
-    if(endY >= lastIndex.y) { endY = lastIndex.y - 1; }
+    if(endX >= GetLastTuiIndex().x) { endX = GetLastTuiIndex().x - 1; }
+    if(endY >= GetLastTuiIndex().y) { endY = GetLastTuiIndex().y - 1; }
 
 	double rpx = (double)GetCellSizeInPixels().x * width;
     double rpy = (double)GetCellSizeInPixels().y * height;

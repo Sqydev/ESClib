@@ -173,38 +173,11 @@ void DrawTextPro(const char* text, int x, int y, int originX, int originY, Color
 
 	float cos = 0.0f;
 	float sin = 0.0f;
-	Vecrot2 dir = {0};
+	Vector2d dir = {0};
 
-	// NOTE: Check if angle is multiplicity of PI / 2. Accounding for float errors
-	float q = angle / (PI / 2.0f);
-	int qi = (int)roundf(q);
-	if(fabsf(q - qi) < 0.001f) {
-		// NOTE: Somehow get dir
-		int dir_idx = (qi % 4 + 4) % 4;
-
-		switch(dir_idx) {
-			case 0: { cos = 1.0f; sin = 0.0f; break; }
-			case 1: { cos = 0.0f; sin = 1.0f; break; }
-			case 2: { cos = -1.0f; sin = 0.0f; break; }
-			case 3: { cos = 0.0f; sin = -1.0f; break; }
-		}
-
-		dir.x = cos;
-		dir.y = sin;
-	}
-	else {
-		cos = cosf(angle);
-		sin = sinf(angle);
-
-		dir.x = cos;
-		dir.y = sin;
-
-		float maxDir = fmaxf(fabsf(dir.x), fabsf(dir.y));
-		if (maxDir > 0.0f) {
-			dir.x /= maxDir;
-			dir.y /= maxDir;
-		}
-	}
+	dir = EDir(angle);
+	cos = dir.x;
+	sin = dir.y;
 
 	// NOTE: Calc startpos with origin!
 	float curX = x - (originX * cos) + (originY * sin);

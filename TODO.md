@@ -1,5 +1,3 @@
-// TODO: Fix 🔥 rec with rotation beying just retarded. just look at it in DrawRecTester() IT'S FLOPING DESCE OR SMF
-
 // TODO: Fix Vecrot typeo to Vector
 
 // Make makefile make different obj files for tester and shit
@@ -11,3 +9,5 @@
 // TODO: Make optional shaders support
 
 // TODO: Fix makefile
+
+// TODO: Fix DrawRec(for sure with 🔥 but it could also be with normal chars) Beying wierd with 0, 0 origin

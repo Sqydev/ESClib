@@ -244,6 +244,15 @@ RLAPI double GetTime(void);
 
 // EUTILS
 
+// Get sin() FAST. It checks for common angles and if it's f.e PI than it will return 0 without accualy calculating sin(). Will return -2 if error
+RLAPI double ESin(double angle);
+// Get cos() FAST. It checks for common angles and if it's f.e PI than it will return 1 without accualy calculating cos(). Will return -2 if error
+RLAPI double ECos(double angle);
+// Get tan() FAST. It checks for common angles and if it's f.e PI than it will return 0 without accualy calculating tan(). Will return -2 if error
+RLAPI double ETan(double angle);
+// Calculate dir vetor. Nice utility to have. Will return -2, -2 if error
+RLAPI Vector2d EDir(double angle);
+
 RLAPI void ESleep(unsigned long sec, unsigned long ms, unsigned long ns);
 RLAPI int GetCharWidth(const char* character);
 
