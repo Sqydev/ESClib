@@ -35,6 +35,8 @@
 
 #include "./private/coredata.h"
 
+#include <math.h>
+
 #if defined(unix) || defined(__unix) || defined(__unix__)
 	#include <time.h>
 	#include <wchar.h>
@@ -47,6 +49,112 @@
 
 #include <errno.h>
 #include <stdlib.h>
+
+double ESin(double angle) {
+	float q = angle / (PI / 2.0f);
+	int qi = (int)roundf(q);
+
+	if(fabsf(q - qi) < 0.001f) {
+		int dir_idx = (qi % 4 + 4) % 4;
+		switch(dir_idx) {
+			case 0: {
+				return 0.0;
+			}
+			case 1: {
+				return 1.0;
+			}
+			case 2: {
+				return 0.0;
+			}
+			case 3: {
+				return -1.0; 
+			}
+		}
+	}
+	else {
+		return sin(angle);
+	}
+	return -2;
+}
+
+double ECos(double angle) {
+	float q = angle / (PI / 2.0f);
+	int qi = (int)roundf(q);
+
+	if(fabsf(q - qi) < 0.001f) {
+		int dir_idx = (qi % 4 + 4) % 4;
+		switch(dir_idx) {
+			case 0: {
+				return 1.0;
+			}
+			case 1: {
+				return 0.0;
+			}
+			case 2: {
+				 return -1.0;
+			}
+			case 3: { 
+				return 0.0;
+			}
+		}
+	}
+	else {
+		return cos(angle);
+	}
+
+	return -2;
+}
+
+double ETan(double angle) {
+	float q = angle / (PI / 2.0f);
+	int qi = (int)roundf(q);
+
+	if(fabsf(q - qi) < 0.001f) {
+		int dir_idx = (qi % 4 + 4) % 4;
+		switch(dir_idx) {
+			case 0: {
+				return 0.0;
+			}
+			case 2: {
+				 return -1.0;
+			}
+		}
+	}
+	else {
+		return tan(angle);
+	}
+
+	return -2;
+}
+
+Vector2d EDir(double angle) {
+	// NOTE: Check if angle is multiplicity of PI / 2. Accounding for float errors
+	float q = angle / (PI / 2.0f);
+	int qi = (int)roundf(q);
+
+	if(fabsf(q - qi) < 0.001f) {
+		int dir_idx = (qi % 4 + 4) % 4;
+		switch(dir_idx) {
+			case 0: { 
+				return (Vector2d){ 1.0, 0.0 };
+			}
+			case 1: {
+				return (Vector2d){ 0.0, 1.0};
+			}
+			case 2: {
+				return (Vector2d){ -1.0, 0.0 };
+			}
+			case 3: {
+				return (Vector2d){ 0.0, -1.0 };
+			}
+		}
+	}
+	else {
+		return (Vector2d){ cos(angle), sin(angle) };
+	}
+
+	return (Vector2d){ -2, -2 };
+}
 
 void ESleep(unsigned long sec, unsigned long ms, unsigned long ns) {
 	struct timespec required, remaining;
