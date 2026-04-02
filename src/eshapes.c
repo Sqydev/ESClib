@@ -37,7 +37,7 @@
 
 #include <math.h>
 
-void DrawRectangleRec(Rectanglei rec, Color color) {
+void DrawRectangleRec(Rectangle rec, Color color) {
 	DrawRectangleV((Vector2i){ rec.x, rec.y }, (Vector2i){ rec.width, rec.height }, color);
 }
 
@@ -49,7 +49,7 @@ void DrawRectangle(int x, int y, int width, int height, Color color) {
 	DrawRectangleEx(" ", x, y, width, height, &color, &color);
 }
 
-void DrawRectangleExRec(char* character, Rectanglei rec, Color* fg, Color* bg) {
+void DrawRectangleExRec(char* character, Rectangle rec, Color* fg, Color* bg) {
 	DrawRectangleExV(character, (Vector2i){ rec.x, rec.y }, (Vector2i){ rec.width, rec.height }, fg, bg);
 }
 
@@ -61,7 +61,7 @@ void DrawRectangleEx(char* character, int x, int y, int width, int height, Color
 	DrawRectanglePro(character, x, y, width, height, 0, 0, fg, bg, 0, 0);
 }
 
-void DrawRectangleProRec(char* character, Rectanglei rec, Vector2i origin, Color* fg, Color* bg, double rotation, float roundness) {
+void DrawRectangleProRec(char* character, Rectangle rec, Vector2i origin, Color* fg, Color* bg, double rotation, float roundness) {
 	DrawRectangleProV(character, (Vector2i){ rec.x, rec.y }, origin, (Vector2i){ rec.width, rec.height }, fg, bg, rotation, roundness);
 }
 
@@ -150,9 +150,101 @@ void DrawRectanglePro(char* character, int posX, int posY, int width, int height
     }
 }
 
-/*
- * To make.
-    void DrawRectangleGradientV(int posX, int posY, int width, int height, Color top, Color bottom);   // Draw a vertical-gradient-filled rectangle
-    void DrawRectangleGradientH(int posX, int posY, int width, int height, Color left, Color right);   // Draw a horizontal-gradient-filled rectangle
-    void DrawRectangleLines(int posX, int posY, int width, int height, Color color);                   // Draw rectangle outline
-*/
+void DrawCircleCir(Circle circle, Color color) {
+	DrawCircleV((Vector2i){ circle.centerX, circle.centerY }, circle.radius, color);
+}
+
+void DrawCircleV(Vector2i centerPos, int radius, Color color) {
+	DrawCircle(centerPos.x, centerPos.y, radius, color);
+}
+
+void DrawCircle(int centerX, int centerY, int radius, Color color) {
+	DrawCircleEx(" ", centerX, centerY, radius, &color, &color, false);
+}
+
+void DrawCircleExCir(char* character, Circle circle, Color* fg, Color* bg, bool lines) {
+	DrawCircleExV(character, (Vector2i){ circle.centerX, circle.centerY }, circle.radius, fg, bg, lines);
+}
+
+void DrawCircleExV(char* character, Vector2i centerPos, int radius, Color* fg, Color* bg, bool lines) {
+	DrawCircleEx(character, centerPos.x, centerPos.y, radius, fg, bg, lines);
+}
+
+void DrawCircleEx(char* character, int centerX, int centerY, int radius, Color* fg, Color* bg, bool lines) {
+	DrawCirclePro(character, centerX, centerY, radius, 0, 2 * PI, fg, bg, lines);
+}
+
+void DrawCircleProCir(char* character, Circle circle, Vector2d angleSpectrum, Color* fg, Color* bg, bool lines) {
+	DrawCircleProV(character, (Vector2i){ circle.centerX, circle.centerY }, circle.radius, angleSpectrum, fg, bg, lines);
+}
+
+void DrawCircleProV(char* character, Vector2i centerPos, int radius, Vector2d angleSpectrum, Color* fg, Color* bg, bool lines) {
+	DrawCirclePro(character, centerPos.x, centerPos.y, radius, angleSpectrum.x, angleSpectrum.y, fg, bg, lines);
+}
+
+void DrawCirclePro(char* character, int centerX, int centerY, int radius, double startAngle, double endAngle, Color* fg, Color* bg, bool lines) {
+    double aspectRatio = (GetCellProportions().x > 0 && GetCellProportions().y > 0) ? (double)GetCellProportions().x / (double)GetCellProportions().y : 0.5;
+
+	double thickness = 0.5 + (1.0 / aspectRatio);
+
+	int radiusCellsX = (int)(radius / aspectRatio) + 1;
+	int radiusCellsY = radius + 1;
+
+	int startX = centerX - radiusCellsX;
+	int startY = centerY - radiusCellsY;
+	int endX = centerX + radiusCellsX;
+	int endY = centerY + radiusCellsY;
+
+	if(startX < 0) { startX = 0; }
+    if(startY < 0) { startY = 0; }
+    if(endX >= GetLastTuiIndex().x) { endX = GetLastTuiIndex().x - 1; }
+    if(endY >= GetLastTuiIndex().y) { endY = GetLastTuiIndex().y - 1; }
+
+	int vWidth = GetCharWidth(character);
+
+	for(int y = startY; y <= endY; y++) {
+		for(int x = startX; x <= endX; x++) {
+			// NOTE: Magic things from DrawRectangle that scale the chars
+			if((x - centerX) % vWidth != 0) { continue; }
+
+			// NOTE: Get pixel things
+			double dx = (x + vWidth / 2.0 - centerX) * aspectRatio;
+			double dy = (y + 0.5 - centerY);
+
+			double distance = (dx * dx) + (dy * dy);
+
+			// NOTE: Use desmos technification to check if it's INSIDE THE CIRCLE
+			if(!lines) {
+				if(distance > radius * radius) { continue; }
+			}
+			else {
+				if(fabs(distance - radius * radius) > thickness) { continue; }
+			}
+
+			// NOTE: It magicly get's the Vector's angle in rads
+			double angle = atan2(dy, dx);
+
+			if(angle < 0) { angle += 2 * PI; }
+
+			// NOTE: Fix the user
+			double s = startAngle;
+			double e = endAngle;
+			if(s < 0) { s += 2 * PI; }
+			if(e < 0) { e += 2 * PI; }
+
+			// NOTE: Fixing user p2. If s == 300 * DEG2RAD e == 30 * DEG2RAD than just do math that works for that case
+			bool inArc;
+			if(s < e) {
+				inArc = (angle >= s && angle <= e);
+			}
+			else {
+				inArc = (angle >= s || angle <= e);
+			}
+
+			// NOTE: If the point doesn't belong here than FUCKING ANIHILATE IT
+			if(!inArc) { continue; }
+
+			DrawCharEx(character, x, y, fg, bg);
+		}
+	}
+}

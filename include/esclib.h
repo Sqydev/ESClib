@@ -100,7 +100,7 @@ typedef struct {
 typedef struct {
 	float x;
 	float y;
-} Vecrot2;
+} Vector2;
 
 typedef struct {
 	int x;
@@ -118,18 +118,18 @@ typedef struct {
 } Vector2l;
 
 typedef struct {
-	float x;
-	float y;
-	float width;
-	float height;
-} Rectangle;
-
-typedef struct {
 	int x;
 	int y;
 	int width;
 	int height;
-} Rectanglei;
+} Rectangle;
+
+typedef struct {
+	float x;
+	float y;
+	float width;
+	float height;
+} Rectanglef;
 
 typedef struct {
 	double x;
@@ -144,6 +144,30 @@ typedef struct {
 	long width;
 	long height;
 } Rectanglel;
+
+typedef struct {
+	int centerX;
+	int centerY;
+	int radius;
+} Circle;
+
+typedef struct {
+	float centerX;
+	float centerY;
+	float radius;
+} Circlef;
+
+typedef struct {
+	double centerX;
+	double centerY;
+	double radius;
+} Circled;
+
+typedef struct {
+	long centerX;
+	long centerY;
+	long radius;
+} Circlel;
 
 typedef enum {
 	TUI_STATIC,
@@ -279,15 +303,35 @@ RLAPI void DrawTextfPro(const char* text, int x, int y, int originX, int originY
 
 // ESHAPES
 
-RLAPI void DrawRectangleRec(Rectanglei rec, Color color);
+RLAPI void DrawRectangleRec(Rectangle rec, Color color);
 RLAPI void DrawRectangleV(Vector2i pos, Vector2i dimms, Color color);
 RLAPI void DrawRectangle(int x, int y, int width, int height, Color color);
-RLAPI void DrawRectangleExRec(char* character, Rectanglei rec, Color* fg, Color* bg);
+RLAPI void DrawRectangleExRec(char* character, Rectangle rec, Color* fg, Color* bg);
 RLAPI void DrawRectangleExV(char* character, Vector2i pos, Vector2i dimms, Color* fg, Color* bg);
 RLAPI void DrawRectangleEx(char* character, int x, int y, int width, int height, Color* fg, Color* bg);
-RLAPI void DrawRectangleProRec(char* character, Rectanglei rec, Vector2i origin, Color* fg, Color* bg, double rotation, float roundness);
+RLAPI void DrawRectangleProRec(char* character, Rectangle rec, Vector2i origin, Color* fg, Color* bg, double rotation, float roundness);
 RLAPI void DrawRectangleProV(char* character, Vector2i pos, Vector2i dimms, Vector2i origin, Color* fg, Color* bg, double rotation, float roundness);
 RLAPI void DrawRectanglePro(char* character, int x, int y, int width, int height, int originX, int originY, Color* fg, Color* bg, double rotation, float roundness);
+
+RLAPI void DrawCircleCir(Circle circle, Color color);
+RLAPI void DrawCircleV(Vector2i centerPos, int radius, Color color);
+RLAPI void DrawCircle(int centerX, int centerY, int radius, Color color);
+RLAPI void DrawCircleExCir(char* character, Circle circle, Color* fg, Color* bg, bool lines);
+RLAPI void DrawCircleExV(char* character, Vector2i centerPos, int radius, Color* fg, Color* bg, bool lines);
+RLAPI void DrawCircleEx(char* character, int centerX, int centerY, int radius, Color* fg, Color* bg, bool lines);
+RLAPI void DrawCircleProCir(char* character, Circle circle, Vector2d angleSpectrum, Color* fg, Color* bg, bool lines);
+RLAPI void DrawCircleProV(char* character, Vector2i centerPos, int radius, Vector2d angleSpectrum, Color* fg, Color* bg, bool lines);
+RLAPI void DrawCirclePro(char* character, int centerX, int centerY, int radius, double startAngle, double endAngle, Color* fg, Color* bg, bool lines);
+
+/*
+ * To make.
+    void DrawRectangleGradientV(int posX, int posY, int width, int height, Color top, Color bottom);
+    void DrawRectangleGradientH(int posX, int posY, int width, int height, Color left, Color right);
+    void DrawRectangleLines(int posX, int posY, int width, int height, Color color);
+
+	void DrawCircleLines(int centerX, int centerY, float radius, Color color); 
+	void DrawCircleGradient(int centerX, int centerY, float radius, Color inner, Color outer);
+*/
 
 #ifdef __cplusplus
 }

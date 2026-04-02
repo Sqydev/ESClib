@@ -40,6 +40,8 @@ const TesterEntry testers[] = {
 	{"FUCT", FuckedUpColorsTest, "FuckedUpColorsTest"},
 
 	{"FRR", FunnyRottatingRec, "FunnyRottatingRec"},
+
+	{"DCT", DrawCircleTester, "DrawCircleTester"},
 };
 
 void PrintUsage(const char* prog) {
