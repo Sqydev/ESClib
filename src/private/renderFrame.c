@@ -104,7 +104,7 @@ void RenderFrame(void) {
 					memcpy(DATA.Buffers.charbuffer + DATA.Buffers.charbufferOffset, back->Char, (size_t)back->CharLen);
 					DATA.Buffers.charbufferOffset += back->CharLen;
 
-					cursorX += displayWidth;
+					cursorX = x + displayWidth;
 					cursorY = y;
 				}
 				else {
