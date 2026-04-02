@@ -1,4 +1,4 @@
-// TODO: Fix Vecrot typeo to Vector
+// TODO: Make lines in DrawCircle work
 
 // Make makefile make different obj files for tester and shit
 
@@ -11,3 +11,5 @@
 // TODO: Fix makefile
 
 // TODO: Fix DrawRec(for sure with 🔥 but it could also be with normal chars) Beying wierd with 0, 0 origin
+
+// TODO: Revrite DrawRecPro and make it understandable

@@ -116,7 +116,7 @@ static void init_states(void) {
 typedef struct {
 	float  curX;
 	float  curY;
-	Vecrot2 dir;
+	Vector2 dir;
 	Color* local_fg;
 	Color* local_bg;
 	int	spacing;
