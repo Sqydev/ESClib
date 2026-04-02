@@ -70,6 +70,8 @@ void DrawRectangleProV(char* character, Vector2i pos, Vector2i dimms, Vector2i o
 }
 
 // NOTE: DO NOT FLOPING REMOVE Color*. Think about the people that want to make the graphicks with @ that have transparent backgrounds
+// NOTE: Sorry for the sloppy commnets
+// NOTE: I don't know what it does anymore:(((((((
 void DrawRectanglePro(char* character, int posX, int posY, int width, int height, int originX, int originY, Color* fg, Color* bg, double rotation, float roundness) {
 	// NOTE: Advanced technification. Short if statment
 	// aspectRatio is used to convert the like width from cells format to pixels format by doing(something * aspectRatio) and recovering by(something / aspectRatio)
@@ -80,10 +82,9 @@ void DrawRectanglePro(char* character, int posX, int posY, int width, int height
 
 	// NOTE: Just width in pixels
     double pw = width * aspectRatio;
-	// NOTE: sqrt(pw * pw + height * height) is like przekątna cuz I can't do english and we devide it by aspectRatio + 1(it somehow chainges it back into collumns(X) and + 1 is cuz why not
+	// NOTE: So. sqrt(pw^2 + height^2) is calculating przekątna in pixels and / aspectRatio + 1 is just convert it from pixels to cells
     double maxRadius = sqrt(pw * pw + height * height) / aspectRatio + 1;
 
-	// NOTE: I don't remamber
     int startX = posX - (int)maxRadius;
     int endX = posX + (int)maxRadius;
     int startY = posY - (int)maxRadius;
@@ -106,8 +107,9 @@ void DrawRectanglePro(char* character, int posX, int posY, int width, int height
 
     for(int y = startY; y <= endY; y++) {
         for(int x = startX; x <= endX; x++) {
-			// NOTE: collumns -> pixels
-			// IT'S TAKEING THIS FROM THE CENTER OF CELL AND NOT THE LEFT UP CORNER REMAMBERRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRR
+			// NOTE: Don't ask me about that. Idk what it does
+			if((x - posX) % vWidth != 0) { continue; }
+
             double dx = (x + (vWidth / 2.0) - posX) * aspectRatio;
             double dy = (y + 0.5 - posY);
 
@@ -144,7 +146,6 @@ void DrawRectanglePro(char* character, int posX, int posY, int width, int height
 			}
             
 			DrawCharEx(character, x, y, fg, bg);
-			x += (vWidth - 1);
         }
     }
 }

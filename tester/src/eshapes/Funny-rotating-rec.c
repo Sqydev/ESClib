@@ -1,7 +1,8 @@
 #include "../../../include/esclib.h"
+#include <stdio.h>
 
 void FunnyRottatingRec() {
-	InitTui(5, TUI_DYNAMIC);
+	InitTui(165, TUI_DYNAMIC);
 
 	float rot = 0;
 	while(1) {
@@ -16,7 +17,7 @@ void FunnyRottatingRec() {
 
 		EndDrawing();
 
-		rot += 5 * DEG2RAD;
+		rot += 1 * DEG2RAD;
 	}
 
 	CloseTui();
