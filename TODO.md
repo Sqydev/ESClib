@@ -15,3 +15,5 @@
 // TODO: Fix DrawRec(for sure with 🔥 but it could also be with normal chars) Beying wierd with 0, 0 origin
 
 // TODO: Revrite DrawRecPro and make it understandable
+
+// TODO: Add alpha channel to the colors
