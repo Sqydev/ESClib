@@ -3,7 +3,7 @@
 void DrawCircleTester() {
 	InitTui(60, TUI_DYNAMIC);
 
-	float rot = 0;
+	float rot = PI / 2;
 	while(1) {
 		BeginDrawing();
 		ClearTui((Color){ 0,0,0,0 }, (Color){ 255,255,255,1 });
@@ -24,7 +24,7 @@ void DrawCircleTester() {
 		
 		EndDrawing();
 		
-		rot += 1 * DEG2RAD;
+		//rot += 1 * DEG2RAD;
 	}
 
 	CloseTui();

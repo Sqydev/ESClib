@@ -185,8 +185,6 @@ void DrawCircleProV(char* character, Vector2i centerPos, int radius, Vector2d an
 void DrawCirclePro(char* character, int centerX, int centerY, int radius, double startAngle, double endAngle, Color* fg, Color* bg, bool lines) {
     double aspectRatio = (GetCellProportions().x > 0 && GetCellProportions().y > 0) ? (double)GetCellProportions().x / (double)GetCellProportions().y : 0.5;
 
-	double thickness = 0.5 + (1.0 / aspectRatio);
-
 	int radiusCellsX = (int)(radius / aspectRatio) + 1;
 	int radiusCellsY = radius + 1;
 
@@ -201,6 +199,8 @@ void DrawCirclePro(char* character, int centerX, int centerY, int radius, double
     if(endY >= GetLastTuiIndex().y) { endY = GetLastTuiIndex().y - 1; }
 
 	int vWidth = GetCharWidth(character);
+
+	double thickness = radius;
 
 	for(int y = startY; y <= endY; y++) {
 		for(int x = startX; x <= endX; x++) {
