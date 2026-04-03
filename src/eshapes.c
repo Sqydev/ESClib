@@ -200,7 +200,7 @@ void DrawCirclePro(char* character, int centerX, int centerY, int radius, double
 
 	int vWidth = GetCharWidth(character);
 
-	double thickness = radius;
+	double thickness = radius * aspectRatio + (vWidth);
 
 	for(int y = startY; y <= endY; y++) {
 		for(int x = startX; x <= endX; x++) {
