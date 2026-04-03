@@ -174,6 +174,15 @@ typedef enum {
 	TUI_DYNAMIC
 } TuiType;
 
+#define TERMWHITE (Color){ 255, 0, 0, 0 }
+#define TERMBLACK (Color){ 232, 0, 0, 0 }
+
+#define WHITE (Color){ 255, 0, 0, 0 }
+#define BLACK (Color){ 232, 0, 0, 0 }
+
+#define TRUEWHITE (Color){ 255, 255, 255, 1 }
+#define TRUEBLACK (Color){ 0, 0, 0, 1 }
+
 // ECORE
 
 RLAPI void InitTui(int targetFps, TuiType type);
