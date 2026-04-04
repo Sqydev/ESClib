@@ -1,3 +1,5 @@
+// TODO: Make DrawRecPro lines
+
 // TODO: Make lines in DrawCircle work
 
 // TODO: Make aspect ratio correction optional by adding argument to each draw fn: bool aCorrection or bool aspectCorrettion or something like that. And add lines argument to DrawRecPro
@@ -17,3 +19,5 @@
 // TODO: Revrite DrawRecPro and make it understandable
 
 // TODO: Add alpha channel to the colors
+
+// TODO: Make not aspectRatiofied Draws have completly different and faster logic

@@ -46,36 +46,41 @@ void DrawRectangleV(Vector2i pos, Vector2i dimms, Color color) {
 }
 
 void DrawRectangle(int x, int y, int width, int height, Color color) {
-	DrawRectangleEx(" ", x, y, width, height, &color, &color);
+	DrawRectangleEx(" ", x, y, width, height, &color, &color, false);
 }
 
-void DrawRectangleExRec(char* character, Rectangle rec, Color* fg, Color* bg) {
-	DrawRectangleExV(character, (Vector2i){ rec.x, rec.y }, (Vector2i){ rec.width, rec.height }, fg, bg);
+void DrawRectangleExRec(char* character, Rectangle rec, Color* fg, Color* bg, bool lines) {
+	DrawRectangleExV(character, (Vector2i){ rec.x, rec.y }, (Vector2i){ rec.width, rec.height }, fg, bg, lines);
 }
 
-void DrawRectangleExV(char* character, Vector2i pos, Vector2i dimms, Color* fg, Color* bg) {
-	DrawRectangleEx(character, pos.x, pos.y, dimms.x, dimms.y, fg, bg);
+void DrawRectangleExV(char* character, Vector2i pos, Vector2i dimms, Color* fg, Color* bg, bool lines) {
+	DrawRectangleEx(character, pos.x, pos.y, dimms.x, dimms.y, fg, bg, lines);
 }
 
-void DrawRectangleEx(char* character, int x, int y, int width, int height, Color* fg, Color* bg) {
-	DrawRectanglePro(character, x, y, width, height, 0, 0, fg, bg, 0, 0);
+void DrawRectangleEx(char* character, int x, int y, int width, int height, Color* fg, Color* bg, bool lines) {
+	DrawRectanglePro(character, x, y, width, height, 0, 0, fg, bg, 0, 0, lines, true);
 }
 
-void DrawRectangleProRec(char* character, Rectangle rec, Vector2i origin, Color* fg, Color* bg, double rotation, float roundness) {
-	DrawRectangleProV(character, (Vector2i){ rec.x, rec.y }, origin, (Vector2i){ rec.width, rec.height }, fg, bg, rotation, roundness);
+void DrawRectangleProRec(char* character, Rectangle rec, Vector2i origin, Color* fg, Color* bg, double rotation, float roundness, bool lines, bool aspectRatiofied) {
+	DrawRectangleProV(character, (Vector2i){ rec.x, rec.y }, origin, (Vector2i){ rec.width, rec.height }, fg, bg, rotation, roundness, lines, aspectRatiofied);
 }
 
-void DrawRectangleProV(char* character, Vector2i pos, Vector2i dimms, Vector2i origin, Color* fg, Color* bg, double rotation, float roundness) {
-	DrawRectanglePro(character, pos.x, pos.y, dimms.x, dimms.y, origin.x, origin.y, fg, bg, rotation, roundness);
+void DrawRectangleProV(char* character, Vector2i pos, Vector2i dimms, Vector2i origin, Color* fg, Color* bg, double rotation, float roundness, bool lines, bool aspectRatiofied) {
+	DrawRectanglePro(character, pos.x, pos.y, dimms.x, dimms.y, origin.x, origin.y, fg, bg, rotation, roundness, lines, aspectRatiofied);
 }
 
 // NOTE: DO NOT FLOPING REMOVE Color*. Think about the people that want to make the graphicks with @ that have transparent backgrounds
 // NOTE: Sorry for the sloppy commnets
 // NOTE: I don't know what it does anymore:(((((((
-void DrawRectanglePro(char* character, int posX, int posY, int width, int height, int originX, int originY, Color* fg, Color* bg, double rotation, float roundness) {
-	// NOTE: Advanced technification. Short if statment
-	// aspectRatio is used to convert the like width from cells format to pixels format by doing(something * aspectRatio) and recovering by(something / aspectRatio)
-    double aspectRatio = (GetCellProportions().x > 0 && GetCellProportions().y > 0) ? (double)GetCellProportions().x / (double)GetCellProportions().y : 0.5;
+void DrawRectanglePro(char* character, int posX, int posY, int width, int height, int originX, int originY, Color* fg, Color* bg, double rotation, float roundness, bool lines, bool aspectRatiofied) {
+	(void)lines;
+
+	double aspectRatio;
+    if(aspectRatiofied) {
+		aspectRatio = (GetCellProportions().x > 0 && GetCellProportions().y > 0) ? (double)GetCellProportions().x / (double)GetCellProportions().y : 0.5;
+	} else {
+		aspectRatio = 1.0;
+	}
 
 	double cosA = ECos(rotation);
 	double sinA = ESin(rotation);
@@ -171,19 +176,24 @@ void DrawCircleExV(char* character, Vector2i centerPos, int radius, Color* fg, C
 }
 
 void DrawCircleEx(char* character, int centerX, int centerY, int radius, Color* fg, Color* bg, bool lines) {
-	DrawCirclePro(character, centerX, centerY, radius, 0, 2 * PI, fg, bg, lines);
+	DrawCirclePro(character, centerX, centerY, radius, 0, 2 * PI, fg, bg, lines, true);
 }
 
-void DrawCircleProCir(char* character, Circle circle, Vector2d angleSpectrum, Color* fg, Color* bg, bool lines) {
-	DrawCircleProV(character, (Vector2i){ circle.centerX, circle.centerY }, circle.radius, angleSpectrum, fg, bg, lines);
+void DrawCircleProCir(char* character, Circle circle, Vector2d angleSpectrum, Color* fg, Color* bg, bool lines, bool aspectRatiofied) {
+	DrawCircleProV(character, (Vector2i){ circle.centerX, circle.centerY }, circle.radius, angleSpectrum, fg, bg, lines, aspectRatiofied);
 }
 
-void DrawCircleProV(char* character, Vector2i centerPos, int radius, Vector2d angleSpectrum, Color* fg, Color* bg, bool lines) {
-	DrawCirclePro(character, centerPos.x, centerPos.y, radius, angleSpectrum.x, angleSpectrum.y, fg, bg, lines);
+void DrawCircleProV(char* character, Vector2i centerPos, int radius, Vector2d angleSpectrum, Color* fg, Color* bg, bool lines, bool aspectRatiofied) {
+	DrawCirclePro(character, centerPos.x, centerPos.y, radius, angleSpectrum.x, angleSpectrum.y, fg, bg, lines, aspectRatiofied);
 }
 
-void DrawCirclePro(char* character, int centerX, int centerY, int radius, double startAngle, double endAngle, Color* fg, Color* bg, bool lines) {
-    double aspectRatio = (GetCellProportions().x > 0 && GetCellProportions().y > 0) ? (double)GetCellProportions().x / (double)GetCellProportions().y : 0.5;
+void DrawCirclePro(char* character, int centerX, int centerY, int radius, double startAngle, double endAngle, Color* fg, Color* bg, bool lines, bool aspectRatiofied) {
+	double aspectRatio;
+    if(aspectRatiofied) {
+		aspectRatio = (GetCellProportions().x > 0 && GetCellProportions().y > 0) ? (double)GetCellProportions().x / (double)GetCellProportions().y : 0.5;
+	} else {
+		aspectRatio = 1.0;
+	}
 
 	int radiusCellsX = (int)(radius / aspectRatio) + 1;
 	int radiusCellsY = radius + 1;
