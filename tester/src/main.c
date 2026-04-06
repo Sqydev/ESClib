@@ -42,6 +42,8 @@ const TesterEntry testers[] = {
 	{"FRR", FunnyRottatingRec, "FunnyRottatingRec"},
 
 	{"DCT", DrawCircleTester, "DrawCircleTester"},
+
+	{"DLT", DrawLineTester, "DrawLineTester"},
 };
 
 void PrintUsage(const char* prog) {

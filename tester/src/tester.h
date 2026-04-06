@@ -36,3 +36,5 @@ void FuckedUpColorsTest();
 void FunnyRottatingRec();
 
 void DrawCircleTester();
+
+void DrawLineTester();

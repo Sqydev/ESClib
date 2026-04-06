@@ -315,6 +315,13 @@ RLAPI void DrawTextfPro(const char* text, int x, int y, int originX, int originY
 
 // ESHAPES
 
+RLAPI void DrawLineV(Vector2i pointA, Vector2i pointB, Color color, int thickness);
+RLAPI void DrawLine(int pointAX, int pointAY, int pointBX, int pointBY, Color color, int thickness);
+RLAPI void DrawLineExV(char* character, Vector2i pointA, Vector2i pointB, Color* fg, Color* bg, int thickness);
+RLAPI void DrawLineEx(char* character, int pointAX, int pointAY, int pointBX, int pointBY, Color* fg, Color* bg, int thickness);
+RLAPI void DrawLineProV(char* character, Vector2i pointA, Vector2i pointB, Color* fg, Color* bg, int thickness, bool aspectRatiofied);
+RLAPI void DrawLinePro(char* character, int pointAX, int pointAY, int pointBX, int pointBY, Color* fg, Color* bg, int thickness, bool aspectRatiofied);
+
 RLAPI void DrawRectangleRec(Rectangle rec, Color color);
 RLAPI void DrawRectangleV(Vector2i pos, Vector2i dimms, Color color);
 RLAPI void DrawRectangle(int x, int y, int width, int height, Color color);
@@ -343,6 +350,8 @@ RLAPI void DrawCirclePro(char* character, int centerX, int centerY, int radius, 
 
 	void DrawCircleLines(int centerX, int centerY, float radius, Color color); 
 	void DrawCircleGradient(int centerX, int centerY, float radius, Color inner, Color outer);
+	
+	void DrawLineGradient(int pointAX, int pointAY, int pointBX, int pointBY, Color color, int thickness);
 */
 
 #ifdef __cplusplus
