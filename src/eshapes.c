@@ -37,6 +37,58 @@
 
 #include <math.h>
 
+void DrawLineV(Vector2i pointA, Vector2i pointB, Color color, int thickness) {
+	DrawLine(pointA.x, pointA.y, pointB.x, pointB.y, color, thickness);
+}
+
+void DrawLine(int pointAX, int pointAY, int pointBX, int pointBY, Color color, int thickness) {
+	DrawLineEx(" ", pointAX, pointAY, pointBX, pointBY, &color, &color, thickness);
+}
+
+void DrawLineExV(char* character, Vector2i pointA, Vector2i pointB, Color* fg, Color* bg, int thickness) {
+	DrawLineEx(character, pointA.x, pointA.y, pointB.x, pointB.y, fg, bg, thickness);
+}
+
+void DrawLineEx(char* character, int pointAX, int pointAY, int pointBX, int pointBY, Color* fg, Color* bg, int thickness) {
+	DrawLinePro(character, pointAX, pointAY, pointBX, pointBY, fg, bg, thickness, true);
+}
+
+void DrawLineProV(char* character, Vector2i pointA, Vector2i pointB, Color* fg, Color* bg, int thickness, bool aspectRatiofied) {
+	DrawLinePro(character, pointA.x, pointA.y, pointB.x, pointB.y, fg, bg, thickness, aspectRatiofied);
+
+}
+
+void DrawLinePro(char* character, int pointAX, int pointAY, int pointBX, int pointBY, Color* fg, Color* bg, int thickness, bool aspectRatiofied) {
+	double aspectRatio;
+    if(aspectRatiofied) {
+		aspectRatio = (GetCellProportions().x > 0 && GetCellProportions().y > 0) ? (double)GetCellProportions().x / (double)GetCellProportions().y : 0.5;
+	} else {
+		aspectRatio = 1.0;
+	}
+
+	Vector2d aDir = EDir(CalculateAngleOfAGoingToB((Vector2){ pointAX, pointAY }, (Vector2){ pointBX, pointBY }));
+
+	Vector2i termPos = (Vector2i){ pointAX, pointAY };
+	Vector2 realPos = (Vector2){ pointAX, pointAY };
+
+	(void)thickness;
+
+	while(termPos.x != pointBX || termPos.y != pointBY) {
+		if(termPos.x > GetLastTuiIndex().x) { return; }
+		if(termPos.y > GetLastTuiIndex().y) { return; }
+		if(termPos.x < 0) { return; }
+		if(termPos.y < 0) { return; }
+
+		DrawCharEx(character, termPos.x, termPos.y, fg, bg);
+
+		realPos.x += aDir.x * aspectRatio;
+		realPos.y += aDir.y;
+
+		termPos.x = (int)round(realPos.x);
+		termPos.y = (int)round(realPos.y);
+	}
+}
+
 void DrawRectangleRec(Rectangle rec, Color color) {
 	DrawRectangleV((Vector2i){ rec.x, rec.y }, (Vector2i){ rec.width, rec.height }, color);
 }
