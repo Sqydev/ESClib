@@ -42,13 +42,19 @@
 	#include <wchar.h>
 	#include <locale.h>
 
-	extern int wcwidth (wchar_t __c);
+	extern int wcwidth(wchar_t __c);
 
 #elif defined(_WIN32) || defined(_WIN64)
 #endif
 
 #include <errno.h>
 #include <stdlib.h>
+
+double CalculateAngleOfAGoingToB(Vector2 a, Vector2 b) {
+	Vector2 diff = (Vector2){ b.x - a.x, b.y - a.y };
+
+	return atan2(diff.y, diff.x);
+}
 
 double ESin(double angle) {
 	float q = angle / (PI / 2.0f);
