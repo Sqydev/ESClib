@@ -117,6 +117,30 @@ Vector2i GetCellSizeInPixelsForReal(void) {
 	return (Vector2i){ DATA.TuiData.termdimmInPixels.x / DATA.TuiData.termdimm.x, DATA.TuiData.termdimmInPixels.y / DATA.TuiData.termdimm.y };
 }
 
+double GetCurrentFrameTime(void) {
+	return DATA.Time.current;
+}
+
+double GetPreviousFrameTime(void) {
+	return DATA.Time.previous;
+}
+
+double GetDeltaTime(void) {
+	return GetFrameTime();
+}
+
+double GetFrameTime(void) {
+	return DATA.Time.delta;
+}
+
+int GetTargetFps(void) {
+	return DATA.Time.targetFps;
+}
+
+double GetTargetTime(void) {
+	return DATA.Time.target;
+}
+
 size_t GetBackbuffSize(void) {
 	return GetBackbuffCellCount() * sizeof(SBCell);
 }

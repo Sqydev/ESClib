@@ -174,8 +174,8 @@ typedef enum {
 	TUI_DYNAMIC
 } TuiType;
 
-#define TERMWHITE (Color){ 255, 0, 0, 0 }
-#define TERMBLACK (Color){ 232, 0, 0, 0 }
+#define TERMWHITE (Color){ 0, 0, 0, 0 }
+#define TERMBLACK (Color){ 0, 0, 0, 0 }
 
 #define WHITE (Color){ 255, 0, 0, 0 }
 #define BLACK (Color){ 232, 0, 0, 0 }
@@ -260,6 +260,13 @@ RLAPI Vector2i* GetCellSizeInPixelsPtr(void);
 RLAPI Vector2i GetCellProportionsForReal(void);
 // GetCellSizeInPixels() for reals
 RLAPI Vector2i GetCellSizeInPixelsForReal(void);
+
+RLAPI double GetCurrentFrameTime(void);
+RLAPI double GetPreviousFrameTime(void);
+RLAPI double GetDeltaTime(void);
+RLAPI double GetFrameTime(void);
+RLAPI int GetTargetFps(void);
+RLAPI double GetTargetTime(void);
 
 RLAPI size_t GetBackbuffSize(void);
 RLAPI size_t GetBackbuffCellCount(void);

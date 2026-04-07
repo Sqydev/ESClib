@@ -122,11 +122,6 @@ void CloseTui(void) {
 // memcpy
 void BeginDrawing(void) {
 	SignalsStep();
-
-	memcpy(DATA.Buffers.backbuff, DATA.Buffers.frontbuff, GetBackbuffSize());
-
-	DATA.Buffers.backbuffOffset = 0;
-	DATA.Buffers.frontbuffOffset = 0;
 }
 
 // TODO: Make here better error handling
