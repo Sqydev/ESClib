@@ -50,30 +50,28 @@ void DrawLineExV(char* character, Vector2i pointA, Vector2i pointB, Color* fg, C
 }
 
 void DrawLineEx(char* character, int pointAX, int pointAY, int pointBX, int pointBY, Color* fg, Color* bg, int thickness) {
-	DrawLinePro(character, pointAX, pointAY, pointBX, pointBY, fg, bg, thickness, true);
+	DrawLinePro(character, pointAX, pointAY, pointBX, pointBY, fg, bg, thickness);
 }
 
-void DrawLineProV(char* character, Vector2i pointA, Vector2i pointB, Color* fg, Color* bg, int thickness, bool aspectRatiofied) {
-	DrawLinePro(character, pointA.x, pointA.y, pointB.x, pointB.y, fg, bg, thickness, aspectRatiofied);
+void DrawLineProV(char* character, Vector2i pointA, Vector2i pointB, Color* fg, Color* bg, int thickness) {
+	DrawLinePro(character, pointA.x, pointA.y, pointB.x, pointB.y, fg, bg, thickness);
 
 }
 
-void DrawLinePro(char* character, int pointAX, int pointAY, int pointBX, int pointBY, Color* fg, Color* bg, int thickness, bool aspectRatiofied) {
-	double aspectRatio;
-    if(aspectRatiofied) {
-		aspectRatio = (GetCellProportions().x > 0 && GetCellProportions().y > 0) ? (double)GetCellProportions().x / (double)GetCellProportions().y : 0.5;
-	} else {
-		aspectRatio = 1.0;
-	}
-
+void DrawLinePro(char* character, int pointAX, int pointAY, int pointBX, int pointBY, Color* fg, Color* bg, int thickness) {
 	Vector2d aDir = EDir(CalculateAngleOfAGoingToB((Vector2){ pointAX, pointAY }, (Vector2){ pointBX, pointBY }));
+
+	// NOTE: Magic number that makes it accurate
+	double step = 1.0 / fmax(fabs(aDir.x), fabs(aDir.y));
+
+	Vector2d scaledDir = { aDir.x * step, aDir.y * step };
 
 	Vector2i termPos = (Vector2i){ pointAX, pointAY };
 	Vector2 realPos = (Vector2){ pointAX, pointAY };
 
-	(void)thickness;
+	if(thickness < 1) { return; }
 
-	while(termPos.x != pointBX || termPos.y != pointBY) {
+	while((termPos.x - pointBX) * aDir.x + (termPos.y - pointBY) * aDir.y < 0) {
 		if(termPos.x > GetLastTuiIndex().x) { return; }
 		if(termPos.y > GetLastTuiIndex().y) { return; }
 		if(termPos.x < 0) { return; }
@@ -81,8 +79,13 @@ void DrawLinePro(char* character, int pointAX, int pointAY, int pointBX, int poi
 
 		DrawCharEx(character, termPos.x, termPos.y, fg, bg);
 
-		realPos.x += aDir.x * aspectRatio;
-		realPos.y += aDir.y;
+		for(int i = 1; i < thickness; i++) {
+			DrawCharEx(character, termPos.x + (int)(i * -aDir.y), termPos.y + (int)(i * aDir.x), fg, bg);
+			DrawCharEx(character, termPos.x + (int)(i * aDir.y), termPos.y + (int)(i * -aDir.x), fg, bg);
+		}
+
+		realPos.x += scaledDir.x;
+		realPos.y += scaledDir.y;
 
 		termPos.x = (int)round(realPos.x);
 		termPos.y = (int)round(realPos.y);

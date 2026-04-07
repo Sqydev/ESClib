@@ -7,10 +7,14 @@ void DrawLineTester() {
 		BeginDrawing();
 		ClearTui((Color){ 0,0,0,0 }, (Color){ 255,255,255,1 });
 
-		DrawLinePro("@", GetLastTuiIndex().x / 4, GetLastTuiIndex().y / 4, GetLastTuiIndex().x - GetLastTuiIndex().x / 4, GetLastTuiIndex().y - GetLastTuiIndex().y / 4, NULL, &WHITE, 1, true);
+		DrawLine(GetLastTuiIndex().x - GetLastTuiIndex().x / 6, GetLastTuiIndex().y / 2 - GetLastTuiIndex().y / 6, GetLastTuiIndex().x / 6, GetLastTuiIndex().y / 2 - GetLastTuiIndex().y / 6, WHITE, 1);
 
-		DrawLinePro("@", GetLastTuiIndex().x / 3, GetLastTuiIndex().y / 3, GetLastTuiIndex().x - GetLastTuiIndex().x / 3, GetLastTuiIndex().y - GetLastTuiIndex().y / 3, NULL, &(Color){ 200, 200, 200, 1 }, 3, true);
-		
+		DrawLine(GetLastTuiIndex().x - GetLastTuiIndex().x / 6, GetLastTuiIndex().y - GetLastTuiIndex().y / 6, GetLastTuiIndex().x / 6, GetLastTuiIndex().y - GetLastTuiIndex().y / 6, WHITE, 3);
+
+		DrawLineEx("@", GetLastTuiIndex().x / 7, GetLastTuiIndex().y / 7, GetLastTuiIndex().x - GetLastTuiIndex().x / 7, GetLastTuiIndex().y - GetLastTuiIndex().y / 7, &WHITE, &(Color){ 255, 0, 0, 1 }, 1);
+
+		DrawLineEx("#", GetLastTuiIndex().x - GetLastTuiIndex().x / 7, GetLastTuiIndex().y / 7, GetLastTuiIndex().x / 7, GetLastTuiIndex().y - GetLastTuiIndex().y / 7, &WHITE, &(Color){ 0, 255, 0, 1 }, 3);
+
 		EndDrawing();
 		
 	}
