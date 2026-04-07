@@ -15,8 +15,11 @@ void DrawLineTester() {
 
 		DrawLineEx("#", GetLastTuiIndex().x - GetLastTuiIndex().x / 7, GetLastTuiIndex().y / 7, GetLastTuiIndex().x / 7, GetLastTuiIndex().y - GetLastTuiIndex().y / 7, &WHITE, &(Color){ 0, 255, 0, 1 }, 3);
 
+		DrawLineEx("🔥", GetLastTuiIndex().x / 2, GetLastTuiIndex().y - GetLastTuiIndex().y / 4, GetLastTuiIndex().x / 2, GetLastTuiIndex().y / 4, NULL, NULL, 1);
+
+		DrawLineEx("🔥", GetLastTuiIndex().x / 4, GetLastTuiIndex().y / 2, GetLastTuiIndex().x - GetLastTuiIndex().x / 4, GetLastTuiIndex().y / 2, NULL, NULL, 1);
+
 		EndDrawing();
-		
 	}
 
 	CloseTui();
