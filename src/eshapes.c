@@ -61,10 +61,13 @@ void DrawLineProV(char* character, Vector2i pointA, Vector2i pointB, Color* fg, 
 void DrawLinePro(char* character, int pointAX, int pointAY, int pointBX, int pointBY, Color* fg, Color* bg, int thickness) {
 	Vector2d aDir = EDir(CalculateAngleOfAGoingToB((Vector2){ pointAX, pointAY }, (Vector2){ pointBX, pointBY }));
 
-	// NOTE: Magic number that makes it accurate
-	double step = 1.0 / fmax(fabs(aDir.x), fabs(aDir.y));
+	int vWidth = GetCharWidth(character);
 
-	Vector2d scaledDir = { aDir.x * step, aDir.y * step };
+	// NOTE: Magic numbers that makes it accurate
+	double stepX = vWidth / fmax(fabs(aDir.x), fabs(aDir.y));
+	double stepY = 1 / fmax(fabs(aDir.x), fabs(aDir.y));
+
+	Vector2d scaledDir = { aDir.x * stepX, aDir.y * stepY };
 
 	Vector2i termPos = (Vector2i){ pointAX, pointAY };
 	Vector2 realPos = (Vector2){ pointAX, pointAY };
