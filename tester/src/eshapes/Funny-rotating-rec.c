@@ -2,7 +2,7 @@
 #include <stdio.h>
 
 void FunnyRottatingRec() {
-	InitTui(165, TUI_DYNAMIC);
+	InitTui(165, TUI_DYNAMIC, true);
 
 	float rot = 0;
 	while(1) {

@@ -10,27 +10,27 @@
 * applications, and to alter it and redistribute it freely, subject to the following restrictions:
 * 
 * 1. Non-Misrepresentation: The origin of this software must not be misrepresented; 
-*    you must not claim that you wrote the original software. An acknowledgment in 
-*    product documentation is appreciated but not required.
+*	you must not claim that you wrote the original software. An acknowledgment in 
+*	product documentation is appreciated but not required.
 * 
 * 2. Source-Level Copyleft: Any altered versions (forks) of this software's source code, 
-*    or files containing significant portions of this code, must be distributed under 
-*    these same license terms. Such modified source code must be made publicly available 
-*    to any recipient, even if used over a network (SaaS).
+*	or files containing significant portions of this code, must be distributed under 
+*	these same license terms. Such modified source code must be made publicly available 
+*	to any recipient, even if used over a network (SaaS).
 * 
 * 3. Proprietary Integration: This software may be integrated into, linked with, or 
-*    used as a component of proprietary and closed-source products. In such cases, 
-*    the surrounding proprietary application code does not need to be disclosed, 
-*    provided that the original or modified source code of THIS software remains 
-*    available under the terms of Section 2.
+*	used as a component of proprietary and closed-source products. In such cases, 
+*	the surrounding proprietary application code does not need to be disclosed, 
+*	provided that the original or modified source code of THIS software remains 
+*	available under the terms of Section 2.
 * 
 * 4. Persistent Metadata: All original credits, including those in the source code headers 
-*    and binary metadata (e.g., ELF .comment section, PE StringFileInfo, or equivalent), 
-*    must not be removed. You may add your own credits to forks, provided the original 
-*    authorship remains clearly identified.
+*	and binary metadata (e.g., ELF .comment section, PE StringFileInfo, or equivalent), 
+*	must not be removed. You may add your own credits to forks, provided the original 
+*	authorship remains clearly identified.
 * 
 * 5. Notice Retention: This license notice may not be removed or altered from any 
-*    source or binary distribution.
+*	source or binary distribution.
 */
 
 #ifndef ESCLIB_H
@@ -62,7 +62,7 @@ extern "C" {
 #endif
 
 #ifndef RLAPI
-    #define RLAPI
+	#define RLAPI
 #endif
 
 #include <stddef.h>
@@ -74,11 +74,11 @@ extern "C" {
 #endif
 
 #ifndef DEG2RAD
-    #define DEG2RAD (PI/180.0f)
+	#define DEG2RAD (PI/180.0f)
 #endif
 
 #ifndef RAD2DEG
-    #define RAD2DEG (180.0f/PI)
+	#define RAD2DEG (180.0f/PI)
 #endif
 
 // If trueColor == true, rgb is rgb if trueColor == false than the color == r + g + b. WARNING: Terminals have stupid thing that in trueColor if fg == 0, 0, 255 and bg == 255, 0, 0 than the terminal blends the fg to 255, 0, 255. If anyone knows how to turn this off than PLEASE tell me, but for now just keep that fact in mind
@@ -174,6 +174,119 @@ typedef enum {
 	TUI_DYNAMIC
 } TuiType;
 
+typedef enum {
+	KEY_NULL            = 0,
+	KEY_APOSTROPHE      = 40,
+	KEY_COMMA           = 51,
+	KEY_MINUS           = 12,
+	KEY_PERIOD          = 52,
+	KEY_SLASH           = 53,
+	KEY_ZERO            = 11,
+	KEY_ONE             = 2,
+	KEY_TWO             = 3,
+	KEY_THREE           = 4,
+	KEY_FOUR            = 5,
+	KEY_FIVE            = 6,
+	KEY_SIX             = 7,
+	KEY_SEVEN           = 8,
+	KEY_EIGHT           = 9,
+	KEY_NINE            = 10,
+	KEY_SEMICOLON       = 39,
+	KEY_EQUAL           = 13,
+	KEY_A               = 30,
+	KEY_B               = 48,
+	KEY_C               = 46,
+	KEY_D               = 32,
+	KEY_E               = 18,
+	KEY_F               = 33,
+	KEY_G               = 34,
+	KEY_H               = 35,
+	KEY_I               = 23,
+	KEY_J               = 36,
+	KEY_K               = 37,
+	KEY_L               = 38,
+	KEY_M               = 50,
+	KEY_N               = 49,
+	KEY_O               = 24,
+	KEY_P               = 25,
+	KEY_Q               = 16,
+	KEY_R               = 19,
+	KEY_S               = 31,
+	KEY_T               = 20,
+	KEY_U               = 22,
+	KEY_V               = 47,
+	KEY_W               = 17,
+	KEY_X               = 45,
+	KEY_Y               = 21,
+	KEY_Z               = 44,
+	KEY_LEFT_BRACKET    = 26,
+	KEY_BACKSLASH       = 43,
+	KEY_RIGHT_BRACKET   = 27,
+	KEY_GRAVE           = 41,
+
+	KEY_SPACE           = 57,
+	KEY_ESCAPE          = 1,
+	KEY_ENTER           = 28,
+	KEY_TAB             = 15,
+	KEY_BACKSPACE       = 14,
+	KEY_INSERT          = 110,
+	KEY_DELETE          = 111,
+	KEY_RIGHT           = 106,
+	KEY_LEFT            = 105,
+	KEY_DOWN            = 108,
+	KEY_UP              = 103,
+	KEY_PAGE_UP         = 104,
+	KEY_PAGE_DOWN       = 109,
+	KEY_HOME            = 102,
+	KEY_END             = 107,
+	KEY_CAPS_LOCK       = 58,
+	KEY_SCROLL_LOCK     = 70,
+	KEY_NUM_LOCK        = 69,
+	KEY_PRINT_SCREEN    = 99,
+	KEY_PAUSE           = 119,
+	
+	KEY_F1              = 59,
+	KEY_F2              = 60,
+	KEY_F3              = 61,
+	KEY_F4              = 62,
+	KEY_F5              = 63,
+	KEY_F6              = 64,
+	KEY_F7              = 65,
+	KEY_F8              = 66,
+	KEY_F9              = 67,
+	KEY_F10             = 68,
+	KEY_F11             = 87,
+	KEY_F12             = 88,
+
+	KEY_LEFT_SHIFT      = 42,
+	KEY_LEFT_CONTROL    = 29,
+	KEY_LEFT_ALT        = 56,
+	KEY_LEFT_SUPER      = 125,
+	KEY_RIGHT_SHIFT     = 54,
+	KEY_RIGHT_CONTROL   = 97,
+	KEY_RIGHT_ALT       = 100,
+	KEY_RIGHT_SUPER     = 126,
+	KEY_KB_MENU         = 139,
+
+	KEY_KP_0            = 82,
+	KEY_KP_1            = 79,
+	KEY_KP_2            = 80,
+	KEY_KP_3            = 81,
+	KEY_KP_4            = 75,
+	KEY_KP_5            = 76,
+	KEY_KP_6            = 77,
+	KEY_KP_7            = 71,
+	KEY_KP_8            = 72,
+	KEY_KP_9            = 73,
+	KEY_KP_DECIMAL      = 83,
+	KEY_KP_DIVIDE       = 98,
+	KEY_KP_MULTIPLY     = 55,
+	KEY_KP_SUBTRACT     = 74,
+	KEY_KP_ADD          = 78,
+	KEY_KP_ENTER        = 96,
+	KEY_KP_EQUAL	    = 117
+} KeyboardKey;
+
 #define TERMWHITE (Color){ 0, 0, 0, 0 }
 #define TERMBLACK (Color){ 0, 0, 0, 0 }
 
@@ -185,7 +298,7 @@ typedef enum {
 
 // ECORE
 
-RLAPI void InitTui(int targetFps, TuiType type);
+RLAPI void InitTui(int targetFps, TuiType type, bool TypewriterInput);
 RLAPI void CloseTui(void);
 
 RLAPI void BeginDrawing(void);
@@ -351,15 +464,21 @@ RLAPI void DrawCirclePro(char* character, int centerX, int centerY, int radius, 
 
 /*
  * To make.
-    void DrawRectangleGradientV(int posX, int posY, int width, int height, Color top, Color bottom);
-    void DrawRectangleGradientH(int posX, int posY, int width, int height, Color left, Color right);
-    void DrawRectangleLines(int posX, int posY, int width, int height, Color color);
+	void DrawRectangleGradientV(int posX, int posY, int width, int height, Color top, Color bottom);
+	void DrawRectangleGradientH(int posX, int posY, int width, int height, Color left, Color right);
+	void DrawRectangleLines(int posX, int posY, int width, int height, Color color);
 
 	void DrawCircleLines(int centerX, int centerY, float radius, Color color); 
 	void DrawCircleGradient(int centerX, int centerY, float radius, Color inner, Color outer);
 	
 	void DrawLineGradient(int pointAX, int pointAY, int pointBX, int pointBY, Color color, int thickness);
 */
+
+// EINPUT
+
+RLAPI bool IsKeyPressed(int key);
+RLAPI bool IsKeyDown(int key);
+RLAPI bool IsKeyReleased(int key);
 
 #ifdef __cplusplus
 }

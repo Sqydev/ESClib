@@ -3,7 +3,7 @@
 #include <unistd.h>
 
 void InitCloseTuiTester() {
-	InitTui(60, TUI_DYNAMIC);
+	InitTui(60, TUI_DYNAMIC, true);
 
 	write(STDOUT_FILENO, "TESTER: Doing 2 sec break:)\n", 28);
 

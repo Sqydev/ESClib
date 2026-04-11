@@ -5,7 +5,7 @@
 #include <stdio.h>
 
 void BackbuffDump() {
-	InitTui(60, TUI_DYNAMIC);
+	InitTui(60, TUI_DYNAMIC, true);
 
 	printf("\033[?1049l");
 

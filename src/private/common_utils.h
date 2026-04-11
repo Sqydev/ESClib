@@ -40,6 +40,11 @@
 
 #include <stddef.h>
 
+#define BITS_PER_LONG (8u * sizeof(unsigned long))
+#define NBITS(x) (((x) - 1u) / BITS_PER_LONG + 1u)
+#define BIT_WORD(x) ((x) / BITS_PER_LONG)
+#define BIT_MASK(x) (1UL << ((x) % BITS_PER_LONG))
+
 typedef enum {
 	UNI_WRITE_TARGET_STDOUT = 1,
 	UNI_WRITE_TARGET_STDERR = 2
