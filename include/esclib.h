@@ -287,7 +287,7 @@ typedef enum {
 	KEY_KP_EQUAL	    = 117
 } KeyboardKey;
 
-#define TERMWHITE (Color){ 0, 0, 0, 0 }
+#define TERMWHITE (Color){ 15, 0, 0, 0 }
 #define TERMBLACK (Color){ 0, 0, 0, 0 }
 
 #define WHITE (Color){ 255, 0, 0, 0 }

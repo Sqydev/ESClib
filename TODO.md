@@ -1,3 +1,5 @@
+// TODO: Fix lines not beying done to the requested point. look at examples pong
+
 // TODO: Make panic fn that safley cloases everything
 
 // TODO: Make optional option to have log file. YOu init by doing InitLogging(char* path); and like replase all the printf loging by TraceLog(something); so you know, logs are normal
