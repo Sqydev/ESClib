@@ -4,7 +4,7 @@
 #include <unistd.h>
 
 void CharTest() {
-	InitTui(165, TUI_DYNAMIC);
+	InitTui(165, TUI_DYNAMIC, true);
 
 	printf("Drawing this in patern:\n");
 	printf("@@@@@@@@@\n");
@@ -46,7 +46,7 @@ void CharTest() {
 }
 
 void TextTest() {
-	InitTui(165, TUI_DYNAMIC);
+	InitTui(165, TUI_DYNAMIC, true);
 
 	while(1) {
 		BeginDrawing();
@@ -74,7 +74,7 @@ void TextTest() {
 }
 
 void TextTestf() {
-	InitTui(165, TUI_DYNAMIC);
+	InitTui(165, TUI_DYNAMIC, true);
 
 	while(1) {
 		BeginDrawing();

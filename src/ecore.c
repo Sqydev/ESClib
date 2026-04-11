@@ -39,6 +39,7 @@
 #include "./private/signals/signals_actions.h"
 #include "./private/common_utils.h"
 #include "./private/renderFrame.h"
+#include "./private/input/input.h"
 
 #if defined(unix) || defined(__unix) || defined(__unix__)
 #elif defined(_WIN32) || defined(_WIN64)
@@ -51,12 +52,28 @@ CoreData DATA;
 
 // TODO: LIBCSITTYFNSINDEPENDENCE
 // memset
-void InitTui(int targetFps, TuiType type) {
+void InitTui(int targetFps, TuiType type, bool TypewriterTui) {
 	atexit(CloseTui);
 
 	SignalsSetup();
 
 	EnableRawMode();
+
+#if defined(unix) || defined(__unix) || defined(__unix__)
+
+	if(getenv("WAYLAND_DISPLAY")) { DATA.SystemInfo.compositor = WAYLAND; }
+	if(getenv("DISPLAY")) { DATA.SystemInfo.compositor = X11; }
+	else { DATA.SystemInfo.compositor = NONE; }
+
+#elif defined(_WIN32) || defined(_WIN64)
+
+	DATA.SystemInfo.compositor = WINDOWS;
+
+#endif
+
+	DATA.Input.typewriterMode = TypewriterTui;
+
+	InitInput();
 
 	DATA.TuiData.type = type;
 
@@ -112,6 +129,8 @@ void CloseTui(void) {
 	free(DATA.Buffers.charbuffer);
 	DATA.Buffers.charbuffer = NULL;
 
+	CloseInput();
+
 	DisableRawMode();
 
 	SignalsCleanup();
@@ -122,6 +141,8 @@ void CloseTui(void) {
 // memcpy
 void BeginDrawing(void) {
 	SignalsStep();
+
+	InputStep();
 }
 
 // TODO: Make here better error handling

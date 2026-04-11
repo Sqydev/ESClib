@@ -37,7 +37,9 @@
 #define ESCLIB_PRIVATE_COREDATA_H
 
 #if defined(unix) || defined(__unix) || defined(__unix__)
+
 	#include <termios.h>
+
 #elif defined(_WIN32) || defined(__WIN64)
 #endif
 
@@ -45,6 +47,13 @@
 
 #include <stdbool.h>
 #include <signal.h>
+
+typedef enum {
+	WAYLAND,
+	X11,
+	NONE,
+	WINDOWS
+} Compositor;
 
 typedef struct {
 	struct {
@@ -57,6 +66,10 @@ typedef struct {
 		char* charbuffer;
 		size_t charbufferOffset;
 	} Buffers;
+
+	struct {
+		Compositor compositor;
+	} SystemInfo;
 
 	struct {
 		TuiType type;
@@ -95,6 +108,17 @@ typedef struct {
 		double previous;
 		double delta;
 	} Time;
+
+	struct {
+		bool typewriterMode;
+
+		struct {
+			int evdevIndex; // Or something
+
+			bool* keyStates;
+			bool* prevKeyStates;
+		} Keyboard;
+	} Input;
 
 	struct {
 		struct {

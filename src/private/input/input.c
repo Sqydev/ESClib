@@ -33,28 +33,34 @@
 *    source or binary distribution.
 */
 
-#ifndef ESCLIB_PRIVATE_COMMON_UTILS_H
-#define ESCLIB_PRIVATE_COMMON_UTILS_H
+#if defined(unix) || defined(__unix) || defined(__unix__)
 
-#include "../../include/esclib.h"
+#include "./keyboard.h"
 
-#include <stddef.h>
+void InitInput(void) {
+	InitKeyboard();
+}
 
-#define BITS_PER_LONG (8u * sizeof(unsigned long))
-#define NBITS(x) (((x) - 1u) / BITS_PER_LONG + 1u)
-#define BIT_WORD(x) ((x) / BITS_PER_LONG)
-#define BIT_MASK(x) (1UL << ((x) % BITS_PER_LONG))
+void CloseInput(void) {
+	CloseKeyboard();
+}
 
-typedef enum {
-	UNI_WRITE_TARGET_STDOUT = 1,
-	UNI_WRITE_TARGET_STDERR = 2
-} UniWriteTarget;
+void InputStep(void) {
+	KeyboardStep();
+}
 
-size_t UniWrite(UniWriteTarget target, const void* buf, size_t n);
-size_t UniWriteLen(UniWriteTarget target, const void* buf);
-void WriteToBackbuff(const SBCell cell, size_t x, size_t y);
+#elif defined(_WIN32) || defined(_WIN64)
 
-void EnableRawMode(void);
-void DisableRawMode(void);
+void InitInput(void) {
+	return;
+}
+
+void CloseInput(void) {
+	return;
+}
+
+void InputStep(void) {
+	return;
+}
 
 #endif

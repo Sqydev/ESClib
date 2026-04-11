@@ -33,28 +33,27 @@
 *    source or binary distribution.
 */
 
-#ifndef ESCLIB_PRIVATE_COMMON_UTILS_H
-#define ESCLIB_PRIVATE_COMMON_UTILS_H
+#include "./private/coredata.h"
 
-#include "../../include/esclib.h"
+#include <stdbool.h>
 
-#include <stddef.h>
+// TODO: Make the 200 be KEY_MAX
 
-#define BITS_PER_LONG (8u * sizeof(unsigned long))
-#define NBITS(x) (((x) - 1u) / BITS_PER_LONG + 1u)
-#define BIT_WORD(x) ((x) / BITS_PER_LONG)
-#define BIT_MASK(x) (1UL << ((x) % BITS_PER_LONG))
+bool IsKeyPressed(int key) {
+    if (key < 0 || key >= 200) return false;
+    
+    return (DATA.Input.Keyboard.keyStates[key] == true) && 
+           (DATA.Input.Keyboard.prevKeyStates[key] == false);
+}
 
-typedef enum {
-	UNI_WRITE_TARGET_STDOUT = 1,
-	UNI_WRITE_TARGET_STDERR = 2
-} UniWriteTarget;
+bool IsKeyDown(int key) {
+    if (key < 0 || key >= 200) return false;
+    return DATA.Input.Keyboard.keyStates[key];
+}
 
-size_t UniWrite(UniWriteTarget target, const void* buf, size_t n);
-size_t UniWriteLen(UniWriteTarget target, const void* buf);
-void WriteToBackbuff(const SBCell cell, size_t x, size_t y);
-
-void EnableRawMode(void);
-void DisableRawMode(void);
-
-#endif
+bool IsKeyReleased(int key) {
+    if (key < 0 || key >= 200) return false;
+    
+    return (DATA.Input.Keyboard.keyStates[key] == false) && 
+           (DATA.Input.Keyboard.prevKeyStates[key] == true);
+}
