@@ -17,7 +17,7 @@ int main() {
 		DrawLinePro(" ", GetLastTuiIndex().x, 0, GetLastTuiIndex().x, GetLastTuiIndex().y, NULL, &TERMWHITE, 2);
 		DrawLinePro(" ", 0, GetLastTuiIndex().y, GetLastTuiIndex().x, GetLastTuiIndex().y, NULL, &TERMWHITE, 1);
 
-		DrawRectangle(10, playerPos, 2, 5, WHITE);
+		DrawRectangle(10, playerPos, 2, 5, TERMWHITE);
 
 		EndDrawing();
 	}

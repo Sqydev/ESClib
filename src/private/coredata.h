@@ -113,7 +113,7 @@ typedef struct {
 		bool typewriterMode;
 
 		struct {
-			int evdevIndex; // Or something
+			int evdevIndex;
 
 			bool* keyStates;
 			bool* prevKeyStates;

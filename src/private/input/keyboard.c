@@ -266,6 +266,30 @@ void TermiosStep(void) {
 	}
 }
 
+bool InitX11Keyboard() {
+	return false;
+}
+
+void X11KeyboardStep() {
+	return;
+}
+
+void CloseX11Keyboard() {
+	return;
+}
+
+bool InitWaylandKeyboard() {
+	return false;
+}
+
+void WaylandKeyboardStep() {
+	return;
+}
+
+void CloseWaylandKeyboard() {
+	return;
+}
+
 void InitKeyboard(void) {
 	if(!DATA.Input.Keyboard.keyStates) {
 		DATA.Input.Keyboard.keyStates = (bool*)calloc(KEY_MAX, sizeof(bool));
