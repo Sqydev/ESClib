@@ -74,7 +74,7 @@ void DrawLinePro(char* character, int pointAX, int pointAY, int pointBX, int poi
 
 	if(thickness < 1) { return; }
 
-	while((termPos.x - pointBX) * aDir.x + (termPos.y - pointBY) * aDir.y < 0) {
+	while((termPos.x - pointBX) * aDir.x + (termPos.y - pointBY) * aDir.y <= 0) {
 		if(termPos.x > GetLastTuiIndex().x) { return; }
 		if(termPos.y > GetLastTuiIndex().y) { return; }
 		if(termPos.x < 0) { return; }
