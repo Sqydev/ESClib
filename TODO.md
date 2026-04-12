@@ -1,7 +1,3 @@
-// TODO: Fix lines not beying done to the requested point. look at examples pong
-
-// TODO: Make panic fn that safley cloases everything
-
 // TODO: Make optional option to have log file. YOu init by doing InitLogging(char* path); and like replase all the printf loging by TraceLog(something); so you know, logs are normal
 
 // TODO: Make input from the compositor(asking the compositor so sudo isn't needed and focus works) and make termios input type have 2 modes, if DATA.input.typewritermode is true than it does what it does now. and if it's false than do ncurses hack so whait after first input and than read in like 15 or something like that ms delays so the input is delayed but nearly like true thing

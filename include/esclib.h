@@ -301,6 +301,13 @@ typedef enum {
 RLAPI void InitTui(int targetFps, TuiType type, bool TypewriterInput);
 RLAPI void CloseTui(void);
 
+// Will do panic thing and safley close the program with exitCode logging the message and doing added tasks(see AddPanicTask())
+RLAPI void Panic(const char* message, int exitCode);
+// Will add task to tasks that Panic() does. In order of first -> last(index = 0 -> index = last). Will return index of added task. If failed will return 0
+RLAPI int AddPanicTask(void (*task)(void));
+// Will return 0 if succesfull -1 if failed
+RLAPI int RemovePanicTask(size_t index);
+
 RLAPI void BeginDrawing(void);
 RLAPI void EndDrawing(void);
 
@@ -317,7 +324,7 @@ RLAPI int DisableSignalCustomTasks(int signal);
 RLAPI int EnableSignalBuildInTasks(int signal);
 RLAPI int DisableSignalBuildInTasks(int signal);
 
-// Add Custom Task To Signal Tasks. If index < 0 Than It Will Add Task To The End. Will Return Index Of Added Task And -1 if failed
+// Add Custom Task To Signal Tasks( tasks executed in order of first -> last(index = 0 -> index = last) ). If index < 0 Than It Will Add Task To The End. Will Return Index Of Added Task And -1 if failed
 RLAPI int AddSignalTask(int signal, void (*taskFunction)(void), int index);
 // Remove Custom Signal Task From Signal. If index < 0 Than It Will Remove Task From The End. Will Return 0 If Removed Succesfuly And -1 Of Failed
 RLAPI int RemoveSignalTask(int signal, int index);

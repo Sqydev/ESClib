@@ -36,6 +36,11 @@
 #ifndef ESCLIB_PRIVATE_COREDATA_H
 #define ESCLIB_PRIVATE_COREDATA_H
 
+#include "../../include/esclib.h"
+
+#include <stdbool.h>
+#include <signal.h>
+
 #if defined(unix) || defined(__unix) || defined(__unix__)
 
 	#include <termios.h>
@@ -43,10 +48,6 @@
 #elif defined(_WIN32) || defined(__WIN64)
 #endif
 
-#include "../../include/esclib.h"
-
-#include <stdbool.h>
-#include <signal.h>
 
 typedef enum {
 	WAYLAND,
@@ -76,7 +77,7 @@ typedef struct {
 
 	struct {
 		Compositor compositor;
-	} SystemInfo;
+	} System;
 
 	struct {
 		TuiType type;
@@ -129,6 +130,10 @@ typedef struct {
 	} Input;
 
 	struct {
+		Vector2i pos;
+	} Cursor;
+
+	struct {
 		struct {
 #if defined(unix) || defined(__unix) || defined(__unix__)
 
@@ -162,9 +167,6 @@ typedef struct {
 		} SIG_WINCH;
 	} SignalData;
 
-	struct {
-		Vector2i pos;
-	} Cursor;
 } CoreData;
 
 extern CoreData DATA;
