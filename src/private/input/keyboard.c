@@ -271,7 +271,7 @@ void TermiosStep(void) {
 	}
 }
 
-Display* x11Dpy = NULL;
+Display* x11Dpy;
 bool x11Pressed[KEY_MAX];
 Atom x11NetWmPid;
  
@@ -537,10 +537,10 @@ void InitKeyboard(void) {
 	}
 
 	if(!DATA.Input.typewriterMode) {
-		if(DATA.SystemInfo.compositor == WAYLAND && InitWaylandKeyboard()) {
+		if(DATA.System.compositor == WAYLAND && InitWaylandKeyboard()) {
 			DATA.Input.InputBackend = COMP_WAYLAND;
 		}
-		else if(DATA.SystemInfo.compositor == X11 && InitX11Keyboard()) {
+		else if(DATA.System.compositor == X11 && InitX11Keyboard()) {
 			DATA.Input.InputBackend = COMP_X11;
 		}
 		else if(InitEvdev()) {

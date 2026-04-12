@@ -40,6 +40,7 @@
 #include "./private/common_utils.h"
 #include "./private/renderFrame.h"
 #include "./private/input/input.h"
+#include <ctype.h>
 
 #if defined(unix) || defined(__unix) || defined(__unix__)
 #elif defined(_WIN32) || defined(_WIN64)
@@ -47,6 +48,7 @@
 
 #include <stdlib.h>
 #include <string.h>
+#include <errno.h>
 
 CoreData DATA;
 
@@ -61,9 +63,9 @@ void InitTui(int targetFps, TuiType type, bool TypewriterTui) {
 
 #if defined(unix) || defined(__unix) || defined(__unix__)
 
-	if(getenv("WAYLAND_DISPLAY")) { DATA.SystemInfo.compositor = WAYLAND; }
-	else if(getenv("DISPLAY")) { DATA.SystemInfo.compositor = X11; }
-	else { DATA.SystemInfo.compositor = NONE; }
+	if(getenv("WAYLAND_DISPLAY")) { DATA.System.compositor = WAYLAND; }
+	else if(getenv("DISPLAY")) { DATA.System.compositor = X11; }
+	else { DATA.System.compositor = NONE; }
 
 #elif defined(_WIN32) || defined(_WIN64)
 
@@ -137,6 +139,59 @@ void CloseTui(void) {
 
 	UniWriteLen(UNI_WRITE_TARGET_STDOUT, "\033[2J\033[?1049l\033[?7h");
 }
+
+// NOTE: In here becouse I have no idea where else put it :)
+void (**panicTasks)(void) = NULL;
+size_t panicTasksCount = 0;
+
+void Panic(const char* message, int exitCode) {
+	UniWriteLen(UNI_WRITE_TARGET_STDERR, message);
+
+	for(size_t i = 0; i < panicTasksCount; i++) {
+		if(panicTasks[i] != NULL) { panicTasks[i](); }
+	}
+
+	CloseTui();
+	exit(exitCode);
+}
+
+int AddPanicTask(void (*task)(void)) {
+	void (**tmp)(void) = realloc(panicTasks, sizeof(void (*)) * (panicTasksCount + 1));
+	if(!tmp) {
+		UniWriteLen(UNI_WRITE_TARGET_STDERR, "ERROR: Panic Tasks realloc failed somehow\n");
+		errno = ENOMEM;
+		return -1;
+	}
+
+	panicTasks = tmp;
+	panicTasks[panicTasksCount] = task;
+	panicTasksCount++;
+
+	return panicTasksCount - 1;
+}
+
+int RemovePanicTask(size_t index) {
+	if(index > panicTasksCount) {
+		errno = EINVAL;
+		return -1;
+	}
+
+	panicTasks[index] = NULL;
+
+	while(panicTasksCount > 0 && panicTasks[panicTasksCount - 1] == NULL){
+		void (**tmp)(void) = realloc(panicTasks, sizeof(void (*)) * (panicTasksCount - 1));
+		if(!tmp) {
+			UniWriteLen(UNI_WRITE_TARGET_STDERR, "ERROR: Panic Tasks realloc failed somehow\n");
+			errno = ENOMEM;
+			return -1;
+		}
+
+		panicTasksCount--;
+	}
+
+	return 0;
+}
+
 // TODO: LIBCSITTYFNSINDEPENDENCE
 // memcpy
 void BeginDrawing(void) {
