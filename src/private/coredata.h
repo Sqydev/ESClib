@@ -55,6 +55,13 @@ typedef enum {
 	WINDOWS
 } Compositor;
 
+typedef enum {
+	COMP_WAYLAND,
+	COMP_X11,
+	EVDEV,
+	TERMIOS
+} InputBackend;
+
 typedef struct {
 	struct {
 		SBCell* frontbuff;
@@ -111,6 +118,7 @@ typedef struct {
 
 	struct {
 		bool typewriterMode;
+		InputBackend InputBackend;
 
 		struct {
 			int evdevIndex;

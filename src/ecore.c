@@ -62,7 +62,7 @@ void InitTui(int targetFps, TuiType type, bool TypewriterTui) {
 #if defined(unix) || defined(__unix) || defined(__unix__)
 
 	if(getenv("WAYLAND_DISPLAY")) { DATA.SystemInfo.compositor = WAYLAND; }
-	if(getenv("DISPLAY")) { DATA.SystemInfo.compositor = X11; }
+	else if(getenv("DISPLAY")) { DATA.SystemInfo.compositor = X11; }
 	else { DATA.SystemInfo.compositor = NONE; }
 
 #elif defined(_WIN32) || defined(_WIN64)

@@ -53,6 +53,10 @@ LDFLAGS ?= $(LIBC_LDFLAGS)
 
 LDFLAGS += -lm
 
+ifneq ($(SO_EXT),)
+    LDFLAGS += -lX11
+endif
+
 # ==== Paths ====
 
 SRC_DIR := src
