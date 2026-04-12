@@ -301,6 +301,13 @@ typedef enum {
 RLAPI void InitTui(int targetFps, TuiType type, bool TypewriterInput);
 RLAPI void CloseTui(void);
 
+// Init logging to file of path(0 if succes -1 if falied, -2 if already inited)
+RLAPI int InitLoggin(char* path);
+// Log to inited log file
+RLAPI void TraceLog(char* message);
+// Close logging file
+RLAPI void CloseLoggin();
+
 // Will do panic thing and safley close the program with exitCode logging the message and doing added tasks(see AddPanicTask())
 RLAPI void Panic(const char* message, int exitCode);
 // Will add task to tasks that Panic() does. In order of first -> last(index = 0 -> index = last). Will return index of added task. If failed will return 0

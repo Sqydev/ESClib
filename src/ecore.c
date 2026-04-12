@@ -40,7 +40,7 @@
 #include "./private/common_utils.h"
 #include "./private/renderFrame.h"
 #include "./private/input/input.h"
-#include <ctype.h>
+#include <stdio.h>
 
 #if defined(unix) || defined(__unix) || defined(__unix__)
 #elif defined(_WIN32) || defined(_WIN64)
@@ -131,11 +131,13 @@ void CloseTui(void) {
 	free(DATA.Buffers.charbuffer);
 	DATA.Buffers.charbuffer = NULL;
 
-	CloseInput();
+	if(DATA.Logging.enabled) { CloseInput(); }
 
 	DisableRawMode();
 
 	SignalsCleanup();
+
+	if(DATA.Logging.file) { CloseLoggin(); }
 
 	UniWriteLen(UNI_WRITE_TARGET_STDOUT, "\033[2J\033[?1049l\033[?7h");
 }
@@ -190,6 +192,38 @@ int RemovePanicTask(size_t index) {
 	}
 
 	return 0;
+}
+
+int InitLoggin(char* path) {
+	if(DATA.Logging.enabled) { return -2; }
+
+	DATA.Logging.enabled = true;
+	DATA.Logging.path = path;
+
+	DATA.Logging.file = fopen(path, "a");
+	if(!DATA.Logging.file) {
+		DATA.Logging.enabled = false;
+
+		return -1;
+	}
+
+	return 0;
+}
+
+void TraceLog(char* message) {
+	if(!DATA.Logging.enabled) { return; }
+	if(!DATA.Logging.file) { return; }
+
+	fprintf(DATA.Logging.file, "%s\n", message);
+	fflush(DATA.Logging.file);
+}
+
+void CloseLoggin() {
+	if(!DATA.Logging.enabled) { return; }
+
+	DATA.Logging.enabled = false;
+
+	if(DATA.Logging.file) { fclose(DATA.Logging.file); }
 }
 
 // TODO: LIBCSITTYFNSINDEPENDENCE

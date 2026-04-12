@@ -47,6 +47,8 @@ const TesterEntry testers[] = {
 
 	{"IKDT", IsKeyDownTester, "IsKeyDownTester"},
 	{"IKDTT", IsKeyDownTYPEWRITERTester, "IsKeyDownTYPEWRITERTester"},
+
+	{"LT", LoggingTester, "LoggingTester"},
 };
 
 void PrintUsage(const char* prog) {
