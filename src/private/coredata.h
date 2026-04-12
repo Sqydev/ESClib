@@ -40,6 +40,7 @@
 
 #include <stdbool.h>
 #include <signal.h>
+#include <stdio.h>
 
 #if defined(unix) || defined(__unix) || defined(__unix__)
 
@@ -167,6 +168,13 @@ typedef struct {
 		} SIG_WINCH;
 	} SignalData;
 
+	struct {
+		bool enabled;
+
+		FILE* file;
+
+		char* path;
+	} Logging;
 } CoreData;
 
 extern CoreData DATA;

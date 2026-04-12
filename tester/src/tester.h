@@ -27,6 +27,8 @@ void CharTest();
 void TextTest();
 void TextTestf();
 
+void LoggingTester();
+
 void StaticTuiTester();
 
 void DrawRecTester();
