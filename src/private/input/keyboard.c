@@ -518,18 +518,17 @@ void CloseX11Keyboard(void) {
     memset(x11Pressed, 0, sizeof(x11Pressed));
 }
 
-bool InitWaylandKeyboard() {
-	return false;
+bool InitWaylandKeyboard(void) {
+    return false;
 }
-
-void WaylandKeyboardStep() {
+ 
+void WaylandKeyboardStep(void) {
 	return;
 }
-
-void CloseWaylandKeyboard() {
+ 
+void CloseWaylandKeyboard(void) {
 	return;
 }
-
 void InitKeyboard(void) {
 	if(!DATA.Input.Keyboard.keyStates) {
 		DATA.Input.Keyboard.keyStates = (bool*)calloc(KEY_MAX, sizeof(bool));

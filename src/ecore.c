@@ -40,7 +40,6 @@
 #include "./private/common_utils.h"
 #include "./private/renderFrame.h"
 #include "./private/input/input.h"
-#include <stdio.h>
 
 #if defined(unix) || defined(__unix) || defined(__unix__)
 #elif defined(_WIN32) || defined(_WIN64)
@@ -49,6 +48,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <errno.h>
+#include <stdio.h>
 
 CoreData DATA;
 
@@ -63,13 +63,26 @@ void InitTui(int targetFps, TuiType type, bool TypewriterTui) {
 
 #if defined(unix) || defined(__unix) || defined(__unix__)
 
-	if(getenv("WAYLAND_DISPLAY")) { DATA.System.compositor = WAYLAND; }
-	else if(getenv("DISPLAY")) { DATA.System.compositor = X11; }
-	else { DATA.System.compositor = NONE; }
+	if(getenv("WAYLAND_DISPLAY")) {
+		DATA.System.compositor = WAYLAND;
+		
+		TraceLog("[ESCLIB]: INFO: Detected Wayland");
+	}
+	else if(getenv("DISPLAY")) {
+		DATA.System.compositor = X11;
+		
+		TraceLog("[ESCLIB]: INFO: Detected X11");
+	}
+	else {
+		DATA.System.compositor = NONE;
+		
+		TraceLog("[ESCLIB]: INFO: Detected NO COMPOSITOR :0");
+	}
 
 #elif defined(_WIN32) || defined(_WIN64)
 
-	DATA.SystemInfo.compositor = WINDOWS;
+	DATA.SystemInfo.compositor = WINDOWS;	
+	TraceLog("[ESCLIB]: INFO: WINDOWS >:(");
 
 #endif
 
@@ -119,7 +132,7 @@ void CloseTui(void) {
 	if(!DATA.TuiData.initiated) {
 		return;
 	}
-	
+
 	DATA.TuiData.initiated = false;
 	
 	free(DATA.Buffers.backbuff);
