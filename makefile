@@ -54,7 +54,7 @@ LDFLAGS ?= $(LIBC_LDFLAGS)
 LDFLAGS += -lm
 
 ifneq ($(SO_EXT),)
-    LDFLAGS += -lX11 -linput -ludev -lwayland-client
+    LDFLAGS += -lX11
 endif
 
 # ==== Paths ====
