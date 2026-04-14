@@ -1,3 +1,5 @@
+// For wayland just try doing the \033[?u= and if it's not supported than try xwayland
+
 // TODO: Make typewritermode bool in InitTui an enum.
 
 // TODO: Make more logging and replace all of the UniWrite logging with TraceLog logging.

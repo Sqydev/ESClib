@@ -521,14 +521,15 @@ void CloseX11Keyboard(void) {
 bool InitWaylandKeyboard(void) {
     return false;
 }
- 
+
 void WaylandKeyboardStep(void) {
 	return;
 }
- 
+
 void CloseWaylandKeyboard(void) {
 	return;
 }
+
 void InitKeyboard(void) {
 	if(!DATA.Input.Keyboard.keyStates) {
 		DATA.Input.Keyboard.keyStates = (bool*)calloc(KEY_MAX, sizeof(bool));
