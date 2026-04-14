@@ -518,16 +518,150 @@ void CloseX11Keyboard(void) {
     memset(x11Pressed, 0, sizeof(x11Pressed));
 }
 
+int MapKittyToEsclib(int kittyCode) {
+    // --- LITERY (ASCII -> evdev) ---
+    // Uwaga: Kitty wysyła małe litery jako kod bazowy
+    switch (kittyCode) {
+        case 'a': return 30; case 'b': return 48; case 'c': return 46;
+        case 'd': return 32; case 'e': return 18; case 'f': return 33;
+        case 'g': return 34; case 'h': return 35; case 'i': return 23;
+        case 'j': return 36; case 'k': return 37; case 'l': return 38;
+        case 'm': return 50; case 'n': return 49; case 'o': return 24;
+        case 'p': return 25; case 'q': return 16; case 'r': return 19;
+        case 's': return 31; case 't': return 20; case 'u': return 22;
+        case 'v': return 47; case 'w': return 17; case 'x': return 45;
+        case 'y': return 21; case 'z': return 44;
+
+        // --- CYFRY ---
+        case '1': return 2;  case '2': return 3;  case '3': return 4;
+        case '4': return 5;  case '5': return 6;  case '6': return 7;
+        case '7': return 8;  case '8': return 9;  case '9': return 10;
+        case '0': return 11;
+
+        // --- ZNAKI SPECJALNE ---
+        case '\'': return 40; case ',':  return 51; case '-':  return 12;
+        case '.':  return 52; case '/':  return 53; case ';':  return 39;
+        case '=':  return 13; case '[':  return 26; case '\\': return 43;
+        case ']':  return 27; case '`':  return 41; case ' ':  return 57;
+
+        // --- KLAWISZE FUNKCYJNE (Standardowe ASCII/CSI) ---
+        case 27:   return 1;   // ESC
+        case 13:   return 28;  // ENTER
+        case 9:    return 15;  // TAB
+        case 127:  return 14;  // BACKSPACE (często wysyłane jako 127 lub 8)
+        case 8:    return 14;  // BACKSPACE (alternatywne)
+
+        // --- KLAWISZE SPECJALNE (Kitty PUA Codes) ---
+        case 57347: return 110; // INSERT
+        case 57348: return 111; // DELETE
+        case 57361: return 106; // RIGHT
+        case 57360: return 105; // LEFT
+        case 57359: return 108; // DOWN
+        case 57358: return 103; // UP
+        case 57362: return 104; // PAGE_UP
+        case 57363: return 109; // PAGE_DOWN
+        case 57354: return 102; // HOME
+        case 57355: return 107; // END
+        case 57344: return 58;  // CAPS_LOCK
+        case 57345: return 70;  // SCROLL_LOCK
+        case 57346: return 69;  // NUM_LOCK
+        case 57349: return 99;  // PRINT_SCREEN
+        case 57350: return 119; // PAUSE
+        case 57351: return 139; // MENU
+
+        // --- KLAWISZE F1-F12 (Kitty PUA) ---
+        case 57364: return 59; // F1
+        case 57365: return 60; // F2
+        case 57366: return 61; // F3
+        case 57367: return 62; // F4
+        case 57368: return 63; // F5
+        case 57369: return 64; // F6
+        case 57370: return 65; // F7
+        case 57371: return 66; // F8
+        case 57372: return 67; // F9
+        case 57373: return 68; // F10
+        case 57374: return 87; // F11
+        case 57375: return 88; // F12
+
+        // --- MODYFIKATORY (Jeśli raportowane osobno) ---
+        case 57441: return 42;  // LEFT_SHIFT
+        case 57442: return 29;  // LEFT_CONTROL
+        case 57443: return 56;  // LEFT_ALT
+        case 57444: return 125; // LEFT_SUPER
+        case 57445: return 54;  // RIGHT_SHIFT
+        case 57446: return 97;  // RIGHT_CONTROL
+        case 57447: return 100; // RIGHT_ALT
+        case 57448: return 126; // RIGHT_SUPER
+
+        // --- KEYPAD (Numpad) ---
+        case 57399: return 82;  // KP_0
+        case 57400: return 79;  // KP_1
+        case 57401: return 80;  // KP_2
+        case 57402: return 81;  // KP_3
+        case 57403: return 75;  // KP_4
+        case 57404: return 76;  // KP_5
+        case 57405: return 77;  // KP_6
+        case 57406: return 71;  // KP_7
+        case 57407: return 72;  // KP_8
+        case 57408: return 73;  // KP_9
+        case 57409: return 83;  // KP_DECIMAL
+        case 57410: return 98;  // KP_DIVIDE
+        case 57411: return 55;  // KP_MULTIPLY
+        case 57412: return 74;  // KP_SUBTRACT
+        case 57413: return 78;  // KP_ADD
+        case 57414: return 96;  // KP_ENTER
+        case 57415: return 117; // KP_EQUAL
+    }
+    return 0;
+}
+
 bool InitWaylandKeyboard(void) {
-    return false;
+	UniWrite(UNI_WRITE_TARGET_STDOUT, "\033[>4u", 5);
+
+    return true;
 }
 
 void WaylandKeyboardStep(void) {
-	return;
+    for (int i = 0; i < 200; i++) {
+        DATA.Input.Keyboard.prevKeyStates[i] = DATA.Input.Keyboard.keyStates[i];
+    }
+
+    char buf[1024];
+    ssize_t n = read(STDIN_FILENO, buf, sizeof(buf) - 1);
+    if (n <= 0) return;
+    buf[n] = '\0';
+
+    char *ptr = buf;
+    while ((ptr = strstr(ptr, "\033[")) != NULL) {
+        int keycode = 0;
+        int modifiers = 0;
+		(void)modifiers;
+        int event = 1;
+
+        char *end = strchr(ptr, 'u');
+        if (!end) break;
+
+        if (sscanf(ptr + 2, "%d", &keycode) == 1) {
+            char *colon = strchr(ptr, ':');
+            if (colon && colon < end) {
+                event = colon[1] - '0';
+            }
+
+            int mappedKey = MapKittyToEsclib(keycode);
+            if (mappedKey > 0 && mappedKey < 200) {
+                if (event == 1 || event == 2) {
+                    DATA.Input.Keyboard.keyStates[mappedKey] = true;
+                } else if (event == 3) {
+                    DATA.Input.Keyboard.keyStates[mappedKey] = false;
+                }
+            }
+        }
+        ptr = end + 1;
+    }
 }
 
 void CloseWaylandKeyboard(void) {
-	return;
+	UniWrite(UNI_WRITE_TARGET_STDOUT, "\033[<u", 4);
 }
 
 void InitKeyboard(void) {
