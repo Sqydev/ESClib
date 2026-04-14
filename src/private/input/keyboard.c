@@ -616,16 +616,12 @@ int MapKittyToEsclib(int kittyCode) {
 }
 
 bool InitWaylandKeyboard(void) {
-	UniWrite(UNI_WRITE_TARGET_STDOUT, "\033[>4u", 5);
+	UniWrite(UNI_WRITE_TARGET_STDOUT, "\033[>11u", 6);
 
     return true;
 }
 
 void WaylandKeyboardStep(void) {
-    for (int i = 0; i < 200; i++) {
-        DATA.Input.Keyboard.prevKeyStates[i] = DATA.Input.Keyboard.keyStates[i];
-    }
-
     char buf[1024];
     ssize_t n = read(STDIN_FILENO, buf, sizeof(buf) - 1);
     if (n <= 0) return;
@@ -634,26 +630,27 @@ void WaylandKeyboardStep(void) {
     char *ptr = buf;
     while ((ptr = strstr(ptr, "\033[")) != NULL) {
         int keycode = 0;
-        int modifiers = 0;
-		(void)modifiers;
-        int event = 1;
+        int event   = 1;
 
-        char *end = strchr(ptr, 'u');
+        char *end = strchr(ptr + 2, 'u');
         if (!end) break;
 
-        if (sscanf(ptr + 2, "%d", &keycode) == 1) {
-            char *colon = strchr(ptr, ':');
-            if (colon && colon < end) {
-                event = colon[1] - '0';
-            }
+        sscanf(ptr + 2, "%d", &keycode);
 
-            int mappedKey = MapKittyToEsclib(keycode);
-            if (mappedKey > 0 && mappedKey < 200) {
-                if (event == 1 || event == 2) {
-                    DATA.Input.Keyboard.keyStates[mappedKey] = true;
-                } else if (event == 3) {
-                    DATA.Input.Keyboard.keyStates[mappedKey] = false;
-                }
+        char *colon = NULL;
+        for (char *p = ptr + 2; p < end; p++) {
+            if (*p == ':') { colon = p; break; }
+        }
+        if (colon) {
+            event = (int)(colon[1] - '0');
+        }
+
+        int mappedKey = MapKittyToEsclib(keycode);
+        if (mappedKey > 0 && mappedKey < 200) {
+            if (event == 1 || event == 2) {
+                DATA.Input.Keyboard.keyStates[mappedKey] = true;
+            } else if (event == 3) {
+                DATA.Input.Keyboard.keyStates[mappedKey] = false;
             }
         }
         ptr = end + 1;
