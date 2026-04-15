@@ -1,4 +1,4 @@
-// For wayland just try doing the \033[?u= and if it's not supported than try xwayland
+// TODO: Mabey just do some sudo server that the lib asks if it's app is in focus or something?
 
 // TODO: Make typewritermode bool in InitTui an enum.
 
