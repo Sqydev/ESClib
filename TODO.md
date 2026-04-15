@@ -1,8 +1,6 @@
-// TODO: Mabey just do some sudo server that the lib asks if it's app is in focus or something?
+// TODO: Make more logging and replace all of the UniWrite logging with TraceLog logging.
 
 // TODO: Make typewritermode bool in InitTui an enum.
-
-// TODO: Make more logging and replace all of the UniWrite logging with TraceLog logging.
 
 // TODO: Make input from the compositor(asking the compositor so sudo isn't needed and focus works) and make termios input type have 2 modes, if DATA.input.typewritermode is true than it does what it does now. and if it's false than do ncurses hack so whait after first input and than read in like 15 or something like that ms delays so the input is delayed but nearly like true thing
 
@@ -29,3 +27,5 @@
 // TODO: Add alpha channel to the colors
 
 // TODO: Make not aspectRatiofied Draws have completly different and faster logic
+
+// TODO: Make real type input be opening a terminal window. Like new ESCterminal or something
