@@ -37,7 +37,6 @@
 #define ESCLIB_PRIVATE_INPUT_KEYBOARD_H
 
 void InitKeyboard(void);
-void CloseKeyboard(void);
 
 void KeyboardStep(void);
 

@@ -7,7 +7,7 @@
 #include <unistd.h>
 
 void EndDrawingTest() {
-	InitTui(60, TUI_DYNAMIC, true);
+	InitTui(60, TUI_DYNAMIC);
 
 	int times = 10;
 	SBCell filler;
@@ -51,7 +51,7 @@ void RenderLoopStressTest() {
 
 	scanf("%d", &a);
 
-	InitTui(a, TUI_DYNAMIC, true);
+	InitTui(a, TUI_DYNAMIC);
 
 	while(1) {
 		BeginDrawing();

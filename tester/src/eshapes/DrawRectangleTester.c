@@ -3,7 +3,7 @@
 #include <stdlib.h>
 
 void DrawRecTester() {
-	InitTui(60, TUI_DYNAMIC, true);
+	InitTui(60, TUI_DYNAMIC);
 
 	while(1) {
 		BeginDrawing();

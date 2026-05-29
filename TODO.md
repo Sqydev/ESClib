@@ -1,3 +1,5 @@
+// Make input handle the modfiers, like detecting SHIFT
+
 // TODO: Make more logging and replace all of the UniWrite logging with TraceLog logging.
 
 // TODO: Make typewritermode bool in InitTui an enum.

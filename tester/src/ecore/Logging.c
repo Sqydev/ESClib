@@ -1,7 +1,7 @@
 #include "../../../include/esclib.h"
 
 void LoggingTester() {
-	InitTui(60, TUI_DYNAMIC, true);
+	InitTui(60, TUI_DYNAMIC);
 
 	InitLoggin("./log");
 

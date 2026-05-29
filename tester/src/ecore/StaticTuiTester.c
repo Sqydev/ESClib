@@ -1,7 +1,7 @@
 #include "../../../include/esclib.h"
 
 void StaticTuiTester() {
-	InitTui(165, TUI_STATIC, true);
+	InitTui(165, TUI_STATIC);
 
 	// Should be cube
 	SetTuiDimentions(60, 30);
