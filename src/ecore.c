@@ -54,7 +54,7 @@ CoreData DATA;
 
 // TODO: LIBCSITTYFNSINDEPENDENCE
 // memset
-void InitTui(int targetFps, TuiType type, bool TypewriterTui) {
+void InitTui(int targetFps, TuiType type) {
 	atexit(CloseTui);
 
 	SignalsSetup();
@@ -85,8 +85,6 @@ void InitTui(int targetFps, TuiType type, bool TypewriterTui) {
 	TraceLog("[ESCLIB]: INFO: WINDOWS >:(");
 
 #endif
-
-	DATA.Input.typewriterMode = TypewriterTui;
 
 	InitInput();
 

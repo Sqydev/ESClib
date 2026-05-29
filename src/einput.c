@@ -37,23 +37,16 @@
 
 #include <stdbool.h>
 
-// TODO: Make the 200 be KEY_MAX
+void PressKey(int key) {
+	if(key < 0 || key > ESC_KEYMAX) { return; }
+	DATA.Input.Keyboard.keyStates[key] = true;
+}
 
 bool IsKeyPressed(int key) {
-    if (key < 0 || key >= 200) return false;
-    
-    return (DATA.Input.Keyboard.keyStates[key] == true) && 
-           (DATA.Input.Keyboard.prevKeyStates[key] == false);
+	if(key < 0 || key > ESC_KEYMAX) { return false; }
+	return DATA.Input.Keyboard.keyStates[key];
 }
 
 bool IsKeyDown(int key) {
-    if (key < 0 || key >= 200) return false;
-    return DATA.Input.Keyboard.keyStates[key];
-}
-
-bool IsKeyReleased(int key) {
-    if (key < 0 || key >= 200) return false;
-    
-    return (DATA.Input.Keyboard.keyStates[key] == false) && 
-           (DATA.Input.Keyboard.prevKeyStates[key] == true);
+	return IsKeyPressed(key);
 }

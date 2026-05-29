@@ -119,14 +119,8 @@ typedef struct {
 	} Time;
 
 	struct {
-		bool typewriterMode;
-		InputBackend InputBackend;
-
 		struct {
-			int evdevIndex;
-
-			bool* keyStates;
-			bool* prevKeyStates;
+			bool keyStates[ESC_KEYMAX];
 		} Keyboard;
 	} Input;
 

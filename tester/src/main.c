@@ -46,7 +46,6 @@ const TesterEntry testers[] = {
 	{"DLT", DrawLineTester, "DrawLineTester"},
 
 	{"IKDT", IsKeyDownTester, "IsKeyDownTester"},
-	{"IKDTT", IsKeyDownTYPEWRITERTester, "IsKeyDownTYPEWRITERTester"},
 
 	{"LT", LoggingTester, "LoggingTester"},
 };

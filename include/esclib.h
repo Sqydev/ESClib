@@ -174,6 +174,9 @@ typedef enum {
 	TUI_DYNAMIC
 } TuiType;
 
+
+#define ESC_KEYMAX 139
+
 typedef enum {
 	KEY_NULL            = 0,
 	KEY_APOSTROPHE      = 40,
@@ -223,6 +226,9 @@ typedef enum {
 	KEY_BACKSLASH       = 43,
 	KEY_RIGHT_BRACKET   = 27,
 	KEY_GRAVE           = 41,
+	KEY_LEFT_BRACE      = 84,
+    KEY_RIGHT_BRACE     = 85,
+    KEY_DOT             = 86,
 
 	KEY_SPACE           = 57,
 	KEY_ESCAPE          = 1,
@@ -244,6 +250,8 @@ typedef enum {
 	KEY_NUM_LOCK        = 69,
 	KEY_PRINT_SCREEN    = 99,
 	KEY_PAUSE           = 119,
+	KEY_PAGEUP          = 101,
+	KEY_PAGEDOWN        = 121,
 	
 	KEY_F1              = 59,
 	KEY_F2              = 60,
@@ -258,33 +266,30 @@ typedef enum {
 	KEY_F11             = 87,
 	KEY_F12             = 88,
 
-	KEY_LEFT_SHIFT      = 42,
+	KEY_MOD_SHIFT       = 42,
 	KEY_LEFT_CONTROL    = 29,
 	KEY_LEFT_ALT        = 56,
 	KEY_LEFT_SUPER      = 125,
-	KEY_RIGHT_SHIFT     = 54,
 	KEY_RIGHT_CONTROL   = 97,
 	KEY_RIGHT_ALT       = 100,
 	KEY_RIGHT_SUPER     = 126,
-	KEY_KB_MENU         = 139,
+	KEY_MENU            = 139,
 
-	KEY_KP_0            = 82,
-	KEY_KP_1            = 79,
-	KEY_KP_2            = 80,
-	KEY_KP_3            = 81,
-	KEY_KP_4            = 75,
-	KEY_KP_5            = 76,
-	KEY_KP_6            = 77,
-	KEY_KP_7            = 71,
-	KEY_KP_8            = 72,
-	KEY_KP_9            = 73,
-	KEY_KP_DECIMAL      = 83,
-	KEY_KP_DIVIDE       = 98,
-	KEY_KP_MULTIPLY     = 55,
-	KEY_KP_SUBTRACT     = 74,
-	KEY_KP_ADD          = 78,
-	KEY_KP_ENTER        = 96,
-	KEY_KP_EQUAL	    = 117
+	KEY_0               = 82,
+	KEY_1               = 79,
+	KEY_2               = 80,
+	KEY_3               = 81,
+	KEY_4               = 75,
+	KEY_5               = 76,
+	KEY_6               = 77,
+	KEY_7               = 71,
+	KEY_8               = 72,
+	KEY_9               = 73,
+	KEY_DECIMAL         = 83,
+	KEY_DIVIDE          = 98,
+	KEY_MULTIPLY        = 55,
+	KEY_SUBTRACT        = 74,
+	KEY_ADD             = 78,
 } KeyboardKey;
 
 #define TERMWHITE (Color){ 15, 0, 0, 0 }
@@ -298,7 +303,7 @@ typedef enum {
 
 // ECORE
 
-RLAPI void InitTui(int targetFps, TuiType type, bool TypewriterInput);
+RLAPI void InitTui(int targetFps, TuiType type);
 RLAPI void CloseTui(void);
 
 // Init logging to file of path(0 if succes -1 if falied, -2 if already inited)
@@ -490,9 +495,9 @@ RLAPI void DrawCirclePro(char* character, int centerX, int centerY, int radius, 
 
 // EINPUT
 
+RLAPI void PressKey(int key);
 RLAPI bool IsKeyPressed(int key);
 RLAPI bool IsKeyDown(int key);
-RLAPI bool IsKeyReleased(int key);
 
 #ifdef __cplusplus
 }
