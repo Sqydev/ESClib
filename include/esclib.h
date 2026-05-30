@@ -309,7 +309,7 @@ RLAPI void CloseTui(void);
 // Init logging to file of path(0 if succes -1 if falied, -2 if already inited)
 RLAPI int InitLoggin(char* path);
 // Log to inited log file
-RLAPI void TraceLog(char* message);
+RLAPI void TraceLog(const char* message, ...);
 // Close logging file
 RLAPI void CloseLoggin();
 

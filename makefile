@@ -9,7 +9,7 @@ PROFILE ?= local
 LIBC    ?= glibc
 CC ?= gcc
 STD ?= -std=c99
-POSIX_C_SRC ?= -D_POSIX_C_SOURCE=200809L
+POSIX_C_SRC ?= -D_POSIX_C_SOURCE=200809L -DCL_TARGET_OPENCL_VERSION=300
 
 LIB_NAME := esclib
 TESTER_NAME := tester
@@ -52,10 +52,6 @@ CFLAGS += $(BASE_CFLAGS) $(REL_CFLAGS) $(LIBC_CFLAGS) $(STD) $(POSIX_C_SRC)
 LDFLAGS ?= $(LIBC_LDFLAGS)
 
 LDFLAGS += -lm
-
-ifneq ($(SO_EXT),)
-    LDFLAGS += -lX11
-endif
 
 # ==== Paths ====
 

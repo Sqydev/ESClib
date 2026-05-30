@@ -40,11 +40,13 @@
 #include "./private/common_utils.h"
 #include "./private/renderFrame.h"
 #include "./private/input/input.h"
+#include "./private/openCl.h"
 
 #if defined(unix) || defined(__unix) || defined(__unix__)
 #elif defined(_WIN32) || defined(_WIN64)
 #endif
 
+#include <stdarg.h>
 #include <stdlib.h>
 #include <string.h>
 #include <errno.h>
@@ -124,12 +126,16 @@ void InitTui(int targetFps, TuiType type) {
 
 	// Start chainging things
 	UniWriteLen(UNI_WRITE_TARGET_STDOUT, "\033[?1049h\033[H\033[?7l");
+
+	InitOpenCl();
 }
 
 void CloseTui(void) {
 	if(!DATA.TuiData.initiated) {
 		return;
 	}
+
+	CleanUpOpenCl();
 
 	DATA.TuiData.initiated = false;
 	
@@ -221,11 +227,18 @@ int InitLoggin(char* path) {
 	return 0;
 }
 
-void TraceLog(char* message) {
+void TraceLog(const char* message, ...) {
 	if(!DATA.Logging.enabled) { return; }
 	if(!DATA.Logging.file) { return; }
 
-	fprintf(DATA.Logging.file, "%s\n", message);
+	va_list va;
+	va_start(va, message);
+
+	vfprintf(DATA.Logging.file, message, va);
+	fprintf(DATA.Logging.file, "\n");
+
+	va_end(va);
+
 	fflush(DATA.Logging.file);
 }
 
