@@ -198,9 +198,12 @@ typedef struct {
 		
 		cl_int (*clGetPlatformIDs)(cl_uint, cl_platform_id*, cl_uint*);
 		cl_int (*clGetDeviceIDs)(cl_platform_id, cl_device_type, cl_uint, cl_device_id*, cl_uint*);
-		cl_context (*clCreateContext)(const cl_context_properties*, cl_uint, const cl_device_id*, void (CL_CALLBACK *)(const char*, const void*, size_t, void*), void*, cl_int*);
 
+		cl_context (*clCreateContext)(const cl_context_properties*, cl_uint, const cl_device_id*, void (CL_CALLBACK *)(const char*, const void*, size_t, void*), void*, cl_int*);
 		cl_int (*clReleaseContext)(cl_context context);
+
+		cl_command_queue (*clCreateCommandQueue)(cl_context, cl_device_id, cl_command_queue_properties, cl_int*);
+		cl_int (*clReleaseCommandQueue)(cl_command_queue);
 	} OpenCl;
 } CoreData;
 

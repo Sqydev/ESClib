@@ -127,6 +127,9 @@ void InitTui(int targetFps, TuiType type) {
 	// Start chainging things
 	UniWriteLen(UNI_WRITE_TARGET_STDOUT, "\033[?1049h\033[H\033[?7l");
 
+	// Before InitOpenCl we set thoes two to make sure anything wierd isn't happening behind the scenes
+	DATA.System.computeBackend.backend = COMPUTE_ESC;
+	DATA.System.computeBackend.device = DEVICE_CPU;
 	InitOpenCl();
 }
 
