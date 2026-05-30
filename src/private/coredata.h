@@ -42,13 +42,14 @@
 #include <signal.h>
 #include <stdio.h>
 
+#include <CL/cl.h>
+
 #if defined(unix) || defined(__unix) || defined(__unix__)
 
 	#include <termios.h>
 
 #elif defined(_WIN32) || defined(__WIN64)
 #endif
-
 
 typedef enum {
 	WAYLAND,
@@ -65,6 +66,17 @@ typedef enum {
 } InputBackend;
 
 typedef struct {
+	enum {
+		COMPUTE_ESC,
+		COMPUTE_OPENCL,
+	} backend;
+	enum {
+		DEVICE_CPU,
+		DEVICE_GPU,
+	} device;
+} ComputeBackend;
+
+typedef struct {
 	struct {
 		SBCell* frontbuff;
 		size_t frontbuffOffset;
@@ -78,6 +90,7 @@ typedef struct {
 
 	struct {
 		Compositor compositor;
+		ComputeBackend computeBackend;
 	} System;
 
 	struct {
@@ -169,6 +182,26 @@ typedef struct {
 
 		char* path;
 	} Logging;
+
+	struct {
+		cl_platform_id platform;
+		cl_uint platformCount;
+
+		cl_device_id device;
+
+		cl_context context;
+		cl_command_queue queue;
+		cl_program program;
+		cl_kernel kernel;
+
+		void* dlHandle;
+		
+		cl_int (*clGetPlatformIDs)(cl_uint, cl_platform_id*, cl_uint*);
+		cl_int (*clGetDeviceIDs)(cl_platform_id, cl_device_type, cl_uint, cl_device_id*, cl_uint*);
+		cl_context (*clCreateContext)(const cl_context_properties*, cl_uint, const cl_device_id*, void (CL_CALLBACK *)(const char*, const void*, size_t, void*), void*, cl_int*);
+
+		cl_int (*clReleaseContext)(cl_context context);
+	} OpenCl;
 } CoreData;
 
 extern CoreData DATA;
