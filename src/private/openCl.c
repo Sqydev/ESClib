@@ -49,24 +49,24 @@ void InitOpenCl(void) {
 
 	if(!DATA.OpenCl.dlHandle) {
 		char *err = dlerror();
-		TraceLog("[ESCLIB]: Couldn't load OpenCL, fallback to COMPUTE_ESC, error code: %s", err ? err : "unknown");
-		DATA.System.computeBackend.device = DEVICE_CPU;
-		DATA.System.computeBackend.backend = COMPUTE_ESC;
+		TraceLog("[ESCLIB]: WARNING: Couldn't load OpenCL, fallback to COMPUTE_ESC, error code: %s", err ? err : "unknown");
+		CleanUpOpenCl();
 		return;
 	}
-	fprintf(stderr, "DEBUG: opencl load failed");
 
 	DATA.OpenCl.clGetDeviceIDs = dlsym(DATA.OpenCl.dlHandle, "clGetDeviceIDs");
 	DATA.OpenCl.clGetPlatformIDs = dlsym(DATA.OpenCl.dlHandle, "clGetPlatformIDs");
-	DATA.OpenCl.clCreateContext = dlsym(DATA.OpenCl.dlHandle, "clCreateContext");
 
+	DATA.OpenCl.clCreateContext = dlsym(DATA.OpenCl.dlHandle, "clCreateContext");
 	DATA.OpenCl.clReleaseContext = dlsym(DATA.OpenCl.dlHandle, "clReleaseContext");
 
-	if(!DATA.OpenCl.clGetDeviceIDs || !DATA.OpenCl.clGetPlatformIDs || !DATA.OpenCl.clCreateContext || !DATA.OpenCl.clReleaseContext) {
-    	TraceLog("[ESCLIB]: Missing OpenCL symbols, fallback to COMPUTE_ESC");
+	DATA.OpenCl.clCreateCommandQueue = dlsym(DATA.OpenCl.dlHandle, "clCreateCommandQueue");
+	DATA.OpenCl.clReleaseCommandQueue = dlsym(DATA.OpenCl.dlHandle, "clReleaseCommandQueue");
+
+	if(!DATA.OpenCl.clGetDeviceIDs || !DATA.OpenCl.clGetPlatformIDs || !DATA.OpenCl.clCreateContext || !DATA.OpenCl.clReleaseContext || !DATA.OpenCl.clCreateCommandQueue || !DATA.OpenCl.clReleaseCommandQueue) {
+    	TraceLog("[ESCLIB]: WARNING: Missing OpenCL symbols, fallback to COMPUTE_ESC");
     	dlclose(DATA.OpenCl.dlHandle);
-		DATA.System.computeBackend.device = DEVICE_CPU;
-		DATA.System.computeBackend.backend = COMPUTE_ESC;
+		CleanUpOpenCl();
     	return;
 	}
 
@@ -78,21 +78,20 @@ void InitOpenCl(void) {
 
 	erri = DATA.OpenCl.clGetPlatformIDs(1, &DATA.OpenCl.platform, &DATA.OpenCl.platformCount);
 	if(erri != CL_SUCCESS || DATA.OpenCl.platformCount == 0) {
-		TraceLog("[ESCLIB]: No OpenCL platforms, fallback to COMPUTE_ESC, OpenCL error code: %d", erri);
-		DATA.System.computeBackend.device = DEVICE_CPU;
-		DATA.System.computeBackend.backend = COMPUTE_ESC;
+		TraceLog("[ESCLIB]: WARNING: No OpenCL platforms, fallback to COMPUTE_ESC, OpenCL error code: %d", erri);
+		CleanUpOpenCl();
     	return;
 	}
 
 	erri = DATA.OpenCl.clGetDeviceIDs(DATA.OpenCl.platform, CL_DEVICE_TYPE_GPU, 1, &DATA.OpenCl.device, NULL);
 	if(erri != CL_SUCCESS) {
-		TraceLog("[ESCLIB]: No GPUs, fallback to CPU, OpenCL error code: %d", erri);
+		TraceLog("[ESCLIB]: WARNING: No GPUs, fallback to CPU, OpenCL error code: %d", erri);
 		DATA.System.computeBackend.device = DEVICE_CPU;
 
 		erri = DATA.OpenCl.clGetDeviceIDs(DATA.OpenCl.platform, CL_DEVICE_TYPE_CPU, 1, &DATA.OpenCl.device, NULL);
 		if(erri != CL_SUCCESS) {
-			TraceLog("[ESCLIB]: No CPUs found, fallback to COMPUTE_ESC, OpenCL error code: %d", erri);
-			DATA.System.computeBackend.backend = COMPUTE_ESC;
+			TraceLog("[ESCLIB]: WARNING: No CPUs found, fallback to COMPUTE_ESC, OpenCL error code: %d", erri);
+			CleanUpOpenCl();
     		return;
 		}
 	}
@@ -102,9 +101,15 @@ void InitOpenCl(void) {
 
 	DATA.OpenCl.context = DATA.OpenCl.clCreateContext(NULL, 1, &DATA.OpenCl.device, NULL, NULL, &erri);
     if(erri != CL_SUCCESS) {
-        TraceLog("[ESCLIB]: Failed to create OpenCL context, fallback to COMPUTE_ESC, OpenCL error code: %d", erri);
-		DATA.System.computeBackend.device = DEVICE_CPU;
-		DATA.System.computeBackend.backend = COMPUTE_ESC;
+        TraceLog("[ESCLIB]: WARNING: Failed to create OpenCL context, fallback to COMPUTE_ESC, OpenCL error code: %d", erri);
+		CleanUpOpenCl();
+        return;
+    }
+
+	DATA.OpenCl.queue = DATA.OpenCl.clCreateCommandQueue(DATA.OpenCl.context, DATA.OpenCl.device, 0, &erri);
+    if(erri != CL_SUCCESS) {
+        TraceLog("[ESCLIB]: WARNING: Failed to create OpenCL queue, fallback to COMPUTE_ESC, OpenCL error code: %d", erri);
+		CleanUpOpenCl();
         return;
     }
 
@@ -118,6 +123,10 @@ void CleanUpOpenCl(void) {
         DATA.OpenCl.clReleaseContext(DATA.OpenCl.context);
         DATA.OpenCl.context = NULL;
     }
+	if(DATA.OpenCl.queue) {
+    	DATA.OpenCl.clReleaseCommandQueue(DATA.OpenCl.queue);
+		DATA.OpenCl.queue = NULL;
+	}
 	if(DATA.OpenCl.dlHandle) {
 		dlclose(DATA.OpenCl.dlHandle);
 		DATA.OpenCl.dlHandle = NULL;
