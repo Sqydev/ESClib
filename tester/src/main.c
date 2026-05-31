@@ -48,6 +48,8 @@ const TesterEntry testers[] = {
 	{"IKDT", IsKeyDownTester, "IsKeyDownTester"},
 
 	{"LT", LoggingTester, "LoggingTester"},
+
+	{"BGT", BlurGPUTest, "BlurGPUTest"},
 };
 
 void PrintUsage(const char* prog) {

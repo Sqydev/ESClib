@@ -66,6 +66,7 @@ extern "C" {
 #endif
 
 #include <stddef.h>
+#include <stdint.h>
 #include <stdbool.h>
 #include <stdarg.h>
 
@@ -174,6 +175,7 @@ typedef enum {
 	TUI_DYNAMIC
 } TuiType;
 
+typedef struct Kernel Kernel;
 
 #define ESC_KEYMAX 139
 
@@ -498,6 +500,27 @@ RLAPI void DrawCirclePro(char* character, int centerX, int centerY, int radius, 
 RLAPI void PressKey(int key);
 RLAPI bool IsKeyPressed(int key);
 RLAPI bool IsKeyDown(int key);
+
+// OPENCL
+
+// If You Want To Init Only OpenCL And Don't Need TUI You Can Use This
+RLAPI void InitOpenCl(void);
+RLAPI void CleanUpOpenCl(void);
+
+// Compile Shader For Use, If Null Is Returned Than Shader Wasn't Compiled(User Propably Doesn't Have Your Lovely Grafiks API)(Out of the box ~/ handling)
+RLAPI Kernel* CompileKernel(const char* path, const char* kernelName);
+// Add Kernel Arg, Same As In OpenCL
+RLAPI int AddKernelArgValue(Kernel* kernel, uint32_t index, size_t size, const void* data);
+// Add Kernel Arg, Same As In OpenCL
+RLAPI int AddKernelArgBuffer(Kernel* kernel, uint32_t index, size_t size, const void* data);
+
+RLAPI int ReadKernelArg(Kernel* kernel, uint32_t index, size_t size, void* out);
+// Run Kernel
+RLAPI int RunKernel(Kernel* kernel, size_t instances, size_t workgroupSize);
+// Wait For Kernel To Finish
+RLAPI int WaitForKernel(void);
+// Free The Kernel
+RLAPI void DestroyKernel(Kernel* k);
 
 #ifdef __cplusplus
 }
