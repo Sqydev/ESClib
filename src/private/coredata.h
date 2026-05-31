@@ -76,6 +76,14 @@ typedef struct {
 	} device;
 } ComputeBackend;
 
+typedef struct Kernel {
+    cl_program program;
+    cl_kernel kernel;
+    cl_mem* argBufs;
+    size_t* argSizes;
+    uint32_t argCount;
+} Kernel;
+
 typedef struct {
 	struct {
 		SBCell* frontbuff;
@@ -204,6 +212,29 @@ typedef struct {
 
 		cl_command_queue (*clCreateCommandQueue)(cl_context, cl_device_id, cl_command_queue_properties, cl_int*);
 		cl_int (*clReleaseCommandQueue)(cl_command_queue);
+
+		cl_program (*clCreateProgramWithSource)(cl_context, cl_uint, const char**, const size_t*, cl_int*);
+		
+		cl_int (*clBuildProgram)(cl_program, cl_uint, const cl_device_id*, const char*, void (*)(cl_program, void*), void*);
+		cl_int (*clReleaseProgram)(cl_program);
+
+    	cl_kernel (*clCreateKernel)(cl_program, const char*, cl_int*);
+		cl_int (*clReleaseKernel)(cl_kernel);
+
+		cl_int (*clGetProgramBuildInfo)(cl_program, cl_device_id, cl_program_info, size_t, void*, size_t*);
+
+		cl_int (*clSetKernelArg)(cl_kernel, cl_uint, size_t, const void*);
+
+		cl_int (*clEnqueueNDRangeKernel)(cl_command_queue, cl_kernel, cl_uint, const size_t*, const size_t*, const size_t*, cl_uint, const cl_event*, cl_event*);
+
+		cl_int (*clFinish)(cl_command_queue);
+
+		cl_mem (*clCreateBuffer)(cl_context, cl_mem_flags, size_t, void*, cl_int*);
+		cl_int (*clReleaseMemObject)(cl_mem);
+
+		cl_int (*clEnqueueReadBuffer)(cl_command_queue, cl_mem, cl_bool, size_t, size_t, void*, cl_uint, const cl_event*, cl_event*);
+
+		cl_int (*clEnqueueWriteBuffer)(cl_command_queue, cl_mem, cl_bool, size_t, size_t, const void*, cl_uint, const cl_event*, cl_event*);
 	} OpenCl;
 } CoreData;
 

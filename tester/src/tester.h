@@ -42,3 +42,5 @@ void DrawCircleTester();
 void DrawLineTester();
 
 void IsKeyDownTester();
+
+void BlurGPUTest(void);

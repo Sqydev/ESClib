@@ -40,7 +40,6 @@
 #include "./private/common_utils.h"
 #include "./private/renderFrame.h"
 #include "./private/input/input.h"
-#include "./private/openCl.h"
 
 #if defined(unix) || defined(__unix) || defined(__unix__)
 #elif defined(_WIN32) || defined(_WIN64)
@@ -259,13 +258,14 @@ void BeginDrawing(void) {
 	SignalsStep();
 
 	InputStep();
+
+	DATA.Time.previous = GetTime();
 }
 
 // TODO: Make here better error handling
 void EndDrawing(void) {
 	RenderFrame();
 
-	DATA.Time.previous = DATA.Time.current;
 	DATA.Time.current = GetTime();
 	DATA.Time.delta = DATA.Time.current - DATA.Time.previous;
 
@@ -287,9 +287,9 @@ void EndDrawing(void) {
 
 #endif
 
-			DATA.Time.previous = DATA.Time.current;
 			DATA.Time.current = GetTime();
 			DATA.Time.delta = DATA.Time.current - DATA.Time.previous;
+			DATA.Time.previous = DATA.Time.current;
 		}
 	}
 }
