@@ -1,85 +1,116 @@
 #include "../../../include/esclib.h"
+
 #include <stdio.h>
+#include <stdlib.h>
 #include <math.h>
 #include <string.h>
 
-#define W 120
-#define H 38
+unsigned char* input = NULL;
+unsigned char* output = NULL;
+int current_w = 0;
+int current_h = 0;
 
-static unsigned char input[W * H];
-static unsigned char output[W * H];
-
-static const char* ramp = " `.,;'!^-~:=+?><|(){}[]1ilI7JcjsLtfozxnYuvCXUZO08QmwqpdbkhKAFBEPGHRS#&D$M%W@N";
-static int ramp_len = 0;
+const char* ramp = " `.,;'!^-~:=+?><|(){}[]1ilI7JcjsLtfozxnYuvCXUZO08QmwqpdbkhKAFBEPGHRS#&D$M%W@N";
+int ramp_len = 0;
 
 typedef enum { MODE_BLUR = 0, MODE_EDGE, MODE_SHARPEN, MODE_COUNT } Mode;
 typedef enum { PAT_XOR = 0, PAT_RINGS, PAT_PLASMA, PAT_WAVE, PAT_COUNT } Pattern;
 
-static const char* mode_names[] = { "Gaussian Blur", "Edge Detect", "Sharpen" };
-static const char* pat_names[]  = { "XOR", "Rings", "Plasma", "Wave" };
+const char* mode_names[] = { "Gaussian Blur", "Edge Detect", "Sharpen" };
+const char* pat_names[] = { "XOR", "Rings", "Plasma", "Wave" };
 
-static Mode    current_mode = MODE_BLUR;
-static Pattern current_pat  = PAT_XOR;
-static bool    paused       = false;
-static float   time_acc     = 0.0f;
+Mode current_mode = MODE_BLUR;
+Pattern current_pat = PAT_XOR;
+bool paused = false;
+float time_acc = 0.0f;
 
-static Color val_to_color(int v) {
-    Color c; c.trueColor = true;
-    if      (v < 64)  { c.r = 0;   c.g = v * 2;          c.b = 128 + v; }
-    else if (v < 128) { c.r = 0;   c.g = 128+(v-64)*2;   c.b = 192-(v-64)*2; }
-    else if (v < 192) { c.r = (v-128)*4; c.g = 255;       c.b = 0; }
-    else              { c.r = 255; c.g = 255-(v-192)*4;   c.b = 0; }
-    return c;
-}
+Color val_to_color(int value) {
+    Color color;
 
-static void gen_xor(float t) {
-    int off = (int)(t * 20.0f);
-    for(int y = 0; y < H; y++) {
-        for(int x = 0; x < W; x++) { input[y*W+x] = (unsigned char)(((x+off)^y)*255/(W+H)); }
+	color.trueColor = true;
+    if(value < 64) {
+		color.r = 0;
+		color.g = value * 2;
+		color.b = 128 + value;
 	}
+    else if(value < 128) {
+		color.r = 0;
+		color.g = 128 + (value - 64) * 2;
+		color.b = 192 - (value - 64) * 2;
+	}
+    else if(value < 192) {
+		color.r = (value - 128) * 4;
+		color.g = 255;
+		color.b = 0;
+	}
+    else {
+		color.r = 255;
+		color.g = 255 - (value - 192) * 4;
+		color.b = 0;
+	}
+    return color;
 }
-static void gen_rings(float t) {
-    float cx = W/2.0f + sinf(t*0.7f)*W*0.25f;
-    float cy = H/2.0f + cosf(t*0.5f)*H*0.25f;
-    for (int y = 0; y < H; y++)
-        for (int x = 0; x < W; x++) {
-            float dx=(x-cx)*0.5f, dy=(float)(y-cy);
-            float v=(sinf(sqrtf(dx*dx+dy*dy)*0.6f-t*3.0f)+1.0f)*0.5f;
-            input[y*W+x]=(unsigned char)(v*255.0f);
+
+void gen_xor(float time, int width, int height) {
+    int off = (int)(time * 20.0f);
+    for(int y = 0; y < height; y++) {
+        for(int x = 0; x < width; x++) { 
+            input[y * width + x] = (unsigned char)( ( ( (x + off)^y ) * 255 ) / (width + height) ); 
         }
-}
-static void gen_plasma(float t) {
-    for (int y = 0; y < H; y++)
-        for (int x = 0; x < W; x++) {
-            float fx=x*0.08f, fy=y*0.15f;
-            float v=sinf(fx+t)+sinf(fy+t*1.3f)+sinf((fx+fy)*0.5f+t*0.8f)+sinf(sqrtf(fx*fx+fy*fy)+t);
-            input[y*W+x]=(unsigned char)((v/4.0f+1.0f)*0.5f*255.0f);
-        }
-}
-static void gen_wave(float t) {
-    for (int y = 0; y < H; y++)
-        for (int x = 0; x < W; x++) {
-            float v=sinf(x*0.2f+t*2.0f)*cosf(y*0.35f+t)*0.5f+0.5f;
-            input[y*W+x]=(unsigned char)(v*255.0f);
-        }
-}
-static void update_pattern(float t) {
-    switch(current_pat) {
-        case PAT_XOR:    gen_xor(t);    break;
-        case PAT_RINGS:  gen_rings(t);  break;
-        case PAT_PLASMA: gen_plasma(t); break;
-        case PAT_WAVE:   gen_wave(t);   break;
-        default: break;
     }
 }
 
-static void render(unsigned char* buf) {
+void gen_rings(float time, int width, int height) {
+    float cx = width / 2.0f + sinf(time * 0.7f) * width * 0.25f;
+    float cy = height / 2.0f + cosf(time * 0.5f) * height * 0.25f;
+
+    for(int y = 0; y < height; y++) {
+        for(int x = 0; x < width; x++) {
+            float dx = (x - cx) * 0.5f;
+			float dy = (float)(y - cy);
+            float v = ( sinf( sqrtf(dx * dx + dy * dy) * 0.6f - time * 3.0f ) + 1.0f ) * 0.5f;
+            input[y * width + x] = (unsigned char)(v * 255.0f);
+        }
+	}
+}
+
+void gen_plasma(float time, int width, int height) {
+    for(int y = 0; y < height; y++) {
+        for(int x = 0; x < width; x++) {
+            float fx = x * 0.08f;
+			float fy = y * 0.15f;
+            float v = sinf(fx + time) + sinf(fy + time * 1.3f) + sinf((fx + fy) * 0.5f + time * 0.8f) + sinf(sqrtf(fx * fx + fy * fy) + time);
+            input[y * width + x] = (unsigned char)(( (v / 4.0f) + 1.0f ) * 0.5f * 255.0f);
+        }
+	}
+}
+
+void gen_wave(float time, int width, int height) {
+    for(int y = 0; y < height; y++) {
+        for(int x = 0; x < width; x++) {
+            float v = sinf(x * 0.2f + time * 2.0f) * cosf(y * 0.35f + time) * 0.5f + 0.5f;
+            input[y * width + x] = (unsigned char)(v * 255.0f);
+        }
+	}
+}
+
+void update_pattern(float time, int width, int height) {
+    switch(current_pat) {
+        case PAT_XOR: { gen_xor(time, width, height); break; }
+        case PAT_RINGS: { gen_rings(time, width, height); break; }
+        case PAT_PLASMA: { gen_plasma(time, width, height); break; }
+        case PAT_WAVE: { gen_wave(time, width, height); break; }
+        default: { break; }
+    }
+}
+
+void render(unsigned char* buf, int width, int height) {
     BeginDrawing();
 
-    for (int y = 0; y < H; y++) {
-        for (int x = 0; x < W; x++) {
-            int v = buf[y*W+x];
-            int ci = v * (ramp_len-1) / 255;
+    for(int y = 0; y < height; y++) {
+        for(int x = 0; x < width; x++) {
+            int v = buf[y * width + x];
+            int ci = v * (ramp_len - 1) / 255;
             char ch[2] = { ramp[ci], 0 };
             Color fg = val_to_color(v);
             Color bg = { 0, 0, 0, true };
@@ -89,16 +120,13 @@ static void render(unsigned char* buf) {
 
     Color hud_fg = { 255, 220, 50, true };
     Color hud_bg = { 20, 20, 40, true };
-    double dt  = GetDeltaTime();
-    double fps = dt > 0.0 ? 1.0/dt : 0.0;
-    DrawTextfEx(" FPS: %4.0f | dt: %.2fms | Mode: %-14s | Pat: %-7s | %s ",
-        0, H, &hud_fg, &hud_bg,
-        fps, dt*1000.0, mode_names[current_mode], pat_names[current_pat],
-        paused ? "PAUSED" : "LIVE");
+    double dt = GetDeltaTime();
+    double fps = dt > 0.0 ? 1.0 / dt : 0.0;
+    
+    DrawTextfEx(" FPS: %4.0f | dt: %.2fms | Mode: %-14s | Pat: %-7s | %s ", 0, height, &hud_fg, &hud_bg, fps, dt * 1000.0, mode_names[current_mode], pat_names[current_pat], paused ? "PAUSED" : "LIVE");
 
     Color key_fg = { 150, 150, 200, true };
-    DrawTextfEx(" [M] mode  [P] pattern  [SPACE] pause  [ESC] quit ",
-        0, H+1, &key_fg, &hud_bg);
+    DrawTextfEx(" [M] mode  [P] pattern  [SPACE] pause  [ESC] quit ", 0, height + 1, &key_fg, &hud_bg);
 
     EndDrawing();
 }
@@ -110,59 +138,85 @@ static const char* kernel_paths[] = {
 };
 static const char* kernel_names[] = { "blur", "edge", "sharpen" };
 
-void BlurGPUTest(void) {
+void PatternsGPUTest(void) {
     ramp_len = (int)strlen(ramp);
 
     InitTui(165, TUI_DYNAMIC);
 
     Kernel* kernels[MODE_COUNT] = { NULL, NULL, NULL };
-    for (int i = 0; i < MODE_COUNT; i++) {
+    for(int i = 0; i < MODE_COUNT; i++) {
         kernels[i] = CompileKernel(kernel_paths[i], kernel_names[i]);
     }
 
-    if (!kernels[MODE_BLUR]) {
+    if(!kernels[MODE_BLUR]) {
         CloseTui();
         printf("Critical: blur kernel failed. Uruchom z katalogu roota.\n");
         return;
     }
 
-    int width  = W;
-    int height = H;
-
     for (;;) {
-        if (IsKeyPressed(KEY_ESCAPE)) break;
+        if(IsKeyPressed(KEY_ESCAPE)) { break; }
 
-        if (IsKeyPressed(KEY_M)) {
+        if(IsKeyPressed(KEY_M)) {
             int tries = 0;
             do {
-                current_mode = (Mode)((current_mode+1) % MODE_COUNT);
+                current_mode = (Mode)((current_mode + 1) % MODE_COUNT);
                 tries++;
-            } while (!kernels[current_mode] && tries < MODE_COUNT);
+            } while(!kernels[current_mode] && tries < MODE_COUNT);
         }
-        if (IsKeyPressed(KEY_P))
-            current_pat = (Pattern)((current_pat+1) % PAT_COUNT);
-        if (IsKeyPressed(KEY_SPACE))
+        if(IsKeyPressed(KEY_P)) {
+            current_pat = (Pattern)((current_pat + 1) % PAT_COUNT);
+		}
+        if(IsKeyPressed(KEY_SPACE)) {
             paused = !paused;
+		}
 
-        if (!paused)
+        if(!paused) {
             time_acc += (float)GetDeltaTime();
+		}
 
-        update_pattern(time_acc);
+        Vector2i dims = GetTuiDimensions();
+        int new_w = dims.x;
+        int new_h = dims.y - 2;
+
+        if(new_w <= 0 || new_h <= 0) {
+            continue; 
+        }
+
+        if(new_w != current_w || new_h != current_h) {
+            current_w = new_w;
+            current_h = new_h;
+            size_t new_size = current_w * current_h * sizeof(unsigned char);
+            
+            input = realloc(input, new_size);
+            output = realloc(output, new_size);
+            
+            if(!input || !output) {
+                break;
+            }
+        }
+
+        update_pattern(time_acc, current_w, current_h);
 
         Kernel* k = kernels[current_mode];
+        size_t buf_size = current_w * current_h * sizeof(unsigned char);
 
-        AddKernelArgBuffer(k, 0, sizeof(input),  input);
-        AddKernelArgBuffer(k, 1, sizeof(output), output);
-        AddKernelArgValue(k, 2, sizeof(int),    &width);
-        AddKernelArgValue(k, 3, sizeof(int),    &height);
-        RunKernel(k, W*H, 0);
+        AddKernelArgBuffer(k, 0, buf_size, input);
+        AddKernelArgBuffer(k, 1, buf_size, output);
+        AddKernelArgValue(k, 2, sizeof(int), &current_w);
+        AddKernelArgValue(k, 3, sizeof(int), &current_h);
+        
+        RunKernel(k, current_w * current_h, 0);
         WaitForKernel();
-		ReadKernelArg(k, 1, sizeof(output), output);
+        ReadKernelArg(k, 1, buf_size, output);
 
-        render(output);
+        render(output, current_w, current_h);
     }
 
-    for (int i = 0; i < MODE_COUNT; i++)
-        if (kernels[i]) DestroyKernel(kernels[i]);
+    free(input);
+    free(output);
+
+    for(int i = 0; i < MODE_COUNT; i++) { if(kernels[i]) { DestroyKernel(kernels[i]); } }
+
     CloseTui();
 }
