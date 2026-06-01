@@ -43,4 +43,4 @@ void DrawLineTester();
 
 void IsKeyDownTester();
 
-void BlurGPUTest(void);
+void PatternsGPUTest(void);

@@ -49,7 +49,7 @@ const TesterEntry testers[] = {
 
 	{"LT", LoggingTester, "LoggingTester"},
 
-	{"BGT", BlurGPUTest, "BlurGPUTest"},
+	{"BGT", PatternsGPUTest, "PatternsGPUTest"},
 };
 
 void PrintUsage(const char* prog) {
