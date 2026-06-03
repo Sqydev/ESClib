@@ -47,6 +47,9 @@ void InitOpenCl(void) {
 #if defined(unix) || defined(__unix) || defined(__unix__)
 
 	DATA.OpenCl.dlHandle = dlopen("libOpenCL.so", RTLD_NOW);
+	if(!DATA.OpenCl.dlHandle) {
+		DATA.OpenCl.dlHandle = dlopen("libOpenCL.so.1", RTLD_NOW);
+	}
 
 	if(!DATA.OpenCl.dlHandle) {
 		char *err = dlerror();

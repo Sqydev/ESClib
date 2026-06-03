@@ -1,3 +1,5 @@
+// Make GPU part more efficient(f.e don't reset args)
+
 // Make ~/ handling in CompileKernel
 
 // Make aute Kernel Frees

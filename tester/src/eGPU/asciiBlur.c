@@ -150,10 +150,10 @@ void PatternsGPUTest(void) {
 
     if(!kernels[MODE_BLUR]) {
         CloseTui();
-        printf("Critical: blur kernel failed. Uruchom z katalogu roota.\n");
+        printf("Critical: kernel didn't load for some reason. RUN FROM PROJECT ROOT.\n");
         return;
     }
-
+  
     for (;;) {
         if(IsKeyPressed(KEY_ESCAPE)) { break; }
 
@@ -198,14 +198,17 @@ void PatternsGPUTest(void) {
 
         update_pattern(time_acc, current_w, current_h);
 
-        Kernel* k = kernels[current_mode];
-        size_t buf_size = current_w * current_h * sizeof(unsigned char);
+	Kernel* k = kernels[current_mode];
 
-        AddKernelArgBuffer(k, 0, buf_size, input);
-        AddKernelArgBuffer(k, 1, buf_size, output);
-        AddKernelArgValue(k, 2, sizeof(int), &current_w);
-        AddKernelArgValue(k, 3, sizeof(int), &current_h);
+    size_t buf_size = current_w * current_h * sizeof(unsigned char);
+
+    AddKernelArgBuffer(k, 0, buf_size, input);
+    AddKernelArgBuffer(k, 1, buf_size, output);
+    AddKernelArgValue(k, 2, sizeof(int), &current_w);
+    AddKernelArgValue(k, 3, sizeof(int), &current_h);
         
+
+
         RunKernel(k, current_w * current_h, 0);
         WaitForKernel();
         ReadKernelArg(k, 1, buf_size, output);
