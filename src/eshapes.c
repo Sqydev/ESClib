@@ -63,7 +63,6 @@ void DrawLinePro(char* character, int pointAX, int pointAY, int pointBX, int poi
 
 	int vWidth = GetCharWidth(character);
 
-	// NOTE: Magic numbers that makes it accurate
 	double stepX = vWidth / fmax(fabs(aDir.x), fabs(aDir.y));
 	double stepY = 1 / fmax(fabs(aDir.x), fabs(aDir.y));
 
@@ -84,7 +83,7 @@ void DrawLinePro(char* character, int pointAX, int pointAY, int pointBX, int poi
 
 		for(int i = 1; i < thickness; i++) {
 			DrawCharEx(character, termPos.x + (int)(i * -aDir.y), termPos.y + (int)(i * aDir.x), fg, bg);
-			DrawCharEx(character, termPos.x + (int)(i * aDir.y), termPos.y + (int)(i * -aDir.x), fg, bg);
+			if(thickness > 1) { DrawCharEx(character, termPos.x + (int)(i * aDir.y), termPos.y + (int)(i * -aDir.x), fg, bg); }
 		}
 
 		realPos.x += scaledDir.x;
@@ -127,9 +126,6 @@ void DrawRectangleProV(char* character, Vector2i pos, Vector2i dimms, Vector2i o
 	DrawRectanglePro(character, pos.x, pos.y, dimms.x, dimms.y, origin.x, origin.y, fg, bg, rotation, roundness, lines, aspectRatiofied);
 }
 
-// NOTE: DO NOT FLOPING REMOVE Color*. Think about the people that want to make the graphicks with @ that have transparent backgrounds
-// NOTE: Sorry for the sloppy commnets
-// NOTE: I don't know what it does anymore:(((((((
 void DrawRectanglePro(char* character, int posX, int posY, int width, int height, int originX, int originY, Color* fg, Color* bg, double rotation, float roundness, bool lines, bool aspectRatiofied) {
 	(void)lines;
 
@@ -143,10 +139,9 @@ void DrawRectanglePro(char* character, int posX, int posY, int width, int height
 	double cosA = ECos(rotation);
 	double sinA = ESin(rotation);
 
-	// NOTE: Just width in pixels
-    double pw = width * aspectRatio;
+    double widthInPixels = width * aspectRatio;
 	// NOTE: So. sqrt(pw^2 + height^2) is calculating przekątna in pixels and / aspectRatio + 1 is just convert it from pixels to cells
-    double maxRadius = sqrt(pw * pw + height * height) / aspectRatio + 1;
+    double maxRadius = sqrt(widthInPixels * widthInPixels + height * height) / aspectRatio + 1;
 
     int startX = posX - (int)maxRadius;
     int endX = posX + (int)maxRadius;
@@ -161,8 +156,8 @@ void DrawRectanglePro(char* character, int posX, int posY, int width, int height
 	double rpx = (double)GetCellSizeInPixels().x * width;
     double rpy = (double)GetCellSizeInPixels().y * height;
 	// NOTE: Clamp
-    if(roundness < 0.0f)   roundness = 0.0f;
-	if(roundness > 100.0f) roundness = 100.0f;
+    if(roundness < 0.0f) { roundness = 0.0f; }
+	if(roundness > 100.0f) { roundness = 100.0f; }
 	// NOTE: From 0 to 100
 	double r = (roundness / 100.0) * fmin(rpx, rpy) / 2.0;
 
@@ -170,41 +165,29 @@ void DrawRectanglePro(char* character, int posX, int posY, int width, int height
 
     for(int y = startY; y <= endY; y++) {
         for(int x = startX; x <= endX; x++) {
-			// NOTE: Don't ask me about that. Idk what it does
 			if((x - posX) % vWidth != 0) { continue; }
 
             double dx = (x + (vWidth / 2.0) - posX) * aspectRatio;
             double dy = (y + 0.5 - posY);
 
-			// NOTE: Do matrix math shennanygancs or however it's spelled
             double ox = (dx * cosA) + (dy * sinA);
             double oy = -(dx * sinA) + (dy * cosA);
 
-			// NOTE: Come back to cells again
             double srcX = ox / aspectRatio + originX;
             double srcY = oy + originY;
 
-			// NOTE: Skip if out of bounce
 			if(srcX < 0.0 || srcX >= (double)width || srcY < 0.0 || srcY >= (double)height) continue;
 
 			if(roundness > 0.0f) {
-				// NOTE: Pos of point in pixels
             	double px = srcX * GetCellSizeInPixels().x;
                 double py = srcY * GetCellSizeInPixels().y;
 
-				// NOTE: I don't have a mind to expalin that here so here's chatgbt's explenation:
-				// // Find the center of the nearest rounded corner circle.
-				// Each corner circle center is at distance r from both edges (not at the corner itself).
-				// If we're in the corner zone (px < r or px > rpx-r), snap to that corner circle center.
-				// If we're in the middle, snap to px itself so distance will be 0 (always draw).
                 double cx = px < r ? r : (px > rpx - r ? rpx - r : px);
                 double cy = py < r ? r : (py > rpy - r ? rpy - r : py);
 
-				// NOTE: Distance from point to nearest corner circle center (squared, to avoid sqrt)
                 double ddx = px - cx;
                 double ddy = py - cy;
 
-				// NOTE: If distance > r, the point is outside the corner circle = outside the rounded rect
                 if(ddx * ddx + ddy * ddy > r * r) { continue; }
 			}
             
