@@ -129,11 +129,9 @@ void DrawRectangleProV(char* character, Vector2i pos, Vector2i dimms, Vector2i o
 void DrawRectanglePro(char* character, int posX, int posY, int width, int height, int originX, int originY, Color* fg, Color* bg, double rotation, float roundness, bool lines, bool aspectRatiofied) {
 	(void)lines;
 
-	double aspectRatio;
+	double aspectRatio = 1.0;
     if(aspectRatiofied) {
 		aspectRatio = (GetCellProportions().x > 0 && GetCellProportions().y > 0) ? (double)GetCellProportions().x / (double)GetCellProportions().y : 0.5;
-	} else {
-		aspectRatio = 1.0;
 	}
 
 	double cosA = ECos(rotation);
@@ -229,11 +227,9 @@ void DrawCircleProV(char* character, Vector2i centerPos, int radius, Vector2d an
 }
 
 void DrawCirclePro(char* character, int centerX, int centerY, int radius, double startAngle, double endAngle, Color* fg, Color* bg, bool lines, bool aspectRatiofied) {
-	double aspectRatio;
+	double aspectRatio = 1.0;
     if(aspectRatiofied) {
 		aspectRatio = (GetCellProportions().x > 0 && GetCellProportions().y > 0) ? (double)GetCellProportions().x / (double)GetCellProportions().y : 0.5;
-	} else {
-		aspectRatio = 1.0;
 	}
 
 	int radiusCellsX = (int)(radius / aspectRatio) + 1;
@@ -258,13 +254,11 @@ void DrawCirclePro(char* character, int centerX, int centerY, int radius, double
 			// NOTE: Magic things from DrawRectangle that scale the chars
 			if((x - centerX) % vWidth != 0) { continue; }
 
-			// NOTE: Get pixel things
 			double dx = (x + vWidth / 2.0 - centerX) * aspectRatio;
 			double dy = (y + 0.5 - centerY);
 
 			double distance = (dx * dx) + (dy * dy);
 
-			// NOTE: Use desmos technification to check if it's INSIDE THE CIRCLE
 			if(!lines) {
 				if(distance > radius * radius) { continue; }
 			}
@@ -272,27 +266,22 @@ void DrawCirclePro(char* character, int centerX, int centerY, int radius, double
 				if(fabs(distance - radius * radius) > thickness) { continue; }
 			}
 
-			// NOTE: It magicly get's the Vector's angle in rads
+			// NOTE: Remamber tan is from -2pi to +2pi becouse you'll forget. So thoes "angle += 2 * PI;" are correct there is NO what is it's less than -2pi >:(
 			double angle = atan2(dy, dx);
 
 			if(angle < 0) { angle += 2 * PI; }
 
-			// NOTE: Fix the user
-			double s = startAngle;
-			double e = endAngle;
-			if(s < 0) { s += 2 * PI; }
-			if(e < 0) { e += 2 * PI; }
+			if(startAngle < 0) { startAngle += 2 * PI; }
+			if(endAngle < 0) { endAngle += 2 * PI; }
 
-			// NOTE: Fixing user p2. If s == 300 * DEG2RAD e == 30 * DEG2RAD than just do math that works for that case
-			bool inArc;
-			if(s < e) {
-				inArc = (angle >= s && angle <= e);
+			bool inArc = false;
+			if(startAngle < endAngle) {
+				inArc = (angle >= startAngle && angle <= endAngle);
 			}
 			else {
-				inArc = (angle >= s || angle <= e);
+				inArc = (angle >= startAngle || angle <= endAngle);
 			}
 
-			// NOTE: If the point doesn't belong here than FUCKING ANIHILATE IT
 			if(!inArc) { continue; }
 
 			DrawCharEx(character, x, y, fg, bg);
