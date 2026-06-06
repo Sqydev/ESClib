@@ -466,22 +466,22 @@ RLAPI void DrawLinePro(char* character, int pointAX, int pointAY, int pointBX, i
 RLAPI void DrawRectangleRec(Rectangle rec, Color color);
 RLAPI void DrawRectangleV(Vector2i pos, Vector2i dimms, Color color);
 RLAPI void DrawRectangle(int x, int y, int width, int height, Color color);
-RLAPI void DrawRectangleExRec(char* character, Rectangle rec, Color* fg, Color* bg, bool lines);
-RLAPI void DrawRectangleExV(char* character, Vector2i pos, Vector2i dimms, Color* fg, Color* bg, bool lines);
-RLAPI void DrawRectangleEx(char* character, int x, int y, int width, int height, Color* fg, Color* bg, bool lines);
-RLAPI void DrawRectangleProRec(char* character, Rectangle rec, Vector2i origin, Color* fg, Color* bg, double rotation, float roundness, bool lines, bool aspectRatiofied);
-RLAPI void DrawRectangleProV(char* character, Vector2i pos, Vector2i dimms, Vector2i origin, Color* fg, Color* bg, double rotation, float roundness, bool lines, bool aspectRatiofied);
-RLAPI void DrawRectanglePro(char* character, int x, int y, int width, int height, int originX, int originY, Color* fg, Color* bg, double rotation, float roundness, bool lines, bool aspectRatiofied);
+RLAPI void DrawRectangleExRec(char* character, Rectangle rec, Color* fg, Color* bg, bool lines, int thicknessLines);
+RLAPI void DrawRectangleExV(char* character, Vector2i pos, Vector2i dimms, Color* fg, Color* bg, bool lines, int thicknessLines);
+RLAPI void DrawRectangleEx(char* character, int x, int y, int width, int height, Color* fg, Color* bg, bool lines, int thicknessLines);
+RLAPI void DrawRectangleProRec(char* character, Rectangle rec, Vector2i origin, Color* fg, Color* bg, double rotation, float roundness, bool lines, int thicknessLines, bool aspectRatiofied);
+RLAPI void DrawRectangleProV(char* character, Vector2i pos, Vector2i dimms, Vector2i origin, Color* fg, Color* bg, double rotation, float roundness, bool lines, int thicknessLines, bool aspectRatiofied);
+RLAPI void DrawRectanglePro(char* character, int posX, int posY, int width, int height, int originX, int originY, Color* fg, Color* bg, double rotation, float roundness, bool lines, int thicknessLines, bool aspectRatiofied);
 
 RLAPI void DrawCircleCir(Circle circle, Color color);
 RLAPI void DrawCircleV(Vector2i centerPos, int radius, Color color);
 RLAPI void DrawCircle(int centerX, int centerY, int radius, Color color);
-RLAPI void DrawCircleExCir(char* character, Circle circle, Color* fg, Color* bg, bool lines);
-RLAPI void DrawCircleExV(char* character, Vector2i centerPos, int radius, Color* fg, Color* bg, bool lines);
-RLAPI void DrawCircleEx(char* character, int centerX, int centerY, int radius, Color* fg, Color* bg, bool lines);
-RLAPI void DrawCircleProCir(char* character, Circle circle, Vector2d angleSpectrum, Color* fg, Color* bg, bool lines, bool aspectRatiofied);
-RLAPI void DrawCircleProV(char* character, Vector2i centerPos, int radius, Vector2d angleSpectrum, Color* fg, Color* bg, bool lines, bool aspectRatiofied);
-RLAPI void DrawCirclePro(char* character, int centerX, int centerY, int radius, double startAngle, double endAngle, Color* fg, Color* bg, bool lines, bool aspectRatiofied);
+RLAPI void DrawCircleExCir(char* character, Circle circle, Color* fg, Color* bg, bool lines, int thicknessLines);
+RLAPI void DrawCircleExV(char* character, Vector2i centerPos, int radius, Color* fg, Color* bg, bool lines, int thicknessLines);
+RLAPI void DrawCircleEx(char* character, int centerX, int centerY, int radius, Color* fg, Color* bg, bool lines, int thicknessLines);
+RLAPI void DrawCircleProCir(char* character, Circle circle, Vector2d angleSpectrum, Color* fg, Color* bg, bool lines, int thicknessLines, bool aspectRatiofied);
+RLAPI void DrawCircleProV(char* character, Vector2i centerPos, int radius, Vector2d angleSpectrum, Color* fg, Color* bg, bool lines, int thicknessLines, bool aspectRatiofied);
+RLAPI void DrawCirclePro(char* character, int centerX, int centerY, int radius, double startAngle, double endAngle, Color* fg, Color* bg, bool lines, int thicknessLines, bool aspectRatiofied);
 
 /*
  * To make.

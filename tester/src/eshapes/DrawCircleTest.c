@@ -10,17 +10,17 @@ void DrawCircleTester() {
 
 		DrawCircle((((float)GetTuiDimensions().x / 2) * ECos(rot)) + ((float)GetTuiDimensions().x / 2), GetTuiDimensions().y / 2, 5, (Color){ 255, 255, 255, 1 });
 
-		DrawCircleEx("🔥", (((float)GetTuiDimensions().x / 2) * ECos(rot)) + ((float)GetTuiDimensions().x / 2), GetTuiDimensions().y / 3, 5, NULL, NULL, false);
+		DrawCircleEx("🔥", (((float)GetTuiDimensions().x / 2) * ECos(rot)) + ((float)GetTuiDimensions().x / 2), GetTuiDimensions().y / 3, 5, NULL, NULL, false, 0);
 
-		DrawCircleEx("@", (((float)GetTuiDimensions().x / 2) * ECos(rot)) + ((float)GetTuiDimensions().x / 2), GetTuiDimensions().y - GetTuiDimensions().y / 3, 5, NULL, NULL, false);
+		DrawCircleEx("@", (((float)GetTuiDimensions().x / 2) * ECos(rot)) + ((float)GetTuiDimensions().x / 2), GetTuiDimensions().y - GetTuiDimensions().y / 3, 5, NULL, NULL, false, 0);
 
-		DrawCirclePro("@", (((float)GetTuiDimensions().x / 2) * ECos(rot)) + ((float)GetTuiDimensions().x / 2), GetTuiDimensions().y / 6, 5, -PI / 2, PI / 2, NULL, NULL, false, true);
+		DrawCirclePro("@", (((float)GetTuiDimensions().x / 2) * ECos(rot)) + ((float)GetTuiDimensions().x / 2), GetTuiDimensions().y / 6, 5, -PI / 2, PI / 2, NULL, NULL, false, 0, true);
 
-		DrawCirclePro("🔥", (((float)GetTuiDimensions().x / 2) * ECos(rot)) + ((float)GetTuiDimensions().x / 2), GetTuiDimensions().y / 6, 5, PI / 2, -PI / 2, NULL, NULL, true, true);
+		DrawCirclePro("🔥", (((float)GetTuiDimensions().x / 2) * ECos(rot)) + ((float)GetTuiDimensions().x / 2), GetTuiDimensions().y / 6, 5, PI / 2, -PI / 2, NULL, NULL, true, 1, true);
 
-		DrawCirclePro("🔥", (((float)GetTuiDimensions().x / 2) * ECos(rot)) + ((float)GetTuiDimensions().x / 2), GetTuiDimensions().y  - (GetTuiDimensions().y / 6), 5, PI / 2, -PI / 2, NULL, NULL, false, true);
+		DrawCirclePro("🔥", (((float)GetTuiDimensions().x / 2) * ECos(rot)) + ((float)GetTuiDimensions().x / 2), GetTuiDimensions().y  - (GetTuiDimensions().y / 6), 5, PI / 2, -PI / 2, NULL, NULL, false, 0, true);
 
-		DrawCirclePro("@", (((float)GetTuiDimensions().x / 2) * ECos(rot)) + ((float)GetTuiDimensions().x / 2), GetTuiDimensions().y  - (GetTuiDimensions().y / 6), 5, -PI / 2, PI / 2, NULL, NULL, true, true);
+		DrawCirclePro("@", (((float)GetTuiDimensions().x / 2) * ECos(rot)) + ((float)GetTuiDimensions().x / 2), GetTuiDimensions().y  - (GetTuiDimensions().y / 6), 5, -PI / 2, PI / 2, NULL, NULL, true, 1, true);
 		
 		EndDrawing();
 		
