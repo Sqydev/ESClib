@@ -62,7 +62,7 @@ int EnableSignal(int signal) {
 		}
 		
 		default: {
-			UniWriteLen(UNI_WRITE_TARGET_STDOUT, "ERROR: Couldn't enable signal becouse signal is NOT supported\n");
+			TraceLog("[ESCLIB.EnableSignal]: ERROR: Couldn't enable signal becouse signal is NOT supported");
 			errno = EINVAL;
 			return EXIT_FAILURE;
 		}
@@ -85,7 +85,7 @@ int DisableSignal(int signal) {
 		}
 		
 		default: {
-			UniWriteLen(UNI_WRITE_TARGET_STDOUT, "ERROR: Couldn't disable signal becouse signal is NOT supported\n");
+			TraceLog("[ESCLIB.DisableSignal]: ERROR: Couldn't disable signal becouse signal is NOT supported");
 			errno = EINVAL;
 			return EXIT_FAILURE;
 		}
@@ -108,7 +108,7 @@ int EnableSignalESClibTasks(int signal) {
 		}
 		
 		default: {
-			UniWriteLen(UNI_WRITE_TARGET_STDOUT, "ERROR: Couldn't enable ESClib task becouse signal is NOT supported\n");
+			TraceLog("[ESCLIB.EnableSignalESClibTasks]: ERROR: Couldn't enable ESClib task becouse signal is NOT supported");
 			errno = EINVAL;
 			return EXIT_FAILURE;
 		}
@@ -131,7 +131,7 @@ int DisableSignalESClibTasks(int signal) {
 		}
 		
 		default: {
-			UniWriteLen(UNI_WRITE_TARGET_STDOUT, "ERROR: Couldn't disable ESClib task becouse signal is NOT supported\n");
+			TraceLog("[ESCLIB.DisableSignalESClibTasks]: ERROR: Couldn't disable ESClib task becouse signal is NOT supported");
 			errno = EINVAL;
 			return EXIT_FAILURE;
 		}
@@ -154,7 +154,7 @@ int EnableSignalCustomTasks(int signal) {
 		}
 		
 		default: {
-			UniWriteLen(UNI_WRITE_TARGET_STDOUT, "ERROR: Couldn't enable custom task becouse signal is NOT supported\n");
+			TraceLog("[ESCLIB.EnableSignalCustomTasks]: ERROR: Couldn't enable custom task becouse signal is NOT supported");
 			errno = EINVAL;
 			return EXIT_FAILURE;
 		}
@@ -177,7 +177,7 @@ int DisableSignalCustomTasks(int signal) {
 		}
 		
 		default: {
-			UniWriteLen(UNI_WRITE_TARGET_STDOUT, "ERROR: Couldn't disable custom task becouse signal is NOT supported\n");
+			TraceLog("[ESCLIB.DisableSignalCustomTasks]: ERROR: Couldn't disable custom task becouse signal is NOT supported");
 			errno = EINVAL;
 			return EXIT_FAILURE;
 		}
@@ -200,7 +200,7 @@ int EnableSignalBuildInTasks(int signal) {
 		}
 		
 		default: {
-			UniWriteLen(UNI_WRITE_TARGET_STDOUT, "ERROR: Couldn't enable build in task becouse signal is NOT supported\n");
+			TraceLog("[ESCLIB.EnableSignalBuildInTasks]: ERROR: Couldn't enable build in task becouse signal is NOT supported");
 			errno = EINVAL;
 			return EXIT_FAILURE;
 		}
@@ -223,7 +223,7 @@ int DisableSignalBuildInTasks(int signal) {
 		}
 		
 		default: {
-			UniWriteLen(UNI_WRITE_TARGET_STDOUT, "ERROR: Couldn't disable build in task becouse signal is NOT supported\n");
+			TraceLog("[ESCLIB.DisableSignalBuildInTasks]: ERROR: Couldn't disable build in task becouse signal is NOT supported");
 			errno = EINVAL;
 			return EXIT_FAILURE;
 		}
@@ -243,7 +243,7 @@ int AddSignalTask(int signal, void (*taskFunction)(void), int index) {
 				void (**tmp)(void) = realloc(DATA.SignalData.SIG_INT.customTasks, newSize * sizeof( void (*)(void) ));
 
 				if(!tmp) {
-					UniWriteLen(UNI_WRITE_TARGET_STDERR, "ERROR: AddSignalTask() realloc failed for tmp in SIGINT\n");
+					TraceLog("[ESCLIB.AddSignalTask]: ERROR: Realloc failed for tmp in SIGINT");
 					errno = ENOMEM;
 					return -1;
 				}
@@ -271,7 +271,7 @@ int AddSignalTask(int signal, void (*taskFunction)(void), int index) {
 				void (**tmp)(void) = realloc(DATA.SignalData.SIG_WINCH.customTasks, newSize * sizeof( void (*)(void) ));
 
 				if(!tmp) {
-					UniWriteLen(UNI_WRITE_TARGET_STDERR, "ERROR: AddSignalTask() realloc failed for tmp in SIGWINCH\n");
+					TraceLog("[ESCLIB.AddSignalTask]: ERROR: Realloc failed for tmp in SIGWINCH");
 					errno = ENOMEM;
 					return -1;
 				}
@@ -291,7 +291,7 @@ int AddSignalTask(int signal, void (*taskFunction)(void), int index) {
 		}
 
 		default: {
-			UniWriteLen(UNI_WRITE_TARGET_STDERR, "ERROR: Couldn't add task becouse signal is NOT supported\n");
+			TraceLog("[ESCLIB.AddSignalTask]: ERROR: Couldn't add task becouse signal is NOT supported");
 			errno = EINVAL;
 			return -1;
 		}
@@ -302,12 +302,12 @@ int RemoveSignalTask(int signal, int index) {
 	switch(signal) {
 		case SIGINT: {
 			if(DATA.SignalData.SIG_INT.customTasksNumber == 0) {
-				UniWriteLen(UNI_WRITE_TARGET_STDERR, "ERROR: There is no SignalTasks to RemoveSignalTask()!?\n");
+				TraceLog("[ESCLIB.RemoveSignalTask]: ERROR: There is no SIGINT tasks to remove");
 				return -1;
 			}
 			if(index < 0) { index = DATA.SignalData.SIG_INT.customTasksNumber - 1; }
 			if(index < 0 || index >= DATA.SignalData.SIG_INT.customTasksNumber) {
-				UniWriteLen(UNI_WRITE_TARGET_STDERR, "ERROR: There is no SignalTask with given index to remove with RemoveSignalTask() :0\n");
+				TraceLog("[ESCLIB.RemoveSignalTask]: ERROR: There is no SIGINT task with given index to remove");
 				errno = EINVAL;
 				return -1;
 			}
@@ -326,7 +326,7 @@ int RemoveSignalTask(int signal, int index) {
 				void* tmp = realloc(DATA.SignalData.SIG_INT.customTasks, DATA.SignalData.SIG_INT.customTasksNumber * sizeof( void (*)(void) ));
 
 				if(!tmp) {
-					UniWriteLen(UNI_WRITE_TARGET_STDERR, "ERROR: RemoveSignalTask() realloc failed for tmp in SIGINT\n");
+					TraceLog("[ESCLIB.RemoveSignalTask]: ERROR: Realloc failed for tmp in SIGINT");
 					errno = ENOMEM;
 					return -1;
 				}
@@ -339,12 +339,12 @@ int RemoveSignalTask(int signal, int index) {
 
 		case SIGWINCH: {
 			if(DATA.SignalData.SIG_WINCH.customTasksNumber == 0) {
-				UniWriteLen(UNI_WRITE_TARGET_STDERR, "ERROR: There is no SignalTasks to RemoveSignalTask()!?\n");
+				TraceLog("[ESCLIB.RemoveSignalTask]: ERROR: There is no SIGWINCH tasks to remove");
 				return -1;
 			}
 			if(index < 0) { index = DATA.SignalData.SIG_WINCH.customTasksNumber - 1; }
 			if(index < 0 || index >= DATA.SignalData.SIG_WINCH.customTasksNumber) {
-				UniWriteLen(UNI_WRITE_TARGET_STDERR, "ERROR: There is no SignalTask with given index to remove with RemoveSignalTask() :0\n");
+				TraceLog("[ESCLIB.RemoveSignalTask]: ERROR: There is no SIGWINCH task with given index to remove");
 				errno = EINVAL;
 				return -1;
 			}
@@ -363,7 +363,7 @@ int RemoveSignalTask(int signal, int index) {
 				void* tmp = realloc(DATA.SignalData.SIG_WINCH.customTasks, DATA.SignalData.SIG_WINCH.customTasksNumber * sizeof( void (*)(void) ));
 
 				if(!tmp) {
-					UniWriteLen(UNI_WRITE_TARGET_STDERR, "ERROR: RemoveSignalTask() realloc failed for tmp in SIGWINCH\n");
+					TraceLog("[ESCLIB.RemoveSignalTask]: ERROR: Realloc failed for tmp in SIGWINCH");
 					errno = ENOMEM;
 					return -1;
 				}
@@ -375,7 +375,7 @@ int RemoveSignalTask(int signal, int index) {
 		}
 
 		default: {
-			UniWriteLen(UNI_WRITE_TARGET_STDERR, "ERROR: Couldn't remove task becouse signal is NOT supported\n");
+			TraceLog("[ESCLIB.RemoveSignalTask]: ERROR: Couldn't remove task becouse signal is NOT supported");
 			errno = EINVAL;
 			return -1;
 		}
@@ -388,7 +388,6 @@ int CompressSignalTasks(int signal, int from, int to) {
 			if(from < 0) { from = 0; }
 			if(to < 0 || to > DATA.SignalData.SIG_INT.customTasksNumber) { to = DATA.SignalData.SIG_INT.customTasksNumber; }
 			if(from >= to) {
-				UniWriteLen(UNI_WRITE_TARGET_STDERR, "WARNING: Nothing to do, from and to are the same. CompressSignalTasks out:)\n");
 				return 0;
 			}
 
@@ -413,7 +412,7 @@ int CompressSignalTasks(int signal, int from, int to) {
 			else {
 				void* tmp = realloc(DATA.SignalData.SIG_INT.customTasks, newSize * sizeof( void(*)(void) ));
 				if(!tmp) {
-					UniWriteLen(UNI_WRITE_TARGET_STDERR, "ERROR: CompressSignalTasks() realloc failed for tmp in SIGINT\n");
+					TraceLog("[ESCLIB.CompressSignalTasks]: ERROR: Realloc failed for tmp in SIGINT");
 					errno = ENOMEM;
 					return -1;
 				}
@@ -430,7 +429,6 @@ int CompressSignalTasks(int signal, int from, int to) {
 			if(from < 0) { from = 0; }
 			if(to < 0 || to > DATA.SignalData.SIG_WINCH.customTasksNumber) { to = DATA.SignalData.SIG_WINCH.customTasksNumber; }
 			if(from >= to) {
-				UniWriteLen(UNI_WRITE_TARGET_STDERR, "WARNING: Nothing to do, from and to are the same. CompressSignalTasks out:)\n");
 				return 0;
 			}
 
@@ -455,7 +453,7 @@ int CompressSignalTasks(int signal, int from, int to) {
 			else {
 				void* tmp = realloc(DATA.SignalData.SIG_WINCH.customTasks, newSize * sizeof( void(*)(void) ));
 				if(!tmp) {
-					UniWriteLen(UNI_WRITE_TARGET_STDERR, "ERROR: CompressSignalTasks() realloc failed for tmp in SIGWINCH\n");
+					TraceLog("[ESCLIB.CompressSignalTasks]: ERROR: Realloc failed for tmp in SIGWINCH");
 					errno = ENOMEM;
 					return -1;
 				}
@@ -469,7 +467,7 @@ int CompressSignalTasks(int signal, int from, int to) {
 		}
 
 		default: {
-			UniWriteLen(UNI_WRITE_TARGET_STDERR, "ERROR: Couldn't compress tasks becouse signal is NOT supported\n");
+			TraceLog("[ESCLIB.CompressSignalTasks]: ERROR: Couldn't compress tasks becouse signal is NOT supported");
 			errno = EINVAL;
 			return -1;
 		}
