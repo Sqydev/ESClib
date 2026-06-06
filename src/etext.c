@@ -62,7 +62,6 @@ void DrawCharExV(const char* character, Vector2i pos, Color* fg, Color* bg) {
 // memcpy, memset
 void DrawCharEx(const char* character, int x, int y, Color* fg, Color* bg) {
 	if(character == NULL) {
-		UniWriteLen(UNI_WRITE_TARGET_STDERR, "Character is NULL\n");
 		return;
 	}
 
@@ -80,12 +79,12 @@ void DrawCharEx(const char* character, int x, int y, Color* fg, Color* bg) {
 		len = 4;
 	}
 	else {
-		UniWriteLen(UNI_WRITE_TARGET_STDERR, "ERROR: Invalid UTF-8 character\n");
+		TraceLog("[ESCLIB.DrawCharEx]: ERROR: Invalid UTF-8 character, bytes: %d, %d, %d, %d", character[0], character[1], character[2], character[3]);
 		return;
 	}
 
 	if(len > 0 && character[len] != '\0') {
-		UniWriteLen(UNI_WRITE_TARGET_STDERR, "ERROR: String contains more than one UTF-8 character\n");
+		TraceLog("[ESCLIB.DrawCharEx]: ERROR: String contains more than one UTF-8 character\n");
 		return;
 	}
 
@@ -167,7 +166,6 @@ void DrawTextProV(const char* text, Vector2i pos, Vector2i origin, Color* fg, Co
 // memcpy, mabey round and fmaxf
 void DrawTextPro(const char* text, int x, int y, int originX, int originY, Color* fg, Color* bg, int spaceing, float angle) {
 	if(text == NULL) {
-		UniWriteLen(UNI_WRITE_TARGET_STDERR, "Text is NULL\n");
 		return;
 	}
 
