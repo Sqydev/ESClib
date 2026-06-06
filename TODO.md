@@ -6,6 +6,8 @@
 
 // Make input handle the modfiers, like detecting SHIFT
 
+// Make Vector2 -> Vector2f and Vector2i -> Vector2
+
 // TODO: Make more logging and replace all of the UniWrite logging with TraceLog logging.
 
 // TODO: Make typewritermode bool in InitTui an enum.

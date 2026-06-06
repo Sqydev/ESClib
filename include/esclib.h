@@ -119,6 +119,58 @@ typedef struct {
 } Vector2l;
 
 typedef struct {
+	float x;
+	float y;
+	float z;
+} Vector3;
+
+typedef struct {
+	int x;
+	int y;
+	int z;
+} Vector3i;
+
+typedef struct {
+	double x;
+	double y;
+	double z;
+} Vector3d;
+
+typedef struct {
+	long x;
+	long y;
+	long z;
+} Vector3l;
+
+typedef struct {
+	float x;
+	float y;
+	float z;
+	float w;
+} Vector4;
+
+typedef struct {
+	int x;
+	int y;
+	int z;
+	int w;
+} Vector4i;
+
+typedef struct {
+	double x;
+	double y;
+	double z;
+	double w;
+} Vector4d;
+
+typedef struct {
+	long x;
+	long y;
+	long z;
+	long w;
+} Vector4l;
+
+typedef struct {
 	int x;
 	int y;
 	int width;
@@ -169,6 +221,30 @@ typedef struct {
 	long centerY;
 	long radius;
 } Circlel;
+
+typedef struct {
+	Vector2i A;
+	Vector2i B;
+	Vector2i C;
+} Triangle;
+
+typedef struct {
+	Vector2 A;
+	Vector2 B;
+	Vector2 C;
+} Trianglef;
+
+typedef struct {
+	Vector2d A;
+	Vector2d B;
+	Vector2d C;
+} Triangled;
+
+typedef struct {
+	Vector2l A;
+	Vector2l B;
+	Vector2l C;
+} Trianglel;
 
 typedef enum {
 	TUI_STATIC,
@@ -483,17 +559,15 @@ RLAPI void DrawCircleProCir(char* character, Circle circle, Vector2d angleSpectr
 RLAPI void DrawCircleProV(char* character, Vector2i centerPos, int radius, Vector2d angleSpectrum, Color* fg, Color* bg, bool lines, int thicknessLines, bool aspectRatiofied);
 RLAPI void DrawCirclePro(char* character, int centerX, int centerY, int radius, double startAngle, double endAngle, Color* fg, Color* bg, bool lines, int thicknessLines, bool aspectRatiofied);
 
-/*
- * To make.
-	void DrawRectangleGradientV(int posX, int posY, int width, int height, Color top, Color bottom);
-	void DrawRectangleGradientH(int posX, int posY, int width, int height, Color left, Color right);
-	void DrawRectangleLines(int posX, int posY, int width, int height, Color color);
-
-	void DrawCircleLines(int centerX, int centerY, float radius, Color color); 
-	void DrawCircleGradient(int centerX, int centerY, float radius, Color inner, Color outer);
-	
-	void DrawLineGradient(int pointAX, int pointAY, int pointBX, int pointBY, Color color, int thickness);
-*/
+RLAPI void DrawTriangleTri(Triangle triangle, Color color);
+RLAPI void DrawTriangleV(Vector2i posA, Vector2i posB, Vector2i posC, Color color);
+RLAPI void DrawTriangle(int Ax, int Ay, int Bx, int By, int Cx, int Cy, Color color);
+RLAPI void DrawTriangleExTri(char* character, Triangle triangle, Color* fg, Color* bg, bool lines, int thicknessLines);
+RLAPI void DrawTriangleExV(char* character, Vector2i posA, Vector2i posB, Vector2i posC, Color* fg, Color* bg, bool lines, int thicknessLines);
+RLAPI void DrawTriangleEx(char* character, int Ax, int Ay, int Bx, int By, int Cx, int Cy, Color* fg, Color* bg, bool lines, int thicknessLines);
+RLAPI void DrawTriangleProTri(char* character, Triangle triangle, Vector2i origin, Color* fg, Color* bg, double rotation, bool lines, int thicknessLines, bool aspectRatiofied);
+RLAPI void DrawTriangleProV(char* character, Vector2i posA, Vector2i posB, Vector2i posC, Vector2i origin, Color* fg, Color* bg, double rotation, bool lines, int thicknessLines, bool aspectRatiofied);
+RLAPI void DrawTrianglePro(char* character, int Ax, int Ay, int Bx, int By, int Cx, int Cy, int originX, int originY, Color* fg, Color* bg, double rotation, bool lines, int thicknessLines, bool aspectRatiofied);
 
 // EINPUT
 

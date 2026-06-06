@@ -305,3 +305,80 @@ void DrawCirclePro(char* character, int centerX, int centerY, int radius, double
 		}
 	}
 }
+
+void DrawTriangleTri(Triangle triangle, Color color) {
+	DrawTriangleV(triangle.A, triangle.B, triangle.C, color);
+}
+
+void DrawTriangleV(Vector2i posA, Vector2i posB, Vector2i posC, Color color) {
+	DrawTriangle(posA.x, posA.y, posB.x, posB.y, posC.x, posC.y, color);
+}
+
+void DrawTriangle(int Ax, int Ay, int Bx, int By, int Cx, int Cy, Color color) {
+	DrawTriangleEx(" ", Ax, Ay, Bx, By, Cx, Cy, &color, &color, false, 0);
+}
+
+void DrawTriangleExTri(char* character, Triangle triangle, Color* fg, Color* bg, bool lines, int thicknessLines) {
+	DrawTriangleExV(character, triangle.A, triangle.B, triangle.C, fg, bg, lines, thicknessLines);
+}
+
+void DrawTriangleExV(char* character, Vector2i posA, Vector2i posB, Vector2i posC, Color* fg, Color* bg, bool lines, int thicknessLines) {
+	DrawTriangleEx(character, posA.x, posA.y, posB.x, posB.y, posC.x, posC.y, fg, bg, lines, thicknessLines);
+}
+
+void DrawTriangleEx(char* character, int Ax, int Ay, int Bx, int By, int Cx, int Cy, Color* fg, Color* bg, bool lines, int thicknessLines) {
+	DrawTrianglePro(character, Ax, Ay, Bx, By, Cx, Cy, 0, 0, fg, bg, 0, lines, thicknessLines, true);
+}
+
+void DrawTriangleProTri(char* character, Triangle triangle, Vector2i origin, Color* fg, Color* bg, double rotation, bool lines, int thicknessLines, bool aspectRatiofied) {
+	DrawTriangleProV(character, triangle.A, triangle.B, triangle.C, origin, fg, bg, rotation, lines, thicknessLines, aspectRatiofied);
+}
+
+void DrawTriangleProV(char* character, Vector2i posA, Vector2i posB, Vector2i posC, Vector2i origin, Color* fg, Color* bg, double rotation, bool lines, int thicknessLines, bool aspectRatiofied) {
+	DrawTrianglePro(character, posA.x, posA.y, posB.x, posB.y, posC.x, posC.y, origin.x, origin.y, fg, bg, rotation, lines, thicknessLines, aspectRatiofied);
+}
+
+void DrawTrianglePro(char* character, int Ax, int Ay, int Bx, int By, int Cx, int Cy, int originX, int originY, Color* fg, Color* bg, double rotation, bool lines, int thicknessLines, bool aspectRatiofied) {
+	// NOTE: NO, I know what your thinking, aspectRatio has sense here. See how it looks when rotating. >:( YOU FORGOR WHY YOU MADE THIS
+	double aspectRatio = 1.0;
+    if(aspectRatiofied) {
+		aspectRatio = (GetCellProportions().x > 0 && GetCellProportions().y > 0) ? (double)GetCellProportions().x / (double)GetCellProportions().y : 0.5;
+	}
+	(void)aspectRatio;
+	(void)lines;
+	(void)thicknessLines;
+
+	int oAx = Ax - originX;
+	int oBx = Bx - originX;
+	int oCx = Cx - originX;
+	int oAy = Ay - originY;
+	int oBy = By - originY;
+	int oCy = Cy - originY;
+
+	double cosA = ECos(rotation);
+	double sinA = ESin(rotation);
+
+	double aAx = oAx*cosA - oAy*sinA + originX;
+	double aBx = oBx*cosA - oBy*sinA + originX;
+	double aCx = oCx*cosA - oCy*sinA + originX;
+	double aAy = oAx*sinA + oAy*cosA + originY;
+	double aBy = oBx*sinA + oBy*cosA + originY;
+	double aCy = oCx*sinA + oCy*cosA + originY;
+
+	int minX = (int)floor(fmin(aAx, fmin(aBx, aCx)));
+	int maxX = (int)ceil(fmax(aAx, fmax(aBx, aCx)));
+	int minY = (int)floor(fmin(aAy, fmin(aBy, aCy)));
+	int maxY = (int)ceil(fmax(aAy, fmax(aBy, aCy)));
+
+	for(int y = minY; y <= maxY; y++) {
+		for(int x = minX; x <= maxX; x++) {
+			double e1 = (x - aAx)*(aBy - aAy) - (y - aAy)*(aBx - aAx);
+			double e2 = (x - aBx)*(aCy - aBy) - (y - aBy)*(aCx - aBx);
+			double e3 = (x - aCx)*(aAy - aCy) - (y - aCy)*(aAx - aCx);
+		
+			if((e1 >= 0 && e2 >= 0 && e3 >= 0) || (e1 <= 0 && e2 <= 0 && e3 <= 0)) {
+				DrawCharEx(character, x, y, fg, bg);
+			}
+		}
+	}
+}

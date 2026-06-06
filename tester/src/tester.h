@@ -44,3 +44,5 @@ void DrawLineTester();
 void IsKeyDownTester();
 
 void PatternsGPUTest(void);
+
+void DrawTriangleTester();
