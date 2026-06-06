@@ -358,6 +358,7 @@ void DrawTrianglePro(char* character, int Ax, int Ay, int Bx, int By, int Cx, in
 	double cosA = ECos(rotation);
 	double sinA = ESin(rotation);
 
+	// There propably shouldn't be - origin so check it later I'm going to sleep now so
 	double aAx = oAx*cosA - oAy*sinA + originX;
 	double aBx = oBx*cosA - oBy*sinA + originX;
 	double aCx = oCx*cosA - oCy*sinA + originX;
