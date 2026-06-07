@@ -339,29 +339,24 @@ void DrawTriangleProV(char* character, Vector2i posA, Vector2i posB, Vector2i po
 }
 
 void DrawTrianglePro(char* character, int Ax, int Ay, int Bx, int By, int Cx, int Cy, int originX, int originY, Color* fg, Color* bg, double rotation, bool lines, int thicknessLines, bool aspectRatiofied) {
-	// NOTE: NO, I know what your thinking, aspectRatio has sense here. See how it looks when rotating. >:( YOU FORGOR WHY YOU MADE THIS
 	double aspectRatio = 1.0;
     if(aspectRatiofied) {
 		aspectRatio = (GetCellProportions().x > 0 && GetCellProportions().y > 0) ? (double)GetCellProportions().x / (double)GetCellProportions().y : 0.5;
 	}
-	(void)aspectRatio;
-	(void)lines;
-	(void)thicknessLines;
 
-	int oAx = Ax - originX;
-	int oBx = Bx - originX;
-	int oCx = Cx - originX;
-	int oAy = Ay - originY;
-	int oBy = By - originY;
-	int oCy = Cy - originY;
+	int oAx = (Ax - originX) * aspectRatio;
+	int oBx = (Bx - originX) * aspectRatio;
+	int oCx = (Cx - originX) * aspectRatio;
+	int oAy = (Ay - originY) * aspectRatio;
+	int oBy = (By - originY) * aspectRatio;
+	int oCy = (Cy - originY) * aspectRatio;
 
 	double cosA = ECos(rotation);
 	double sinA = ESin(rotation);
 
-	// There propably shouldn't be - origin so check it later I'm going to sleep now so
-	double aAx = oAx*cosA - oAy*sinA + originX;
-	double aBx = oBx*cosA - oBy*sinA + originX;
-	double aCx = oCx*cosA - oCy*sinA + originX;
+	double aAx = ((oAx*cosA - oAy*sinA) / aspectRatio) + originX;
+	double aBx = ((oBx*cosA - oBy*sinA) / aspectRatio) + originX;
+	double aCx = ((oCx*cosA - oCy*sinA) / aspectRatio) + originX;
 	double aAy = oAx*sinA + oAy*cosA + originY;
 	double aBy = oBx*sinA + oBy*cosA + originY;
 	double aCy = oCx*sinA + oCy*cosA + originY;
@@ -377,8 +372,23 @@ void DrawTrianglePro(char* character, int Ax, int Ay, int Bx, int By, int Cx, in
 			double e2 = (x - aBx)*(aCy - aBy) - (y - aBy)*(aCx - aBx);
 			double e3 = (x - aCx)*(aAy - aCy) - (y - aCy)*(aAx - aCx);
 		
-			if((e1 >= 0 && e2 >= 0 && e3 >= 0) || (e1 <= 0 && e2 <= 0 && e3 <= 0)) {
-				DrawCharEx(character, x, y, fg, bg);
+			if(!lines) {
+				if((e1 >= 0 && e2 >= 0 && e3 >= 0) || (e1 <= 0 && e2 <= 0 && e3 <= 0)) {
+					DrawCharEx(character, x, y, fg, bg);
+				}
+			}
+			else {
+				double lenAB = sqrt((aBx-aAx)*(aBx-aAx) + (aBy-aAy)*(aBy-aAy));
+				double lenBC = sqrt((aCx-aBx)*(aCx-aBx) + (aCy-aBy)*(aCy-aBy));
+				double lenCA = sqrt((aAx-aCx)*(aAx-aCx) + (aAy-aCy)*(aAy-aCy));
+
+				double d1 = fabs(e1) / lenAB;
+    			double d2 = fabs(e2) / lenBC;
+    			double d3 = fabs(e3) / lenCA;
+
+				if(((e1 >= 0 && e2 >= 0 && e3 >= 0) || (e1 <= 0 && e2 <= 0 && e3 <= 0)) && (d1 <= thicknessLines || d2 <= thicknessLines || d3 <= thicknessLines)) {
+					DrawCharEx(character, x, y, fg, bg);
+				}
 			}
 		}
 	}

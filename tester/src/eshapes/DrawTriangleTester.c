@@ -10,12 +10,32 @@ void DrawTriangleTester() {
         ClearTui((Color){ 0, 0, 0, 255 }, (Color){ 255, 255, 255, 1 });
 
         angle += 1 * DEG2RAD;
-        if(angle > 2*PI) angle = -2*PI;
+        if(angle > 2 * PI) { angle = -2 * PI; }
 
-		// Make good origin here
-        DrawTrianglePro("@", 20, 40, 30, 40, 20, 20, 20, 20, &(Color){255, 255, 255, true}, NULL, angle, false, 1, true);
+        int width = GetTuiDimensions().x;
+        int height = GetTuiDimensions().y;
 
-        DrawTrianglePro("A", 50, 40, 70, 40, 60, 20, 60, 10, &(Color){255, 255, 255, true}, NULL, angle, false, 1, true);
+        int Ax1 = width * 1 / 8;
+        int Ay1 = height * 3 / 4;
+
+        int Bx1 = width * 3 / 8;
+        int By1 = height * 3 / 4;
+
+        int Cx1 = width * 1 / 4;
+        int Cy1 = height * 1 / 4;
+
+        DrawTrianglePro("@", Ax1, Ay1, Bx1, By1, Cx1, Cy1, (Ax1 + Bx1 + Cx1) / 3, (Ay1 + By1 + Cy1) / 3, &(Color){255, 255, 255, 255}, NULL, angle, false, 0, true);
+
+        int Ax2 = width * 5 / 8;
+        int Ay2 = height * 3 / 4;
+
+        int Bx2 = width * 7 / 8;
+        int By2 = height * 3 / 4;
+
+        int Cx2 = width * 3 / 4;
+        int Cy2 = height * 1 / 4;
+
+        DrawTrianglePro("A", Ax2, Ay2, Bx2, By2, Cx2, Cy2, (Ax2 + Bx2 + Cx2) / 3, (Ay2 + By2 + Cy2) / 3, &(Color){255, 255, 255, 255}, NULL, angle, true, 1, true);
 
         EndDrawing();
     }
