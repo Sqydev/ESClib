@@ -37,7 +37,6 @@
 
 #include "./private/coredata.h"
 #include "./private/common_utils.h"
-#include "./private/drawTextfCORE.h"
 
 #include <math.h>
 
@@ -45,6 +44,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stdarg.h>
+#include <errno.h>
 
 void DrawCharV(const char* character, Vector2i pos, Color color) {
 	DrawChar(character, pos.x, pos.y, color);
@@ -234,56 +234,163 @@ void DrawTextPro(const char* text, int x, int y, int originX, int originY, Color
 	}
 }
 
-static void DrawTextfPro_va(const char* text, int x, int y, int originX, int originY, Color* fg, Color* bg, int spacing, double angle, va_list va) {
-	DrawTextfCORE(text, x, y, originX, originY, fg, bg, spacing, angle, va);
-}
-
-static void DrawTextfEx_va(const char* text, int x, int y, Color* fg, Color* bg, va_list va) {
-	DrawTextfPro_va(text, x, y, 0, 0, fg, bg, 0, 0, va);
-}
-
-static void DrawTextf_va(const char* text, int x, int y, Color color, va_list va) {
-	DrawTextfEx_va(text, x, y, &color, NULL, va);
-}
-
 void DrawTextfV(const char* text, Vector2i pos, Color color, ...) {
 	va_list va;
 	va_start(va, color);
-	DrawTextf_va(text, pos.x, pos.y, color, va);
+	vaDrawTextf(text, pos.x, pos.y, color, va);
 	va_end(va);
 }
 
 void DrawTextf(const char* text, int x, int y, Color color, ...) {
 	va_list va;
 	va_start(va, color);
-	DrawTextf_va(text, x, y, color, va);
+	vaDrawTextf(text, x, y, color, va);
 	va_end(va);
 }
 
 void DrawTextfExV(const char* text, Vector2i pos, Color* fg, Color* bg, ...) {
 	va_list va;
 	va_start(va, bg);
-	DrawTextfEx_va(text, pos.x, pos.y, fg, bg, va);
+	vaDrawTextfEx(text, pos.x, pos.y, fg, bg, va);
 	va_end(va);
 }
 
 void DrawTextfEx(const char* text, int x, int y, Color* fg, Color* bg, ...) {
 	va_list va;
 	va_start(va, bg);
-	DrawTextfEx_va(text, x, y, fg, bg, va);
+	vaDrawTextfEx(text, x, y, fg, bg, va);
 	va_end(va);
 }
 
 void DrawTextfProV(const char* text, Vector2i pos, Vector2i origin, Color* fg, Color* bg, int spacing, double angle, ...) {
 	va_list va;
 	va_start(va, angle);
-	DrawTextfPro_va(text, pos.x, pos.y, origin.x, origin.y, fg, bg, spacing, angle, va);
+	vaDrawTextfPro(text, pos.x, pos.y, origin.x, origin.y, fg, bg, spacing, angle, va);
 	va_end(va);
 }
 
 void DrawTextfPro(const char* text, int x, int y, int originX, int originY, Color* fg, Color* bg, int spacing, double angle, ...) {
 	va_list va;
 	va_start(va, angle);
-	DrawTextfPro_va(text, x, y, originX, originY, fg, bg, spacing, angle, va);
+	vaDrawTextfPro(text, x, y, originX, originY, fg, bg, spacing, angle, va);
 	va_end(va);
+}
+
+static void calc_dir(double angle, Vector2 *dir) {
+    float q  = (float)(angle / (PI / 2.0));
+    int   qi = (int)roundf(q);
+    if (fabsf(q - qi) < 0.001f) {
+        switch ((qi % 4 + 4) % 4) {
+        case 0: dir->x =  1.f; dir->y =  0.f; return;
+        case 1: dir->x =  0.f; dir->y =  1.f; return;
+        case 2: dir->x = -1.f; dir->y =  0.f; return;
+        case 3: dir->x =  0.f; dir->y = -1.f; return;
+        }
+    }
+    float fc = cosf((float)angle), fs = sinf((float)angle);
+    float mx = fmaxf(fabsf(fc), fabsf(fs));
+    dir->x = mx > 0.f ? fc / mx : fc;
+    dir->y = mx > 0.f ? fs / mx : fs;
+}
+
+void vaDrawTextfV(const char* text, Vector2i pos, Color color, va_list va) { vaDrawTextfPro(text, pos.x, pos.y, 0, 0, &color, NULL, 0, 0, va); }
+void vaDrawTextf(const char* text, int x, int y, Color color, va_list va) { vaDrawTextfPro(text, x, y, 0, 0, &color, NULL, 0, 0, va); }
+void vaDrawTextfExV(const char* text, Vector2i pos, Color* fg, Color* bg, va_list va) { vaDrawTextfPro(text, pos.x, pos.y, 0, 0, fg, bg, 0, 0, va); }
+void vaDrawTextfEx(const char* text, int x, int y, Color* fg, Color* bg, va_list va) { vaDrawTextfPro(text, x, y, 0, 0, fg, bg, 0, 0, va); }
+void vaDrawTextfProV(const char* text, Vector2i pos, Vector2i origin, Color* fg, Color* bg, int spacing, double angle, va_list va) { vaDrawTextfPro(text, pos.x, pos.y, origin.x, origin.y, fg, bg, spacing, angle, va); }
+void vaDrawTextfPro(const char* text, int x, int y, int originX, int originY, Color* fg, Color* bg, int spacing, double angle, va_list va) {
+    if(!text) {
+        UniWriteLen(UNI_WRITE_TARGET_STDERR, "Text is NULL\n");
+        return;
+    }
+
+    va_list va2;
+    va_copy(va2, va);
+    int need = vsnprintf(NULL, 0, text, va2);
+    va_end(va2);
+    if(need < 0) { errno = EINVAL; return; }
+
+    char* buf = malloc((size_t)need + 1);
+    if(!buf) { return; }
+    vsnprintf(buf, (size_t)need + 1, text, va);
+
+    Color local_fg_storage;
+	Color local_bg_storage;
+
+    Color* local_fg = NULL;
+	Color* local_bg = NULL;
+    if(fg) { local_fg_storage = *fg; local_fg = &local_fg_storage; }
+    if(bg) { local_bg_storage = *bg; local_bg = &local_bg_storage; }
+
+    Vector2 dir;
+    calc_dir(angle, &dir);
+
+    float curX = x - (originX * dir.x) + (originY * dir.y);
+    float curY = y - (originX * dir.y) - (originY * dir.x);
+
+    const char* p = buf;
+    while(*p) {
+        if(p[0] == '\\' && p[1] == '$') {
+            DrawCharEx("$", (int)roundf(curX), (int)roundf(curY), local_fg, local_bg);
+            curX += dir.x * (spacing + 1);
+            curY += dir.y * (spacing + 1);
+            p += 2;
+            continue;
+        }
+        if(p[0] == '$') {
+            if (strncmp(p, "$fg", 3) == 0) {
+                Color c = va_arg(va, Color);
+                local_fg_storage = c;
+                local_fg = &local_fg_storage;
+
+                p += 3;
+				continue;
+            }
+            if(strncmp(p, "$bg", 3) == 0) {
+                Color c = va_arg(va, Color);
+                local_bg_storage = c;
+                local_bg = &local_bg_storage;
+
+                p += 3;
+				continue;
+            }
+            if(strncmp(p, "$sp", 3) == 0) {
+                spacing = va_arg(va, int);
+
+                p += 3;
+				continue;
+            }
+            if(strncmp(p, "$an", 3) == 0) {
+                angle = va_arg(va, double);
+                calc_dir(angle, &dir);
+
+                p += 3;
+				continue;
+            }
+        }
+
+        if(curX < 0 || curX >= DATA.TuiData.tuidimm.x) { break; }
+        if(curY < 0 || curY >= DATA.TuiData.tuidimm.y) { break; }
+
+        int vWidth = GetCharWidth(p);
+        float drawX = curX;
+        if(drawX >= DATA.TuiData.tuidimm.x - (vWidth - 1)) { drawX -= vWidth - 1; }
+
+        int clen;
+        if((*p & 0x80) == 0x00) { clen = 1; }
+        else if((*p & 0xE0) == 0xC0) { clen = 2; }
+        else if((*p & 0xF0) == 0xE0) { clen = 3; }
+        else if((*p & 0xF8) == 0xF0) { clen = 4; }
+        else { p++; continue; }
+
+        char tmp[5] = { 0 };
+        memcpy(tmp, p, clen);
+        DrawCharEx(tmp, (int)roundf(drawX), (int)roundf(curY), local_fg, local_bg);
+
+        curX += dir.x * (spacing + 1);
+        curY += dir.y * (spacing + 1);
+        p += clen;
+    }
+
+    free(buf);
 }

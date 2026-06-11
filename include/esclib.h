@@ -530,6 +530,13 @@ RLAPI void DrawTextfEx(const char* text, int x, int y, Color* fg, Color* bg, ...
 RLAPI void DrawTextfProV(const char* text, Vector2i pos, Vector2i origin, Color* fg, Color* bg, int spaceing, double angle, ...);
 RLAPI void DrawTextfPro(const char* text, int x, int y, int originX, int originY, Color* fg, Color* bg, int spaceing, double angle, ...);
 
+RLAPI void vaDrawTextfV(const char* text, Vector2i pos, Color color, va_list va);
+RLAPI void vaDrawTextf(const char* text, int x, int y, Color color, va_list va);
+RLAPI void vaDrawTextfExV(const char* text, Vector2i pos, Color* fg, Color* bg, va_list va);
+RLAPI void vaDrawTextfEx(const char* text, int x, int y, Color* fg, Color* bg, va_list va);
+RLAPI void vaDrawTextfProV(const char* text, Vector2i pos, Vector2i origin, Color* fg, Color* bg, int spacing, double angle, va_list va);
+RLAPI void vaDrawTextfPro(const char* text, int x, int y, int originX, int originY, Color* fg, Color* bg, int spacing, double angle, va_list va);
+
 // ESHAPES
 
 RLAPI void DrawLineV(Vector2i pointA, Vector2i pointB, Color color, int thickness);
