@@ -36,6 +36,7 @@
 #include "../include/esclib.h"
 
 #include <math.h>
+#include <stdlib.h>
 
 void DrawLineV(Vector2i pointA, Vector2i pointB, Color color, int thickness) {
 	DrawLine(pointA.x, pointA.y, pointB.x, pointB.y, color, thickness);
@@ -366,6 +367,16 @@ void DrawTrianglePro(char* character, int Ax, int Ay, int Bx, int By, int Cx, in
 	int minY = (int)floor(fmin(aAy, fmin(aBy, aCy)));
 	int maxY = (int)ceil(fmax(aAy, fmax(aBy, aCy)));
 
+	double lenAB;
+	double lenBC;
+	double lenCA;
+
+	if(lines) {
+		lenAB = sqrt((aBx-aAx)*(aBx-aAx) + (aBy-aAy)*(aBy-aAy));
+		lenBC = sqrt((aCx-aBx)*(aCx-aBx) + (aCy-aBy)*(aCy-aBy));
+		lenCA = sqrt((aAx-aCx)*(aAx-aCx) + (aAy-aCy)*(aAy-aCy));
+	}
+
 	for(int y = minY; y <= maxY; y++) {
 		for(int x = minX; x <= maxX; x++) {
 			double e1 = (x - aAx)*(aBy - aAy) - (y - aAy)*(aBx - aAx);
@@ -378,10 +389,6 @@ void DrawTrianglePro(char* character, int Ax, int Ay, int Bx, int By, int Cx, in
 				}
 			}
 			else {
-				double lenAB = sqrt((aBx-aAx)*(aBx-aAx) + (aBy-aAy)*(aBy-aAy));
-				double lenBC = sqrt((aCx-aBx)*(aCx-aBx) + (aCy-aBy)*(aCy-aBy));
-				double lenCA = sqrt((aAx-aCx)*(aAx-aCx) + (aAy-aCy)*(aAy-aCy));
-
 				double d1 = fabs(e1) / lenAB;
     			double d2 = fabs(e2) / lenBC;
     			double d3 = fabs(e3) / lenCA;
