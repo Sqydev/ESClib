@@ -603,6 +603,11 @@ RLAPI int WaitForKernel(void);
 // Free The Kernel
 RLAPI void DestroyKernel(Kernel* k);
 
+// EBRAILLE
+
+// IT WILL MALLOC
+char* MergeBraille(const char* merged, const char* merger);
+
 #ifdef __cplusplus
 }
 #endif
