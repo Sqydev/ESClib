@@ -67,23 +67,23 @@ void InitTui(int targetFps, TuiType type) {
 	if(getenv("WAYLAND_DISPLAY")) {
 		DATA.System.compositor = WAYLAND;
 		
-		TraceLog("[ESCLIB]: INFO: Detected Wayland");
+		TraceLog("[ESCLIB.InitTui]: INFO: Detected Wayland");
 	}
 	else if(getenv("DISPLAY")) {
 		DATA.System.compositor = X11;
 		
-		TraceLog("[ESCLIB]: INFO: Detected X11");
+		TraceLog("[ESCLIB.InitTui]: INFO: Detected X11");
 	}
 	else {
 		DATA.System.compositor = NONE;
 		
-		TraceLog("[ESCLIB]: INFO: Detected NO COMPOSITOR :0");
+		TraceLog("[ESCLIB.InitTui]: INFO: Detected NO COMPOSITOR :0");
 	}
 
 #elif defined(_WIN32) || defined(_WIN64)
 
 	DATA.SystemInfo.compositor = WINDOWS;	
-	TraceLog("[ESCLIB]: INFO: WINDOWS >:(");
+	TraceLog("[ESCLIB.InitTui]: INFO: WINDOWS >:(");
 
 #endif
 

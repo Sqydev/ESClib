@@ -52,6 +52,8 @@ const TesterEntry testers[] = {
 	{"BGT", PatternsGPUTest, "PatternsGPUTest"},
 
 	{"DTT", DrawTriangleTester, "DrawTriangleTester"},
+
+	{"MBT", MergBrileTester, "MergBrileTester"},
 };
 
 void PrintUsage(const char* prog) {

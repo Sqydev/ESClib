@@ -36,7 +36,6 @@
 #include "../include/esclib.h"
 
 #include <math.h>
-#include <stdlib.h>
 
 void DrawLineV(Vector2i pointA, Vector2i pointB, Color color, int thickness) {
 	DrawLine(pointA.x, pointA.y, pointB.x, pointB.y, color, thickness);

@@ -46,3 +46,5 @@ void IsKeyDownTester();
 void PatternsGPUTest(void);
 
 void DrawTriangleTester();
+
+void MergBrileTester();
