@@ -143,7 +143,7 @@ void DrawCharEx(const char* character, int x, int y, Color* fg, Color* bg) {
 }
 
 void DrawTextV(const char* text, Vector2i pos, Color color) {
-	DrawChar(text, pos.x, pos.y, color);
+	DrawText(text, pos.x, pos.y, color);
 }
 
 void DrawText(const char* text, int x, int y, Color color) {
@@ -185,14 +185,14 @@ void DrawTextPro(const char* text, int x, int y, int originX, int originY, Color
 
 	while(*ptrr != '\0') {
 		if(curX < 0) {
-			return;
+			continue;
 		}
 		if(curX >= DATA.TuiData.tuidimm.x) {
 			return;
 		}
 
 		if(curY < 0) {
-			return;
+			continue;
 		}
 		if(curY >= DATA.TuiData.tuidimm.y) {
 			return;
@@ -219,6 +219,13 @@ void DrawTextPro(const char* text, int x, int y, int originX, int originY, Color
 		}
 		else {
 			ptrr++;
+			continue;
+		}
+
+		if(curX < 0 || curY < 0) {
+			ptrr += len;
+			curX += dir.x * (spaceing + 1);
+			curY += dir.y * (spaceing + 1);
 			continue;
 		}
 
@@ -276,23 +283,6 @@ void DrawTextfPro(const char* text, int x, int y, int originX, int originY, Colo
 	va_end(va);
 }
 
-static void calc_dir(double angle, Vector2 *dir) {
-    float q  = (float)(angle / (PI / 2.0));
-    int   qi = (int)roundf(q);
-    if (fabsf(q - qi) < 0.001f) {
-        switch ((qi % 4 + 4) % 4) {
-        case 0: dir->x =  1.f; dir->y =  0.f; return;
-        case 1: dir->x =  0.f; dir->y =  1.f; return;
-        case 2: dir->x = -1.f; dir->y =  0.f; return;
-        case 3: dir->x =  0.f; dir->y = -1.f; return;
-        }
-    }
-    float fc = cosf((float)angle), fs = sinf((float)angle);
-    float mx = fmaxf(fabsf(fc), fabsf(fs));
-    dir->x = mx > 0.f ? fc / mx : fc;
-    dir->y = mx > 0.f ? fs / mx : fs;
-}
-
 void vaDrawTextfV(const char* text, Vector2i pos, Color color, va_list va) { vaDrawTextfPro(text, pos.x, pos.y, 0, 0, &color, NULL, 0, 0, va); }
 void vaDrawTextf(const char* text, int x, int y, Color color, va_list va) { vaDrawTextfPro(text, x, y, 0, 0, &color, NULL, 0, 0, va); }
 void vaDrawTextfExV(const char* text, Vector2i pos, Color* fg, Color* bg, va_list va) { vaDrawTextfPro(text, pos.x, pos.y, 0, 0, fg, bg, 0, 0, va); }
@@ -322,8 +312,7 @@ void vaDrawTextfPro(const char* text, int x, int y, int originX, int originY, Co
     if(fg) { local_fg_storage = *fg; local_fg = &local_fg_storage; }
     if(bg) { local_bg_storage = *bg; local_bg = &local_bg_storage; }
 
-    Vector2 dir;
-    calc_dir(angle, &dir);
+    Vector2d dir = EDir(angle);
 
     float curX = x - (originX * dir.x) + (originY * dir.y);
     float curY = y - (originX * dir.y) - (originY * dir.x);
@@ -362,7 +351,7 @@ void vaDrawTextfPro(const char* text, int x, int y, int originX, int originY, Co
             }
             if(strncmp(p, "$an", 3) == 0) {
                 angle = va_arg(va, double);
-                calc_dir(angle, &dir);
+                dir = EDir(angle);
 
                 p += 3;
 				continue;

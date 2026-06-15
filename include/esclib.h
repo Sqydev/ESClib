@@ -262,6 +262,15 @@ typedef struct {
 
 
 
+typedef struct {
+	int x;
+	int y;
+	int width;
+	int height;
+} Panel;
+
+
+
 typedef enum {
 	TUI_STATIC,
 	TUI_DYNAMIC
@@ -634,6 +643,19 @@ RLAPI void DestroyKernel(Kernel* k);
 
 // IT WILL MALLOC
 char* MergeBraille(const char* merged, const char* merger);
+
+// EPANELS
+RLAPI void DrawCharVP(Panel panel, const char* character, Vector2i pos, Color color);
+RLAPI void DrawCharP(Panel panel, const char* character, int x, int y, Color color);
+RLAPI void DrawCharExVP(Panel panel, const char* character, Vector2i pos, Color* fg, Color* bg);
+RLAPI void DrawCharExP(Panel panel, const char* character, int x, int y, Color* fg, Color* bg);
+
+RLAPI void DrawTextVP(Panel panel, const char* text, Vector2i pos, Color color);
+RLAPI void DrawTextP(Panel panel, const char* text, int x, int y, Color color);
+RLAPI void DrawTextExVP(Panel panel, const char* text, Vector2i pos, Color* fg, Color* bg);
+RLAPI void DrawTextExP(Panel panel, const char* text, int x, int y, Color* fg, Color* bg);
+RLAPI void DrawTextProVP(Panel panel, const char* text, Vector2i pos, Vector2i origin, Color* fg, Color* bg, int spaceing, float angle);
+RLAPI void DrawTextProP(Panel panel, const char* text, int x, int y, int originX, int originY, Color* fg, Color* bg, int spaceing, float angle);
 
 #ifdef __cplusplus
 }
