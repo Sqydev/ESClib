@@ -1,3 +1,5 @@
+// Make logging be like in GUIDELINES.md and remove any Panic() left in error handling of the lib
+
 // Do more LOGGIGN
 
 // ELIPSY
