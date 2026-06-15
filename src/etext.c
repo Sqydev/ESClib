@@ -79,12 +79,12 @@ void DrawCharEx(const char* character, int x, int y, Color* fg, Color* bg) {
 		len = 4;
 	}
 	else {
-		TraceLog("[ESCLIB.DrawCharEx]: ERROR: Invalid UTF-8 character, bytes: %d, %d, %d, %d", character[0], character[1], character[2], character[3]);
+		TraceLog(LOG_ERROR, "[ESCLIB.DrawCharEx]: ERROR: Invalid UTF-8 character, bytes: %d, %d, %d, %d", character[0], character[1], character[2], character[3]);
 		return;
 	}
 
 	if(len > 0 && character[len] != '\0') {
-		TraceLog("[ESCLIB.DrawCharEx]: ERROR: String contains more than one UTF-8 character\n");
+		TraceLog(LOG_ERROR, "[ESCLIB.DrawCharEx]: ERROR: String contains more than one UTF-8 character\n");
 		return;
 	}
 

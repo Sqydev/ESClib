@@ -187,6 +187,7 @@ typedef struct {
 		bool enabled;
 
 		FILE* file;
+		LogLevel logLevel;
 
 		char* path;
 	} Logging;

@@ -90,6 +90,8 @@ typedef struct {
 	bool trueColor;
 } Color;
 
+
+
 typedef struct {
 	char Char[4];
 	char CharLen;
@@ -97,6 +99,8 @@ typedef struct {
 	Color fgColor;
 	Color bgColor;
 } SBCell;
+
+
 
 typedef struct {
 	float x;
@@ -117,6 +121,8 @@ typedef struct {
 	long x;
 	long y;
 } Vector2l;
+
+
 
 typedef struct {
 	float x;
@@ -141,6 +147,8 @@ typedef struct {
 	long y;
 	long z;
 } Vector3l;
+
+
 
 typedef struct {
 	float x;
@@ -170,6 +178,8 @@ typedef struct {
 	long w;
 } Vector4l;
 
+
+
 typedef struct {
 	int x;
 	int y;
@@ -198,6 +208,8 @@ typedef struct {
 	long height;
 } Rectanglel;
 
+
+
 typedef struct {
 	int centerX;
 	int centerY;
@@ -222,6 +234,8 @@ typedef struct {
 	long radius;
 } Circlel;
 
+
+
 typedef struct {
 	Vector2i A;
 	Vector2i B;
@@ -245,6 +259,8 @@ typedef struct {
 	Vector2l B;
 	Vector2l C;
 } Trianglel;
+
+
 
 typedef enum {
 	TUI_STATIC,
@@ -370,6 +386,17 @@ typedef enum {
 	KEY_ADD             = 78,
 } KeyboardKey;
 
+
+
+typedef enum {
+	LOG_ERROR = 3,
+	LOG_WARNING = 2,
+	LOG_INFO = 1,
+	LOG_DEBUG = 0,
+} LogLevel;
+
+
+
 #define TERMWHITE (Color){ 15, 0, 0, 0 }
 #define TERMBLACK (Color){ 0, 0, 0, 0 }
 
@@ -385,9 +412,9 @@ RLAPI void InitTui(int targetFps, TuiType type);
 RLAPI void CloseTui(void);
 
 // Init logging to file of path(0 if succes -1 if falied, -2 if already inited)
-RLAPI int InitLoggin(char* path);
+RLAPI int InitLoggin(char* path, LogLevel logLevel);
 // Log to inited log file
-RLAPI void TraceLog(const char* message, ...);
+RLAPI void TraceLog(LogLevel logLevel, const char* message, ...);
 // Close logging file
 RLAPI void CloseLoggin();
 

@@ -67,23 +67,23 @@ void InitTui(int targetFps, TuiType type) {
 	if(getenv("WAYLAND_DISPLAY")) {
 		DATA.System.compositor = WAYLAND;
 		
-		TraceLog("[ESCLIB.InitTui]: INFO: Detected Wayland");
+		TraceLog(LOG_INFO, "[ESCLIB.InitTui]: INFO: Detected Wayland");
 	}
 	else if(getenv("DISPLAY")) {
 		DATA.System.compositor = X11;
 		
-		TraceLog("[ESCLIB.InitTui]: INFO: Detected X11");
+		TraceLog(LOG_INFO, "[ESCLIB.InitTui]: INFO: Detected X11");
 	}
 	else {
 		DATA.System.compositor = NONE;
 		
-		TraceLog("[ESCLIB.InitTui]: INFO: Detected NO COMPOSITOR :0");
+		TraceLog(LOG_INFO, "[ESCLIB.InitTui]: INFO: Detected NO COMPOSITOR :0");
 	}
 
 #elif defined(_WIN32) || defined(_WIN64)
 
 	DATA.SystemInfo.compositor = WINDOWS;	
-	TraceLog("[ESCLIB.InitTui]: INFO: WINDOWS >:(");
+	TraceLog(LOG_DEBUG, "[ESCLIB.InitTui]: INFO: WINDOWS >:(");
 
 #endif
 
@@ -213,7 +213,7 @@ int RemovePanicTask(size_t index) {
 	return 0;
 }
 
-int InitLoggin(char* path) {
+int InitLoggin(char* path, LogLevel logLevel) {
 	if(DATA.Logging.enabled) { return -2; }
 
 	DATA.Logging.enabled = true;
@@ -226,12 +226,16 @@ int InitLoggin(char* path) {
 		return -1;
 	}
 
+	DATA.Logging.logLevel = logLevel;
+
 	return 0;
 }
 
-void TraceLog(const char* message, ...) {
+void TraceLog(LogLevel logLevel, const char* message, ...) {
 	if(!DATA.Logging.enabled) { return; }
 	if(!DATA.Logging.file) { return; }
+	
+	if(logLevel > DATA.Logging.logLevel) { return; }
 
 	va_list va;
 	va_start(va, message);
