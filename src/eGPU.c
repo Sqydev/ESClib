@@ -53,7 +53,7 @@ void InitOpenCl(void) {
 
 	if(!DATA.OpenCl.dlHandle) {
 		char *err = dlerror();
-		TraceLog("[ESCLIB.CompileKernel]: WARNING: Couldn't load OpenCL, fallback to COMPUTE_ESC, error code: %s", err ? err : "unknown");
+		TraceLog(LOG_WARNING, "[ESCLIB.CompileKernel]: WARNING: Couldn't load OpenCL, fallback to COMPUTE_ESC, error code: %s", err ? err : "unknown");
 		CleanUpOpenCl();
 		return;
 	}
@@ -91,7 +91,7 @@ void InitOpenCl(void) {
 	DATA.OpenCl.clEnqueueWriteBuffer = dlsym(DATA.OpenCl.dlHandle, "clEnqueueWriteBuffer");
 
 	if(!DATA.OpenCl.clGetDeviceIDs || !DATA.OpenCl.clGetPlatformIDs || !DATA.OpenCl.clCreateContext || !DATA.OpenCl.clReleaseContext || !DATA.OpenCl.clCreateCommandQueue || !DATA.OpenCl.clReleaseCommandQueue || !DATA.OpenCl.clCreateProgramWithSource || !DATA.OpenCl.clBuildProgram || !DATA.OpenCl.clReleaseProgram || !DATA.OpenCl.clCreateKernel || !DATA.OpenCl.clReleaseKernel || !DATA.OpenCl.clGetProgramBuildInfo || !DATA.OpenCl.clSetKernelArg || !DATA.OpenCl.clEnqueueNDRangeKernel || !DATA.OpenCl.clFinish || !DATA.OpenCl.clCreateBuffer || !DATA.OpenCl.clReleaseMemObject || !DATA.OpenCl.clEnqueueReadBuffer || !DATA.OpenCl.clEnqueueWriteBuffer) {
-		TraceLog("[ESCLIB.CompileKernel]: WARNING: Missing OpenCL symbols, fallback to COMPUTE_ESC");
+		TraceLog(LOG_WARNING, "[ESCLIB.CompileKernel]: WARNING: Missing OpenCL symbols, fallback to COMPUTE_ESC");
 		dlclose(DATA.OpenCl.dlHandle);
 		CleanUpOpenCl();
 		return;
@@ -105,19 +105,19 @@ void InitOpenCl(void) {
 
 	erri = DATA.OpenCl.clGetPlatformIDs(1, &DATA.OpenCl.platform, &DATA.OpenCl.platformCount);
 	if(erri != CL_SUCCESS || DATA.OpenCl.platformCount == 0) {
-		TraceLog("[ESCLIB.CompileKernel]: WARNING: No OpenCL platforms, fallback to COMPUTE_ESC, OpenCL error code: %d", erri);
+		TraceLog(LOG_WARNING, "[ESCLIB.CompileKernel]: WARNING: No OpenCL platforms, fallback to COMPUTE_ESC, OpenCL error code: %d", erri);
 		CleanUpOpenCl();
 		return;
 	}
 
 	erri = DATA.OpenCl.clGetDeviceIDs(DATA.OpenCl.platform, CL_DEVICE_TYPE_GPU, 1, &DATA.OpenCl.device, NULL);
 	if(erri != CL_SUCCESS) {
-		TraceLog("[ESCLIB.CompileKernel]: WARNING: No GPUs, fallback to CPU, OpenCL error code: %d", erri);
+		TraceLog(LOG_WARNING, "[ESCLIB.CompileKernel]: WARNING: No GPUs, fallback to CPU, OpenCL error code: %d", erri);
 		DATA.System.computeBackend.device = DEVICE_CPU;
 
 		erri = DATA.OpenCl.clGetDeviceIDs(DATA.OpenCl.platform, CL_DEVICE_TYPE_CPU, 1, &DATA.OpenCl.device, NULL);
 		if(erri != CL_SUCCESS) {
-			TraceLog("[ESCLIB.CompileKernel]: WARNING: No CPUs found, fallback to COMPUTE_ESC, OpenCL error code: %d", erri);
+			TraceLog(LOG_WARNING, "[ESCLIB.CompileKernel]: WARNING: No CPUs found, fallback to COMPUTE_ESC, OpenCL error code: %d", erri);
 			CleanUpOpenCl();
 			return;
 		}
@@ -128,21 +128,21 @@ void InitOpenCl(void) {
 
 	DATA.OpenCl.context = DATA.OpenCl.clCreateContext(NULL, 1, &DATA.OpenCl.device, NULL, NULL, &erri);
 	if(erri != CL_SUCCESS) {
-		TraceLog("[ESCLIB.CompileKernel]: WARNING: Failed to create OpenCL context, fallback to COMPUTE_ESC, OpenCL error code: %d", erri);
+		TraceLog(LOG_WARNING, "[ESCLIB.CompileKernel]: WARNING: Failed to create OpenCL context, fallback to COMPUTE_ESC, OpenCL error code: %d", erri);
 		CleanUpOpenCl();
 		return;
 	}
 
 	DATA.OpenCl.queue = DATA.OpenCl.clCreateCommandQueue(DATA.OpenCl.context, DATA.OpenCl.device, 0, &erri);
 	if(erri != CL_SUCCESS) {
-		TraceLog("[ESCLIB.CompileKernel]: WARNING: Failed to create OpenCL queue, fallback to COMPUTE_ESC, OpenCL error code: %d", erri);
+		TraceLog(LOG_WARNING, "[ESCLIB.CompileKernel]: WARNING: Failed to create OpenCL queue, fallback to COMPUTE_ESC, OpenCL error code: %d", erri);
 		CleanUpOpenCl();
 		return;
 	}
 
 	DATA.System.computeBackend.backend = COMPUTE_OPENCL;
 
-	TraceLog("[ESCLIB.CompileKernel]: INFO: OpenCL initialized successfully, device: %s", DATA.System.computeBackend.device == DEVICE_GPU ? "GPU" : "CPU");
+	TraceLog(LOG_INFO, "[ESCLIB.CompileKernel]: INFO: OpenCL initialized successfully, device: %s", DATA.System.computeBackend.device == DEVICE_GPU ? "GPU" : "CPU");
 }
 
 void CleanUpOpenCl(void) {
@@ -165,7 +165,7 @@ void CleanUpOpenCl(void) {
 }
 
 Kernel* CompileKernel(const char* path, const char* kernelName) {
-	if(DATA.System.computeBackend.backend != COMPUTE_OPENCL) { TraceLog("[ESCLIB.CompileKernel]: WARNING: OpenCL not inited, returninig NULL"); return NULL; }
+	if(DATA.System.computeBackend.backend != COMPUTE_OPENCL) { TraceLog(LOG_WARNING, "[ESCLIB.CompileKernel]: WARNING: OpenCL not inited, returninig NULL"); return NULL; }
 
 	Kernel* kernel = malloc(sizeof(Kernel));
 	memset(kernel, 0, sizeof(Kernel));
@@ -177,7 +177,7 @@ Kernel* CompileKernel(const char* path, const char* kernelName) {
 	FILE* file = fopen(path, "rb");
 	if(!file) {
 		free(kernel);
-		TraceLog("[ESCLIB.CompileKernel]: ERROR: Couldn't open file at: %s, returninig NULL", path);
+		TraceLog(LOG_ERROR, "[ESCLIB.CompileKernel]: ERROR: Couldn't open file at: %s, returninig NULL", path);
 		return NULL;
 	}
 
@@ -189,7 +189,7 @@ Kernel* CompileKernel(const char* path, const char* kernelName) {
 	if(!src) {
 		fclose(file);
 		free(kernel);
-		TraceLog("[ESCLIB.CompileKernel]: ERROR: Couldn't malloc src");
+		TraceLog(LOG_ERROR, "[ESCLIB.CompileKernel]: ERROR: Couldn't malloc src");
 		return NULL;
 	}
 	fread(src, 1, fileSize, file);
@@ -205,7 +205,7 @@ Kernel* CompileKernel(const char* path, const char* kernelName) {
 	free(src);
 	if(erri != CL_SUCCESS) {
 		free(kernel);
-		TraceLog("[ESCLIB.CompileKernel]: ERROR: clCreateProgramWithSource return value is not CL_SUCCESS, OpenCL error code: %d", erri);
+		TraceLog(LOG_ERROR, "[ESCLIB.CompileKernel]: ERROR: clCreateProgramWithSource return value is not CL_SUCCESS, OpenCL error code: %d", erri);
 		return NULL;
 	}
 
@@ -213,23 +213,23 @@ Kernel* CompileKernel(const char* path, const char* kernelName) {
 	if(erri != CL_SUCCESS) {
 		DATA.OpenCl.clReleaseProgram(program);
 		free(kernel);
-		TraceLog("[ESCLIB.CompileKernel]: ERROR: clBuildProgram return value is not CL_SUCCESS, OpenCL error code: %d", erri);
+		TraceLog(LOG_ERROR, "[ESCLIB.CompileKernel]: ERROR: clBuildProgram return value is not CL_SUCCESS, OpenCL error code: %d", erri);
 		size_t logSize = 0;
 
 		cl_int logErr;
 		logErr = DATA.OpenCl.clGetProgramBuildInfo(program, DATA.OpenCl.device, CL_PROGRAM_BUILD_LOG, 0, NULL, &logSize);
 		if(logErr != CL_SUCCESS) {
-			TraceLog("[ESCLIB.CompileKernel]: Failed to get build log: %d", logErr);
+			TraceLog(LOG_ERROR, "[ESCLIB.CompileKernel]: ERROR: Failed to get build log: %d", logErr);
 		}
 
 		char* log = malloc(logSize + 1);
 		logErr = DATA.OpenCl.clGetProgramBuildInfo(program, DATA.OpenCl.device, CL_PROGRAM_BUILD_LOG, logSize, log, NULL);
 		if(logErr != CL_SUCCESS) {
-			TraceLog("[ESCLIB.CompileKernel]: Failed to get build log: %d", logErr);
+			TraceLog(LOG_ERROR, "[ESCLIB.CompileKernel]: ERROR: Failed to get build log: %d", logErr);
 		}
 
 		log[logSize] = '\0';
-		TraceLog("[ESCLIB.CompileKernel]: BUILD LOG:\n%s", log);
+		TraceLog(LOG_ERROR, "[ESCLIB.CompileKernel]: ERROR: BUILD LOG:\n%s", log);
 		free(log);
 		return NULL;
 	}
@@ -238,7 +238,7 @@ Kernel* CompileKernel(const char* path, const char* kernelName) {
 	if(erri != CL_SUCCESS) {
 		DATA.OpenCl.clReleaseProgram(program);
 		free(kernel);
-		TraceLog("[ESCLIB.CompileKernel]: ERROR: clCreateKernel return value is not CL_SUCCESS, OpenCL error code: %d", erri);
+		TraceLog(LOG_ERROR, "[ESCLIB.CompileKernel]: ERROR: clCreateKernel return value is not CL_SUCCESS, OpenCL error code: %d", erri);
 		return NULL;
 	}
 
@@ -250,16 +250,16 @@ Kernel* CompileKernel(const char* path, const char* kernelName) {
 
 int AddKernelArgValue(Kernel* kernel, uint32_t index, size_t size, const void* data) {
 	if(DATA.System.computeBackend.backend != COMPUTE_OPENCL) {
-		TraceLog("[ESCLIB.AddKernelArgValue]: WARNING: OpenCL not inited");
+		TraceLog(LOG_WARNING, "[ESCLIB.AddKernelArgValue]: WARNING: OpenCL not inited");
 		return -1;
 	}
 	if(!kernel || !kernel->kernel) {
-		TraceLog("[ESCLIB.AddKernelArgValue]: ERROR: invalid kernel");
+		TraceLog(LOG_ERROR, "[ESCLIB.AddKernelArgValue]: ERROR: invalid kernel");
 		return -2;
 	}
 	cl_int erri = DATA.OpenCl.clSetKernelArg(kernel->kernel, index, size, data);
 	if(erri != CL_SUCCESS) {
-		TraceLog("[ESCLIB.AddKernelArgValue]: ERROR: clSetKernelArg failed: %d", erri);
+		TraceLog(LOG_ERROR, "[ESCLIB.AddKernelArgValue]: ERROR: clSetKernelArg failed: %d", erri);
 		return -3;
 	}
 	return 0;
@@ -267,11 +267,11 @@ int AddKernelArgValue(Kernel* kernel, uint32_t index, size_t size, const void* d
 
 int AddKernelArgBuffer(Kernel* kernel, uint32_t index, size_t size, const void* data) {
 	if(DATA.System.computeBackend.backend != COMPUTE_OPENCL) {
-		TraceLog("[ESCLIB.AddKernelArgBuffer]: WARNING: OpenCL not inited");
+		TraceLog(LOG_WARNING, "[ESCLIB.AddKernelArgBuffer]: WARNING: OpenCL not inited");
 		return -1;
 	}
 	if(!kernel || !kernel->kernel) {
-		TraceLog("[ESCLIB.AddKernelArgBuffer]: ERROR: invalid kernel");
+		TraceLog(LOG_ERROR, "[ESCLIB.AddKernelArgBuffer]: ERROR: invalid kernel");
 		return -2;
 	}
 
@@ -280,7 +280,7 @@ int AddKernelArgBuffer(Kernel* kernel, uint32_t index, size_t size, const void* 
 		cl_mem* newBufs = realloc(kernel->argBufs, newCount * sizeof(cl_mem));
 		size_t* newSizes = realloc(kernel->argSizes, newCount * sizeof(size_t));
 		if(!newBufs || !newSizes) {
-			TraceLog("[ESCLIB.AddKernelArgBuffer]: ERROR: realloc failed");
+			TraceLog(LOG_ERROR, "[ESCLIB.AddKernelArgBuffer]: ERROR: realloc failed");
 			free(newBufs); free(newSizes);
 			return -4;
 		}
@@ -296,7 +296,7 @@ int AddKernelArgBuffer(Kernel* kernel, uint32_t index, size_t size, const void* 
 	if(kernel->argBufs[index] && kernel->argSizes[index] == size) {
 		cl_int erri = DATA.OpenCl.clEnqueueWriteBuffer(DATA.OpenCl.queue, kernel->argBufs[index], CL_TRUE, 0, size, data, 0, NULL, NULL);
 		if(erri != CL_SUCCESS) {
-			TraceLog("[ESCLIB.AddKernelArgBuffer]: ERROR: clEnqueueWriteBuffer failed: %d", erri);
+			TraceLog(LOG_ERROR, "[ESCLIB.AddKernelArgBuffer]: ERROR: clEnqueueWriteBuffer failed: %d", erri);
 			return -3;
 		}
 		return 0;
@@ -309,13 +309,13 @@ int AddKernelArgBuffer(Kernel* kernel, uint32_t index, size_t size, const void* 
 	cl_int erri;
 	cl_mem buf = DATA.OpenCl.clCreateBuffer(DATA.OpenCl.context, CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR, size, (void*)data, &erri);
 	if(erri != CL_SUCCESS) {
-		TraceLog("[ESCLIB.AddKernelArgBuffer]: ERROR: clCreateBuffer failed: %d", erri);
+		TraceLog(LOG_ERROR, "[ESCLIB.AddKernelArgBuffer]: ERROR: clCreateBuffer failed: %d", erri);
 		return -3;
 	}
 	erri = DATA.OpenCl.clSetKernelArg(kernel->kernel, index, sizeof(cl_mem), &buf);
 	if(erri != CL_SUCCESS) {
 		DATA.OpenCl.clReleaseMemObject(buf);
-		TraceLog("[ESCLIB.AddKernelArgBuffer]: ERROR: clSetKernelArg (buf) failed: %d", erri);
+		TraceLog(LOG_ERROR, "[ESCLIB.AddKernelArgBuffer]: ERROR: clSetKernelArg (buf) failed: %d", erri);
 		return -3;
 	}
 	kernel->argBufs[index] = buf;
@@ -325,7 +325,7 @@ int AddKernelArgBuffer(Kernel* kernel, uint32_t index, size_t size, const void* 
 
 int ReadKernelArg(Kernel* kernel, uint32_t index, size_t size, void* out) {
 	if(index >= kernel->argCount || !kernel->argBufs[index]) {
-		TraceLog("[ESCLIB.ReadKernelArg]: ERROR: no buffer at index %u", index);
+		TraceLog(LOG_ERROR, "[ESCLIB.ReadKernelArg]: ERROR: no buffer at index %u", index);
 		return -1;
 	}
 	cl_int erri = DATA.OpenCl.clEnqueueReadBuffer(DATA.OpenCl.queue, kernel->argBufs[index], CL_TRUE, 0, size, out, 0, NULL, NULL);
@@ -334,12 +334,12 @@ int ReadKernelArg(Kernel* kernel, uint32_t index, size_t size, void* out) {
 
 int RunKernel(Kernel* kernel, size_t instances, size_t workgroupSize) {
 	if(DATA.System.computeBackend.backend != COMPUTE_OPENCL) {
-		TraceLog("[ESCLIB.RunKernel]: WARNING: OpenCL not inited, returninig NULL");
+		TraceLog(LOG_WARNING, "[ESCLIB.RunKernel]: WARNING: OpenCL not inited, returninig NULL");
 		return -1;
 	}
 
 	if(!kernel || !kernel->kernel) {
-		TraceLog("[ESCLIB.RunKernel]: ERROR: invalid kernel");
+		TraceLog(LOG_ERROR, "[ESCLIB.RunKernel]: ERROR: invalid kernel");
 		return -2;
 	}
 
@@ -348,7 +348,7 @@ int RunKernel(Kernel* kernel, size_t instances, size_t workgroupSize) {
 
 	cl_int erri = DATA.OpenCl.clEnqueueNDRangeKernel(DATA.OpenCl.queue, kernel->kernel, 1, NULL, &global, local, 0, NULL, NULL);
 	if(erri != CL_SUCCESS) {
-		TraceLog("[ESCLIB.RunKernel]: ERROR: clEnqueueNDRangeKernel failed: %d", erri);
+		TraceLog(LOG_ERROR, "[ESCLIB.RunKernel]: ERROR: clEnqueueNDRangeKernel failed: %d", erri);
 		return -3;
 	}
 
@@ -357,14 +357,14 @@ int RunKernel(Kernel* kernel, size_t instances, size_t workgroupSize) {
 
 int WaitForKernel(void) {
 	if(DATA.System.computeBackend.backend != COMPUTE_OPENCL) {
-		TraceLog("[ESCLIB.WaitForKernel]: WARNING: OpenCL not inited, returninig NULL");
+		TraceLog(LOG_WARNING, "[ESCLIB.WaitForKernel]: WARNING: OpenCL not inited, returninig NULL");
 		return -1;
 	}
 
 	cl_int erri = DATA.OpenCl.clFinish(DATA.OpenCl.queue);
 
 	if(erri != CL_SUCCESS) {
-		TraceLog("[ESCLIB.WaitForKernel]: ERROR: clFinish failed: %d", erri);
+		TraceLog(LOG_ERROR, "[ESCLIB.WaitForKernel]: ERROR: clFinish failed: %d", erri);
 		return -2;
 	}
 

@@ -62,7 +62,7 @@ int EnableSignal(int signal) {
 		}
 		
 		default: {
-			TraceLog("[ESCLIB.EnableSignal]: ERROR: Couldn't enable signal becouse signal is NOT supported");
+			TraceLog(LOG_ERROR, "[ESCLIB.EnableSignal]: ERROR: Couldn't enable signal becouse signal is NOT supported");
 			errno = EINVAL;
 			return EXIT_FAILURE;
 		}
@@ -85,7 +85,7 @@ int DisableSignal(int signal) {
 		}
 		
 		default: {
-			TraceLog("[ESCLIB.DisableSignal]: ERROR: Couldn't disable signal becouse signal is NOT supported");
+			TraceLog(LOG_ERROR, "[ESCLIB.DisableSignal]: ERROR: Couldn't disable signal becouse signal is NOT supported");
 			errno = EINVAL;
 			return EXIT_FAILURE;
 		}
@@ -108,7 +108,7 @@ int EnableSignalESClibTasks(int signal) {
 		}
 		
 		default: {
-			TraceLog("[ESCLIB.EnableSignalESClibTasks]: ERROR: Couldn't enable ESClib task becouse signal is NOT supported");
+			TraceLog(LOG_ERROR, "[ESCLIB.EnableSignalESClibTasks]: ERROR: Couldn't enable ESClib task becouse signal is NOT supported");
 			errno = EINVAL;
 			return EXIT_FAILURE;
 		}
@@ -131,7 +131,7 @@ int DisableSignalESClibTasks(int signal) {
 		}
 		
 		default: {
-			TraceLog("[ESCLIB.DisableSignalESClibTasks]: ERROR: Couldn't disable ESClib task becouse signal is NOT supported");
+			TraceLog(LOG_ERROR, "[ESCLIB.DisableSignalESClibTasks]: ERROR: Couldn't disable ESClib task becouse signal is NOT supported");
 			errno = EINVAL;
 			return EXIT_FAILURE;
 		}
@@ -154,7 +154,7 @@ int EnableSignalCustomTasks(int signal) {
 		}
 		
 		default: {
-			TraceLog("[ESCLIB.EnableSignalCustomTasks]: ERROR: Couldn't enable custom task becouse signal is NOT supported");
+			TraceLog(LOG_ERROR, "[ESCLIB.EnableSignalCustomTasks]: ERROR: Couldn't enable custom task becouse signal is NOT supported");
 			errno = EINVAL;
 			return EXIT_FAILURE;
 		}
@@ -177,7 +177,7 @@ int DisableSignalCustomTasks(int signal) {
 		}
 		
 		default: {
-			TraceLog("[ESCLIB.DisableSignalCustomTasks]: ERROR: Couldn't disable custom task becouse signal is NOT supported");
+			TraceLog(LOG_ERROR, "[ESCLIB.DisableSignalCustomTasks]: ERROR: Couldn't disable custom task becouse signal is NOT supported");
 			errno = EINVAL;
 			return EXIT_FAILURE;
 		}
@@ -200,7 +200,7 @@ int EnableSignalBuildInTasks(int signal) {
 		}
 		
 		default: {
-			TraceLog("[ESCLIB.EnableSignalBuildInTasks]: ERROR: Couldn't enable build in task becouse signal is NOT supported");
+			TraceLog(LOG_ERROR, "[ESCLIB.EnableSignalBuildInTasks]: ERROR: Couldn't enable build in task becouse signal is NOT supported");
 			errno = EINVAL;
 			return EXIT_FAILURE;
 		}
@@ -223,7 +223,7 @@ int DisableSignalBuildInTasks(int signal) {
 		}
 		
 		default: {
-			TraceLog("[ESCLIB.DisableSignalBuildInTasks]: ERROR: Couldn't disable build in task becouse signal is NOT supported");
+			TraceLog(LOG_ERROR, "[ESCLIB.DisableSignalBuildInTasks]: ERROR: Couldn't disable build in task becouse signal is NOT supported");
 			errno = EINVAL;
 			return EXIT_FAILURE;
 		}
@@ -243,7 +243,7 @@ int AddSignalTask(int signal, void (*taskFunction)(void), int index) {
 				void (**tmp)(void) = realloc(DATA.SignalData.SIG_INT.customTasks, newSize * sizeof( void (*)(void) ));
 
 				if(!tmp) {
-					TraceLog("[ESCLIB.AddSignalTask]: ERROR: Realloc failed for tmp in SIGINT");
+					TraceLog(LOG_ERROR, "[ESCLIB.AddSignalTask]: ERROR: Realloc failed for tmp in SIGINT");
 					errno = ENOMEM;
 					return -1;
 				}
@@ -271,7 +271,7 @@ int AddSignalTask(int signal, void (*taskFunction)(void), int index) {
 				void (**tmp)(void) = realloc(DATA.SignalData.SIG_WINCH.customTasks, newSize * sizeof( void (*)(void) ));
 
 				if(!tmp) {
-					TraceLog("[ESCLIB.AddSignalTask]: ERROR: Realloc failed for tmp in SIGWINCH");
+					TraceLog(LOG_ERROR, "[ESCLIB.AddSignalTask]: ERROR: Realloc failed for tmp in SIGWINCH");
 					errno = ENOMEM;
 					return -1;
 				}
@@ -291,7 +291,7 @@ int AddSignalTask(int signal, void (*taskFunction)(void), int index) {
 		}
 
 		default: {
-			TraceLog("[ESCLIB.AddSignalTask]: ERROR: Couldn't add task becouse signal is NOT supported");
+			TraceLog(LOG_ERROR, "[ESCLIB.AddSignalTask]: ERROR: Couldn't add task becouse signal is NOT supported");
 			errno = EINVAL;
 			return -1;
 		}
@@ -302,12 +302,12 @@ int RemoveSignalTask(int signal, int index) {
 	switch(signal) {
 		case SIGINT: {
 			if(DATA.SignalData.SIG_INT.customTasksNumber == 0) {
-				TraceLog("[ESCLIB.RemoveSignalTask]: ERROR: There is no SIGINT tasks to remove");
+				TraceLog(LOG_ERROR, "[ESCLIB.RemoveSignalTask]: ERROR: There is no SIGINT tasks to remove");
 				return -1;
 			}
 			if(index < 0) { index = DATA.SignalData.SIG_INT.customTasksNumber - 1; }
 			if(index < 0 || index >= DATA.SignalData.SIG_INT.customTasksNumber) {
-				TraceLog("[ESCLIB.RemoveSignalTask]: ERROR: There is no SIGINT task with given index to remove");
+				TraceLog(LOG_ERROR, "[ESCLIB.RemoveSignalTask]: ERROR: There is no SIGINT task with given index to remove");
 				errno = EINVAL;
 				return -1;
 			}
@@ -326,7 +326,7 @@ int RemoveSignalTask(int signal, int index) {
 				void* tmp = realloc(DATA.SignalData.SIG_INT.customTasks, DATA.SignalData.SIG_INT.customTasksNumber * sizeof( void (*)(void) ));
 
 				if(!tmp) {
-					TraceLog("[ESCLIB.RemoveSignalTask]: ERROR: Realloc failed for tmp in SIGINT");
+					TraceLog(LOG_ERROR, "[ESCLIB.RemoveSignalTask]: ERROR: Realloc failed for tmp in SIGINT");
 					errno = ENOMEM;
 					return -1;
 				}
@@ -339,12 +339,12 @@ int RemoveSignalTask(int signal, int index) {
 
 		case SIGWINCH: {
 			if(DATA.SignalData.SIG_WINCH.customTasksNumber == 0) {
-				TraceLog("[ESCLIB.RemoveSignalTask]: ERROR: There is no SIGWINCH tasks to remove");
+				TraceLog(LOG_ERROR, "[ESCLIB.RemoveSignalTask]: ERROR: There is no SIGWINCH tasks to remove");
 				return -1;
 			}
 			if(index < 0) { index = DATA.SignalData.SIG_WINCH.customTasksNumber - 1; }
 			if(index < 0 || index >= DATA.SignalData.SIG_WINCH.customTasksNumber) {
-				TraceLog("[ESCLIB.RemoveSignalTask]: ERROR: There is no SIGWINCH task with given index to remove");
+				TraceLog(LOG_ERROR, "[ESCLIB.RemoveSignalTask]: ERROR: There is no SIGWINCH task with given index to remove");
 				errno = EINVAL;
 				return -1;
 			}
@@ -363,7 +363,7 @@ int RemoveSignalTask(int signal, int index) {
 				void* tmp = realloc(DATA.SignalData.SIG_WINCH.customTasks, DATA.SignalData.SIG_WINCH.customTasksNumber * sizeof( void (*)(void) ));
 
 				if(!tmp) {
-					TraceLog("[ESCLIB.RemoveSignalTask]: ERROR: Realloc failed for tmp in SIGWINCH");
+					TraceLog(LOG_ERROR, "[ESCLIB.RemoveSignalTask]: ERROR: Realloc failed for tmp in SIGWINCH");
 					errno = ENOMEM;
 					return -1;
 				}
@@ -375,7 +375,7 @@ int RemoveSignalTask(int signal, int index) {
 		}
 
 		default: {
-			TraceLog("[ESCLIB.RemoveSignalTask]: ERROR: Couldn't remove task becouse signal is NOT supported");
+			TraceLog(LOG_ERROR, "[ESCLIB.RemoveSignalTask]: ERROR: Couldn't remove task becouse signal is NOT supported");
 			errno = EINVAL;
 			return -1;
 		}
@@ -412,7 +412,7 @@ int CompressSignalTasks(int signal, int from, int to) {
 			else {
 				void* tmp = realloc(DATA.SignalData.SIG_INT.customTasks, newSize * sizeof( void(*)(void) ));
 				if(!tmp) {
-					TraceLog("[ESCLIB.CompressSignalTasks]: ERROR: Realloc failed for tmp in SIGINT");
+					TraceLog(LOG_ERROR, "[ESCLIB.CompressSignalTasks]: ERROR: Realloc failed for tmp in SIGINT");
 					errno = ENOMEM;
 					return -1;
 				}
@@ -453,7 +453,7 @@ int CompressSignalTasks(int signal, int from, int to) {
 			else {
 				void* tmp = realloc(DATA.SignalData.SIG_WINCH.customTasks, newSize * sizeof( void(*)(void) ));
 				if(!tmp) {
-					TraceLog("[ESCLIB.CompressSignalTasks]: ERROR: Realloc failed for tmp in SIGWINCH");
+					TraceLog(LOG_ERROR, "[ESCLIB.CompressSignalTasks]: ERROR: Realloc failed for tmp in SIGWINCH");
 					errno = ENOMEM;
 					return -1;
 				}
@@ -467,7 +467,7 @@ int CompressSignalTasks(int signal, int from, int to) {
 		}
 
 		default: {
-			TraceLog("[ESCLIB.CompressSignalTasks]: ERROR: Couldn't compress tasks becouse signal is NOT supported");
+			TraceLog(LOG_ERROR, "[ESCLIB.CompressSignalTasks]: ERROR: Couldn't compress tasks becouse signal is NOT supported");
 			errno = EINVAL;
 			return -1;
 		}
