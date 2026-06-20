@@ -147,6 +147,9 @@ typedef struct {
 
 	struct {
 		Vector2i pos;
+		bool hidden;
+		bool preHidden;
+		bool oob;
 	} Cursor;
 
 	struct {

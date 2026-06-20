@@ -246,3 +246,9 @@ double GetTime(void) {
 
 #endif
 }
+
+Vector2i GetCursorPos(void) {
+	return (Vector2i){ DATA.Cursor.pos.x, DATA.Cursor.pos.y };
+}
+
+bool IsCursorHidden(void) { return DATA.Cursor.hidden; }

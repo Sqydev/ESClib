@@ -528,6 +528,9 @@ RLAPI size_t GetCustomSignalTasksSize(int signal);
 
 RLAPI double GetTime(void);
 
+RLAPI Vector2i GetCursorPos(void);
+RLAPI bool IsCursorHidden(void);
+
 // EUTILS
 
 // Like. If you have a and b. And if you wanna get angle that a in going. Use this
@@ -642,7 +645,7 @@ RLAPI void DestroyKernel(Kernel* k);
 // EBRAILLE
 
 // IT WILL MALLOC
-char* MergeBraille(const char* merged, const char* merger);
+RLAPI char* MergeBraille(const char* merged, const char* merger);
 
 // EPANELS
 RLAPI void DrawCharVP(Panel panel, const char* character, Vector2i pos, Color color);
@@ -693,6 +696,13 @@ RLAPI void DrawTriangleExP(Panel panel, char* character, int Ax, int Ay, int Bx,
 RLAPI void DrawTriangleProTriP(Panel panel, char* character, Triangle triangle, Vector2i origin, Color* fg, Color* bg, double rotation, bool lines, int thicknessLines, bool aspectRatiofied);
 RLAPI void DrawTriangleProVP(Panel panel, char* character, Vector2i posA, Vector2i posB, Vector2i posC, Vector2i origin, Color* fg, Color* bg, double rotation, bool lines, int thicknessLines, bool aspectRatiofied);
 RLAPI void DrawTriangleProP(Panel panel, char* character, int Ax, int Ay, int Bx, int By, int Cx, int Cy, int originX, int originY, Color* fg, Color* bg, double rotation, bool lines, int thicknessLines, bool aspectRatiofied);
+
+// ECURSOR
+RLAPI void SetCursorPositionV(Vector2i pos);
+RLAPI void SetCursorPosition(int posX, int posY);
+
+RLAPI void MoveCursorV(Vector2i pos);
+RLAPI void MoveCursor(int posX, int posY);
 
 #ifdef __cplusplus
 }

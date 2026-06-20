@@ -39,8 +39,6 @@
 #include <stdio.h>
 #include <string.h>
 
-// TODO: LIBCSITTYFNSINDEPENDENCE
-// sprintf memcpy and memcmp
 void RenderFrame(void) {
 	if(DATA.Buffers.backbuff == NULL || DATA.Buffers.frontbuff == NULL || DATA.Buffers.charbuffer == NULL) { return; }
 
@@ -120,7 +118,19 @@ void RenderFrame(void) {
 		}
 	}
 
-	DATA.Buffers.charbufferOffset += sprintf(DATA.Buffers.charbuffer + DATA.Buffers.charbufferOffset, "\033[%d;%dH", DATA.Cursor.pos.y + 1, DATA.Cursor.pos.x + 1);
+	bool shouldBeHidden = DATA.Cursor.hidden || DATA.Cursor.oob;
+ 
+	if(!shouldBeHidden) { DATA.Buffers.charbufferOffset += sprintf(DATA.Buffers.charbuffer + DATA.Buffers.charbufferOffset, "\033[%d;%dH", DATA.Cursor.pos.y + 1, DATA.Cursor.pos.x + 1); }
+
+	if(shouldBeHidden && !DATA.Cursor.preHidden) {
+		DATA.Cursor.preHidden = true;
+		DATA.Buffers.charbufferOffset += sprintf(DATA.Buffers.charbuffer + DATA.Buffers.charbufferOffset, "\033[?25l");
+	}
+	else if(!shouldBeHidden && DATA.Cursor.preHidden) {
+		DATA.Cursor.preHidden = false;
+		DATA.Buffers.charbufferOffset += sprintf(DATA.Buffers.charbuffer + DATA.Buffers.charbufferOffset, "\033[?25h");
+	}
+
 
 	if(DATA.Buffers.charbufferOffset > 0) {
 		UniWrite(UNI_WRITE_TARGET_STDOUT, DATA.Buffers.charbuffer, DATA.Buffers.charbufferOffset * sizeof(char));
