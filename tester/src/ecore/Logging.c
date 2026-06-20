@@ -3,9 +3,9 @@
 void LoggingTester() {
 	InitTui(60, TUI_DYNAMIC);
 
-	InitLoggin("./log");
+	InitLoggin("./log", LOG_DEBUG);
 
-	TraceLog("Log from tester:).");
+	TraceLog(LOG_INFO, "Log from tester:).");
 
 	CloseLoggin();
 
