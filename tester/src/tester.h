@@ -48,3 +48,5 @@ void PatternsGPUTest(void);
 void DrawTriangleTester();
 
 void MergBrileTester();
+
+void SetCursorPosTester();

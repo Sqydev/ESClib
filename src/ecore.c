@@ -120,6 +120,9 @@ void InitTui(int targetFps, TuiType type) {
 	DATA.Buffers.charbuffer = realloc(DATA.Buffers.charbuffer, GetCharbuffSize());
 
 	DATA.Cursor.pos = (Vector2i){ 0, 0 };
+	DATA.Cursor.hidden = false;
+	DATA.Cursor.preHidden = false;
+	DATA.Cursor.oob = false;
 
 	SetTargetFps(targetFps);
 
