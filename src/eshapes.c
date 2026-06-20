@@ -59,39 +59,51 @@ void DrawLineProV(char* character, Vector2i pointA, Vector2i pointB, Color* fg, 
 }
 
 void DrawLinePro(char* character, int pointAX, int pointAY, int pointBX, int pointBY, Color* fg, Color* bg, int thickness) {
-	Vector2d aDir = EDir(CalculateAngleOfAGoingToB((Vector2){ pointAX, pointAY }, (Vector2){ pointBX, pointBY }));
+    if(thickness < 1) { return; }
 
-	int vWidth = GetCharWidth(character);
+    Vector2d aDir = EDir(CalculateAngleOfAGoingToB((Vector2){ pointAX, pointAY }, (Vector2){ pointBX, pointBY }));
 
-	double stepX = vWidth / fmax(fabs(aDir.x), fabs(aDir.y));
-	double stepY = 1 / fmax(fabs(aDir.x), fabs(aDir.y));
+    int vWidth = GetCharWidth(character);
 
-	Vector2d scaledDir = { aDir.x * stepX, aDir.y * stepY };
+    double maxF = fmax(fabs(aDir.x), fabs(aDir.y));
+    if(maxF == 0) { return; }
 
-	Vector2i termPos = (Vector2i){ pointAX, pointAY };
-	Vector2 realPos = (Vector2){ pointAX, pointAY };
+    double stepX = vWidth / maxF;
+    double stepY = 1.0 / maxF;
 
-	if(thickness < 1) { return; }
+    Vector2d scaledDir = { aDir.x * stepX, aDir.y * stepY };
 
-	while((termPos.x - pointBX) * aDir.x + (termPos.y - pointBY) * aDir.y <= 0) {
-		if(termPos.x > GetLastTuiIndex().x) { return; }
-		if(termPos.y > GetLastTuiIndex().y) { return; }
-		if(termPos.x < 0) { return; }
-		if(termPos.y < 0) { return; }
+    Vector2i termPos = (Vector2i){ pointAX, pointAY };
+    Vector2 realPos = (Vector2){ pointAX, pointAY };
 
-		DrawCharEx(character, termPos.x, termPos.y, fg, bg);
+    int maxX = GetLastTuiIndex().x;
+    int maxY = GetLastTuiIndex().y;
 
-		for(int i = 1; i < thickness; i++) {
-			DrawCharEx(character, termPos.x + (int)(i * -aDir.y), termPos.y + (int)(i * aDir.x), fg, bg);
-			if(thickness > 1) { DrawCharEx(character, termPos.x + (int)(i * aDir.y), termPos.y + (int)(i * -aDir.x), fg, bg); }
-		}
+    while((termPos.x - pointBX) * aDir.x + (termPos.y - pointBY) * aDir.y <= 0)  {
+        bool inScreen = termPos.x >= 0 && termPos.x <= maxX && termPos.y >= 0 && termPos.y <= maxY;
 
-		realPos.x += scaledDir.x;
-		realPos.y += scaledDir.y;
+        if(inScreen) {
+            DrawCharEx(character, termPos.x, termPos.y, fg, bg);
 
-		termPos.x = (int)round(realPos.x);
-		termPos.y = (int)round(realPos.y);
-	}
+            for(int i = 1; i < thickness; i++) {
+                int x1 = termPos.x + (int)(i * -aDir.y);
+                int y1 = termPos.y + (int)(i *  aDir.x);
+
+                int x2 = termPos.x + (int)(i *  aDir.y);
+                int y2 = termPos.y + (int)(i * -aDir.x);
+
+                if(x1 >= 0 && x1 <= maxX && y1 >= 0 && y1 <= maxY) { DrawCharEx(character, x1, y1, fg, bg); }
+
+                if(thickness > 1 && x2 >= 0 && x2 <= maxX && y2 >= 0 && y2 <= maxY) { DrawCharEx(character, x2, y2, fg, bg); }
+            }
+        }
+
+        realPos.x += scaledDir.x;
+        realPos.y += scaledDir.y;
+
+        termPos.x = (int)round(realPos.x);
+        termPos.y = (int)round(realPos.y);
+    }
 }
 
 void DrawRectangleRec(Rectangle rec, Color color) {

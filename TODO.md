@@ -19,3 +19,5 @@
 // Make makefile make different obj files for tester and shit
 
 // TODO: Fix makefile
+
+// TODO: Make drawing shapes even faster
