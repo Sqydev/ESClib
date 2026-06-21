@@ -51,6 +51,8 @@
 #elif defined(_WIN32) || defined(__WIN64)
 #endif
 
+#define DATA __EsclibCoreData
+
 typedef enum {
 	WAYLAND,
 	X11,
