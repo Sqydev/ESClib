@@ -704,6 +704,9 @@ RLAPI void SetCursorPosition(int posX, int posY);
 RLAPI void MoveCursorV(Vector2i pos);
 RLAPI void MoveCursor(int posX, int posY);
 
+RLAPI void HideCursor(void);
+RLAPI void ShowCursor(void);
+
 #ifdef __cplusplus
 }
 #endif
