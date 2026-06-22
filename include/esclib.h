@@ -697,6 +697,20 @@ RLAPI void DrawTriangleProTriP(Panel panel, char* character, Triangle triangle, 
 RLAPI void DrawTriangleProVP(Panel panel, char* character, Vector2i posA, Vector2i posB, Vector2i posC, Vector2i origin, Color* fg, Color* bg, double rotation, bool lines, int thicknessLines, bool aspectRatiofied);
 RLAPI void DrawTriangleProP(Panel panel, char* character, int Ax, int Ay, int Bx, int By, int Cx, int Cy, int originX, int originY, Color* fg, Color* bg, double rotation, bool lines, int thicknessLines, bool aspectRatiofied);
 
+RLAPI void DrawTextfVP(Panel panel, const char* text, Vector2i pos, Color color, ...);
+RLAPI void DrawTextfP(Panel panel, const char* text, int x, int y, Color color, ...);
+RLAPI void DrawTextfExVP(Panel panel, const char* text, Vector2i pos, Color* fg, Color* bg, ...);
+RLAPI void DrawTextfExP(Panel panel, const char* text, int x, int y, Color* fg, Color* bg, ...);
+RLAPI void DrawTextfProVP(Panel panel, const char* text, Vector2i pos, Vector2i origin, Color* fg, Color* bg, int spaceing, double angle, ...);
+RLAPI void DrawTextfProP(Panel panel, const char* text, int x, int y, int originX, int originY, Color* fg, Color* bg, int spaceing, double angle, ...);
+
+RLAPI void vaDrawTextfVP(Panel panel, const char* text, Vector2i pos, Color color, va_list va);
+RLAPI void vaDrawTextfP(Panel panel, const char* text, int x, int y, Color color, va_list va);
+RLAPI void vaDrawTextfExVP(Panel panel, const char* text, Vector2i pos, Color* fg, Color* bg, va_list va);
+RLAPI void vaDrawTextfExP(Panel panel, const char* text, int x, int y, Color* fg, Color* bg, va_list va);
+RLAPI void vaDrawTextfProVP(Panel panel, const char* text, Vector2i pos, Vector2i origin, Color* fg, Color* bg, int spacing, double angle, va_list va);
+RLAPI void vaDrawTextfProP(Panel panel, const char* text, int x, int y, int originX, int originY, Color* fg, Color* bg, int spacing, double angle, va_list va);
+
 // ECURSOR
 RLAPI void SetCursorPositionV(Vector2i pos);
 RLAPI void SetCursorPosition(int posX, int posY);
