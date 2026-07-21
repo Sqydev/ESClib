@@ -31,7 +31,7 @@ void WINCHCLEAN() {
 }
 
 int main() {
-	InitTui(10, TUI_DYNAMIC, false);
+	InitTui(10, TUI_DYNAMIC);
 
 	Vector2i size = GetLastTuiIndex();
 	Vector2i currPos = { size.x / 2, size.y / 2 };
