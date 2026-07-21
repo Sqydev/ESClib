@@ -2,6 +2,7 @@
 
 #include <math.h>
 #include <stdlib.h>
+#include <time.h>
 
 #define PLAYER_HEIGHT 10
 #define SPEED 1
@@ -10,12 +11,23 @@ int main() {
 	InitTui(60, TUI_DYNAMIC);
 	HideCursor();
 
-	int playerPos = (GetLastTuiIndex().y / 2) - (PLAYER_HEIGHT / 2);
+	int playerPos;
 
-	Vector2 ballPos = (Vector2){ (float)GetLastTuiIndex().x / 2, (float)GetLastTuiIndex().y / 2 };
-	Vector2d ballDir = EDir(((double)rand() / RAND_MAX) * 2.0 * PI);
+	Vector2 ballPos;
+	Vector2d ballDir;
 
-	double dtc = 0;
+	double dtc;
+
+reset:
+
+	srand(time(NULL));
+
+	playerPos = (GetLastTuiIndex().y / 2) - (PLAYER_HEIGHT / 2);
+
+	ballPos = (Vector2){ (float)GetLastTuiIndex().x / 2, (float)GetLastTuiIndex().y / 2 };
+	ballDir = EDir(((double)rand() / RAND_MAX) * 2.0 * PI);
+
+	dtc = 0;
 
 	while(1) {
 		BeginDrawing();
@@ -30,14 +42,14 @@ int main() {
 			ballPos.x += ballDir.x;
 			ballPos.y += ballDir.y;
 
-			dtc = 0;
+			dtc -= 0.03 * SPEED;
 		}
 
-		if(ballPos.x >= GetLastTuiIndex().x) { ballDir.x = -ballDir.x; }
-		if(ballPos.y >= GetLastTuiIndex().y || ballPos.y <= 0) { ballDir.y = -ballDir.y; }
-		//if((ballPos.y >= playerPos && ballPos.y <= playerPos + PLAYER_HEIGHT) && ballPos.x < 0) { ballDir.x = -ballDir.x; }
+		if(ballPos.x >= GetLastTuiIndex().x) { ballDir.x = -ballDir.x; ballPos.x += ballDir.x; }
+		if(ballPos.y >= GetLastTuiIndex().y || ballPos.y <= 0) { ballDir.y = -ballDir.y; ballPos.y += ballDir.y; }
+		if((ballPos.y >= playerPos && ballPos.y <= playerPos + PLAYER_HEIGHT) && ballPos.x < 0) { ballDir.x = -ballDir.x; ballPos.x += ballDir.x; }
 		if(ballPos.x < 0) {
-			// Game 0ver
+			goto reset;
 		}
 
 		DrawLine(0, playerPos, 0, playerPos + PLAYER_HEIGHT, TERMWHITE, 1);
