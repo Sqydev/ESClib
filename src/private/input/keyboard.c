@@ -33,6 +33,7 @@
 *    source or binary distribution.
 */
 
+#ifdef ESCLIB_KEYIN_EXPERIMENT_ENABLE
 
 #if defined(unix) || defined(__unix) || defined(__unix__)
 	
@@ -68,68 +69,6 @@ static const SeqEntry SEQ_TABLE[] = {
 	{ NULL, 0 }
 };
 
-int SingleByteToKeycode(unsigned char c) {
-    if(c >= 'a' && c <= 'z') { c -= 32; }
-
-    switch(c) {
-        case 'A': return KEY_A;
-        case 'B': return KEY_B;
-        case 'C': return KEY_C;
-        case 'D': return KEY_D;
-        case 'E': return KEY_E;
-        case 'F': return KEY_F;
-        case 'G': return KEY_G;
-        case 'H': return KEY_H;
-        case 'I': return KEY_I;
-        case 'J': return KEY_J;
-        case 'K': return KEY_K;
-        case 'L': return KEY_L;
-        case 'M': return KEY_M;
-        case 'N': return KEY_N;
-        case 'O': return KEY_O;
-        case 'P': return KEY_P;
-        case 'Q': return KEY_Q;
-        case 'R': return KEY_R;
-        case 'S': return KEY_S;
-        case 'T': return KEY_T;
-        case 'U': return KEY_U;
-        case 'V': return KEY_V;
-        case 'W': return KEY_W;
-        case 'X': return KEY_X;
-        case 'Y': return KEY_Y;
-        case 'Z': return KEY_Z;
-
-        case '1': return KEY_1;
-        case '2': return KEY_2;
-        case '3': return KEY_3;
-        case '4': return KEY_4;
-        case '5': return KEY_5;
-        case '6': return KEY_6;
-        case '7': return KEY_7;
-        case '8': return KEY_8;
-        case '9': return KEY_9;
-        case '0': return KEY_0;
-
-        case '\r': case '\n': return KEY_ENTER;
-        case '\x7f': case '\x08': return KEY_BACKSPACE;
-        case '\t': return KEY_TAB;
-        case ' ': return KEY_SPACE;
-        case '\033': return KEY_ESCAPE;
-        case '-': return KEY_MINUS;
-        case '=': return KEY_EQUAL;
-        case '[': return KEY_LEFT_BRACE;
-        case ']': return KEY_RIGHT_BRACE;
-        case ';': return KEY_SEMICOLON;
-        case '\'': return KEY_APOSTROPHE;
-        case ',': return KEY_COMMA;
-        case '.': return KEY_DOT;
-        case '/': return KEY_SLASH;
-        case '\\': return KEY_BACKSLASH;
-        case '`': return KEY_GRAVE;
-        default: return -1;
-    }
-}
-
 void InitKeyboard(void) {
 	if(!isatty(STDIN_FILENO)) {
 		UniWriteLen(UNI_WRITE_TARGET_STDERR, "ERROR: STDIN IN NON EXISTENT\n");
@@ -140,10 +79,12 @@ void InitKeyboard(void) {
 	memset(DATA.Input.Keyboard.keyStates, 0, sizeof(DATA.Input.Keyboard.keyStates));
 }
 
-void KeyboardStep(void) {
-	for(int i = 0; i < ESC_KEYMAX; i++) {
-		if(DATA.Input.Keyboard.keyStates[i]) {
-			DATA.Input.Keyboard.keyStates[i] = false;
+void KeyboardStep(bool saveLastState) {
+	if(!saveLastState) {
+		for(int i = 0; i < ESC_KEYMAX; i++) {
+			if(DATA.Input.Keyboard.keyStates[i]) {
+				DATA.Input.Keyboard.keyStates[i] = false;
+			}
 		}
 	}
  
@@ -183,5 +124,7 @@ void InitKeyboard(void) {
 void KeyboardStep(void) {
 	return;
 }
+
+#endif
 
 #endif

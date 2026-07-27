@@ -50,3 +50,7 @@ void DrawTriangleTester();
 void MergBrileTester();
 
 void SetCursorPosTester();
+
+void WaitForKeyPressTester();
+
+void WRITETester();
