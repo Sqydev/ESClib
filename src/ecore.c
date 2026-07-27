@@ -83,7 +83,7 @@ void InitTui(int targetFps, TuiType type) {
 #elif defined(_WIN32) || defined(_WIN64)
 
 	DATA.SystemInfo.compositor = WINDOWS;	
-	TraceLog(LOG_DEBUG, "[ESCLIB.InitTui]: INFO: WINDOWS >:(");
+	TraceLog(LOG_INFO, "[ESCLIB.InitTui]: INFO: Detected Windows :0");
 
 #endif
 
