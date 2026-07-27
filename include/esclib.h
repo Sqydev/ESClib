@@ -278,6 +278,8 @@ typedef enum {
 
 typedef struct Kernel Kernel;
 
+#ifdef ESCLIB_KEYIN_EXPERIMENT_ENABLE
+
 #define ESC_KEYMAX 139
 
 typedef enum {
@@ -395,6 +397,7 @@ typedef enum {
 	KEY_ADD             = 78,
 } KeyboardKey;
 
+#endif
 
 
 typedef enum {
@@ -617,9 +620,19 @@ RLAPI void DrawTrianglePro(char* character, int Ax, int Ay, int Bx, int By, int 
 
 // EINPUT
 
+#ifdef ESCLIB_KEYIN_EXPERIMENT_ENABLE
+
 RLAPI void PressKey(int key);
 RLAPI bool IsKeyPressed(int key);
 RLAPI bool IsKeyDown(int key);
+
+RLAPI KeyboardKey GetKeyPressed(void);
+RLAPI void WaitForKeyPress(void);
+
+RLAPI KeyboardKey SingleByteToKeycode(unsigned char c);
+RLAPI char KeycodeToSingleByte(KeyboardKey keyCode);
+
+#endif
 
 // OPENCL
 

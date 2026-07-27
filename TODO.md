@@ -1,5 +1,7 @@
 // Make logging be like in GUIDELINES.md and remove any Panic() left in error handling of the lib
 
+// COMPLETLY REWRITE INPUT !!!!!!!!!!!!!! And thing of better desighn
+
 // Do more LOGGIGN
 
 // ELIPSES AND POLIGONS

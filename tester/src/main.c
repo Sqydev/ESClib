@@ -56,6 +56,10 @@ const TesterEntry testers[] = {
 	{"MBT", MergBrileTester, "MergBrileTester"},
 
 	{"SCP", SetCursorPosTester, "SetCursorPosTester"},
+
+	{"WFKPT", WaitForKeyPressTester, "WaitForKeyPressTester"},
+
+	{"WT", WRITETester, "WRITETester"},
 };
 
 void PrintUsage(const char* prog) {

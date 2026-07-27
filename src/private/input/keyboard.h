@@ -36,8 +36,10 @@
 #ifndef ESCLIB_PRIVATE_INPUT_KEYBOARD_H
 #define ESCLIB_PRIVATE_INPUT_KEYBOARD_H
 
+#include <stdbool.h>
+
 void InitKeyboard(void);
 
-void KeyboardStep(void);
+void KeyboardStep(bool saveLastState);
 
 #endif
