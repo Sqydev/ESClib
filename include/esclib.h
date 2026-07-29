@@ -69,6 +69,7 @@ extern "C" {
 #include <stdint.h>
 #include <stdbool.h>
 #include <stdarg.h>
+#include <stdint.h>
 
 #ifndef PI
 	#define PI 3.14159265358979323846f
@@ -278,126 +279,39 @@ typedef enum {
 
 typedef struct Kernel Kernel;
 
-#ifdef ESCLIB_KEYIN_EXPERIMENT_ENABLE
 
-#define ESC_KEYMAX 139
+typedef int32_t EscKey;
 
 typedef enum {
-	KEY_NULL            = 0,
-	KEY_APOSTROPHE      = 40,
-	KEY_COMMA           = 51,
-	KEY_MINUS           = 12,
-	KEY_PERIOD          = 52,
-	KEY_SLASH           = 53,
-	KEY_ZERO            = 11,
-	KEY_ONE             = 2,
-	KEY_TWO             = 3,
-	KEY_THREE           = 4,
-	KEY_FOUR            = 5,
-	KEY_FIVE            = 6,
-	KEY_SIX             = 7,
-	KEY_SEVEN           = 8,
-	KEY_EIGHT           = 9,
-	KEY_NINE            = 10,
-	KEY_SEMICOLON       = 39,
-	KEY_EQUAL           = 13,
-	KEY_A               = 30,
-	KEY_B               = 48,
-	KEY_C               = 46,
-	KEY_D               = 32,
-	KEY_E               = 18,
-	KEY_F               = 33,
-	KEY_G               = 34,
-	KEY_H               = 35,
-	KEY_I               = 23,
-	KEY_J               = 36,
-	KEY_K               = 37,
-	KEY_L               = 38,
-	KEY_M               = 50,
-	KEY_N               = 49,
-	KEY_O               = 24,
-	KEY_P               = 25,
-	KEY_Q               = 16,
-	KEY_R               = 19,
-	KEY_S               = 31,
-	KEY_T               = 20,
-	KEY_U               = 22,
-	KEY_V               = 47,
-	KEY_W               = 17,
-	KEY_X               = 45,
-	KEY_Y               = 21,
-	KEY_Z               = 44,
-	KEY_LEFT_BRACKET    = 26,
-	KEY_BACKSLASH       = 43,
-	KEY_RIGHT_BRACKET   = 27,
-	KEY_GRAVE           = 41,
-	KEY_LEFT_BRACE      = 84,
-    KEY_RIGHT_BRACE     = 85,
-    KEY_DOT             = 86,
+	KEY_NULL = 0,
 
-	KEY_SPACE           = 57,
-	KEY_ESCAPE          = 1,
-	KEY_ENTER           = 28,
-	KEY_TAB             = 15,
-	KEY_BACKSPACE       = 14,
-	KEY_INSERT          = 110,
-	KEY_DELETE          = 111,
-	KEY_RIGHT           = 106,
-	KEY_LEFT            = 105,
-	KEY_DOWN            = 108,
-	KEY_UP              = 103,
-	KEY_PAGE_UP         = 104,
-	KEY_PAGE_DOWN       = 109,
-	KEY_HOME            = 102,
-	KEY_END             = 107,
-	KEY_CAPS_LOCK       = 58,
-	KEY_SCROLL_LOCK     = 70,
-	KEY_NUM_LOCK        = 69,
-	KEY_PRINT_SCREEN    = 99,
-	KEY_PAUSE           = 119,
-	KEY_PAGEUP          = 101,
-	KEY_PAGEDOWN        = 121,
-	
-	KEY_F1              = 59,
-	KEY_F2              = 60,
-	KEY_F3              = 61,
-	KEY_F4              = 62,
-	KEY_F5              = 63,
-	KEY_F6              = 64,
-	KEY_F7              = 65,
-	KEY_F8              = 66,
-	KEY_F9              = 67,
-	KEY_F10             = 68,
-	KEY_F11             = 87,
-	KEY_F12             = 88,
-
-	KEY_MOD_SHIFT       = 42,
-	KEY_LEFT_CONTROL    = 29,
-	KEY_LEFT_ALT        = 56,
-	KEY_LEFT_SUPER      = 125,
-	KEY_RIGHT_CONTROL   = 97,
-	KEY_RIGHT_ALT       = 100,
-	KEY_RIGHT_SUPER     = 126,
-	KEY_MENU            = 139,
-
-	KEY_0               = 82,
-	KEY_1               = 79,
-	KEY_2               = 80,
-	KEY_3               = 81,
-	KEY_4               = 75,
-	KEY_5               = 76,
-	KEY_6               = 77,
-	KEY_7               = 71,
-	KEY_8               = 72,
-	KEY_9               = 73,
-	KEY_DECIMAL         = 83,
-	KEY_DIVIDE          = 98,
-	KEY_MULTIPLY        = 55,
-	KEY_SUBTRACT        = 74,
-	KEY_ADD             = 78,
-} KeyboardKey;
-
-#endif
+	KEY_ESCAPE    = 0x110001,
+    KEY_ENTER     = 0x110002,
+    KEY_TAB       = 0x110003,
+    KEY_BACKSPACE = 0x110004,
+    KEY_INSERT    = 0x110005,
+    KEY_DELETE    = 0x110006,
+    KEY_UP        = 0x110007,
+    KEY_DOWN      = 0x110008,
+    KEY_LEFT      = 0x110009,
+    KEY_RIGHT     = 0x11000A,
+    KEY_HOME      = 0x11000B,
+    KEY_END       = 0x11000C,
+    KEY_PAGE_UP   = 0x11000D,
+    KEY_PAGE_DOWN = 0x11000E,
+    KEY_F1        = 0x11000F,
+	KEY_F2        = 0x11001A,
+	KEY_F3        = 0x11001B,
+	KEY_F4        = 0x11001C,
+	KEY_F5        = 0x11001D,
+	KEY_F6        = 0x11001E,
+	KEY_F7        = 0x11001F,
+	KEY_F8        = 0x11002A,
+	KEY_F9        = 0x11002B,
+	KEY_F10       = 0x11003C,
+	KEY_F11       = 0x11004D,
+	KEY_F12       = 0x11005E,
+} SpecialKeys;
 
 
 typedef enum {
@@ -620,19 +534,10 @@ RLAPI void DrawTrianglePro(char* character, int Ax, int Ay, int Bx, int By, int 
 
 // EINPUT
 
-#ifdef ESCLIB_KEYIN_EXPERIMENT_ENABLE
-
-RLAPI void PressKey(int key);
-RLAPI bool IsKeyPressed(int key);
-RLAPI bool IsKeyDown(int key);
-
-RLAPI KeyboardKey GetKeyPressed(void);
-RLAPI void WaitForKeyPress(void);
-
-RLAPI KeyboardKey SingleByteToKeycode(unsigned char c);
-RLAPI char KeycodeToSingleByte(KeyboardKey keyCode);
-
-#endif
+void PressKey(EscKey key);
+bool IsKeyPressed(EscKey key);
+EscKey GetKeyPressed(void);
+void WaitForKeyPress(void);
 
 // OPENCL
 

@@ -1,4 +1,4 @@
-// COMPLETLY REWRITE INPUT !!!!!!!!!!!!!! And thing of better desighn
+// Rethink WaitForInput. Like it does input prematurly. Yk
 
 // Make logging be like in GUIDELINES.md and remove any Panic() left in error handling of the lib
 

@@ -38,9 +38,7 @@
 #include "./keyboard.h"
 
 void InitInput(void) {
-#ifdef ESCLIB_KEYIN_EXPERIMENT_ENABLE
 	InitKeyboard();
-#endif
 }
 
 void CloseInput(void) {
@@ -48,9 +46,7 @@ void CloseInput(void) {
 }
 
 void InputStep(void) {
-#ifdef ESCLIB_KEYIN_EXPERIMENT_ENABLE
 	KeyboardStep(false);
-#endif
 }
 
 #elif defined(_WIN32) || defined(_WIN64)

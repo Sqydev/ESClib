@@ -33,8 +33,6 @@
 *    source or binary distribution.
 */
 
-#ifdef ESCLIB_KEYIN_EXPERIMENT_ENABLE
-
 #if defined(unix) || defined(__unix) || defined(__unix__)
 	
 #include "../common_utils.h"
@@ -46,12 +44,18 @@
 #include <stdbool.h>
 #include <stdlib.h>
 
+#include <ctype.h>
 #include <sys/ioctl.h>
 #include <unistd.h>
 #include <fcntl.h>
 
 typedef struct { const char* seq; int code; } SeqEntry;
 static const SeqEntry SEQ_TABLE[] = {
+	{ "\n", KEY_ENTER },
+    { "\r", KEY_ENTER },
+    { "\t", KEY_TAB },
+    { "\033", KEY_ESCAPE },
+
 	{ "\033[11~", KEY_F1 }, { "\033[12~", KEY_F2 },
 	{ "\033[13~", KEY_F3 }, { "\033[14~", KEY_F4 },
 	{ "\033[15~", KEY_F5 }, { "\033[17~", KEY_F6 },
@@ -61,7 +65,7 @@ static const SeqEntry SEQ_TABLE[] = {
 	{ "\033OP", KEY_F1 }, { "\033OQ", KEY_F2 },
 	{ "\033OR", KEY_F3 }, { "\033OS", KEY_F4 },
 	{ "\033[2~", KEY_INSERT }, { "\033[3~", KEY_DELETE },
-	{ "\033[5~", KEY_PAGEUP }, { "\033[6~", KEY_PAGEDOWN },
+	{ "\033[5~", KEY_PAGE_UP }, { "\033[6~", KEY_PAGE_DOWN },
 	{ "\033[H",  KEY_HOME }, { "\033[F",  KEY_END },
 	{ "\033OH",  KEY_HOME }, { "\033OF",  KEY_END },
 	{ "\033[A", KEY_UP }, { "\033[B", KEY_DOWN },
@@ -76,16 +80,23 @@ void InitKeyboard(void) {
 		exit(EXIT_FAILURE);
 	}
  
-	memset(DATA.Input.Keyboard.keyStates, 0, sizeof(DATA.Input.Keyboard.keyStates));
+	if(DATA.Input.Keyboard.keysArr) { free(DATA.Input.Keyboard.keysArr); DATA.Input.Keyboard.keysArr = NULL; }
+	DATA.Input.Keyboard.keysArrCapasity = 1;
+	DATA.Input.Keyboard.keysArrTaken = 0;
+	DATA.Input.Keyboard.keysArr = malloc(sizeof(EscKey));
+
+	DATA.Input.Keyboard.getKeyPressedScanner = 0;
 }
 
 void KeyboardStep(bool saveLastState) {
 	if(!saveLastState) {
-		for(int i = 0; i < ESC_KEYMAX; i++) {
-			if(DATA.Input.Keyboard.keyStates[i]) {
-				DATA.Input.Keyboard.keyStates[i] = false;
+		for(int i = 0; i < DATA.Input.Keyboard.keysArrTaken; i++) {
+			if(DATA.Input.Keyboard.keysArr[i]) {
+				DATA.Input.Keyboard.keysArr[i] = KEY_NULL;
 			}
 		}
+
+		DATA.Input.Keyboard.getKeyPressedScanner = 0;
 	}
  
 	unsigned char buf[64];
@@ -94,7 +105,7 @@ void KeyboardStep(bool saveLastState) {
 		int i = 0;
 
 		while(i < n) {
-			if(buf[i] == '\033' && i + 1 < n) {
+			if(iscntrl((unsigned char)buf[i])) {
 				bool matched = false;
 				for(const SeqEntry* entrie = SEQ_TABLE; entrie->seq; entrie++) {
 					int seqlen = (int)strlen(entrie->seq);
@@ -109,10 +120,17 @@ void KeyboardStep(bool saveLastState) {
 				if(matched) { continue; }
 			}
  
-			PressKey(SingleByteToKeycode(buf[i]));
+			PressKey(buf[i]);
 			i++;
 		}
 	}
+}
+
+void CloseKeyboard(void) {
+	if(DATA.Input.Keyboard.keysArr) { free(DATA.Input.Keyboard.keysArr); DATA.Input.Keyboard.keysArr = NULL; }
+	DATA.Input.Keyboard.keysArrCapasity = 0;
+	DATA.Input.Keyboard.keysArrTaken = 0;
+	DATA.Input.Keyboard.getKeyPressedScanner = 0;
 }
 
 #elif defined(_WIN32) || defined(_WIN64)
@@ -124,7 +142,5 @@ void InitKeyboard(void) {
 void KeyboardStep(void) {
 	return;
 }
-
-#endif
 
 #endif
