@@ -143,7 +143,11 @@ typedef struct {
 
 	struct {
 		struct {
-			bool keyStates[ESC_KEYMAX];
+			EscKey* keysArr;
+			size_t keysArrCapasity;
+			size_t keysArrTaken;
+
+			size_t getKeyPressedScanner;
 		} Keyboard;
 	} Input;
 
