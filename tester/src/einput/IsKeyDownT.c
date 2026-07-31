@@ -11,10 +11,10 @@ void IsKeyDownTester() {
 
 		DrawCharEx(" ", pos.x, pos.y, NULL, &WHITE);
 
-		if(IsKeyDown(KEY_W)) { pos.y -= 1; }
-		if(IsKeyDown(KEY_S)) { pos.y += 1; }
-		if(IsKeyDown(KEY_D)) { pos.x += 1; }
-		if(IsKeyDown(KEY_A)) { pos.x -= 1; }
+		if(IsKeyPressed('w')) { pos.y -= 1; }
+		if(IsKeyPressed('s')) { pos.y += 1; }
+		if(IsKeyPressed('d')) { pos.x += 1; }
+		if(IsKeyPressed('a')) { pos.x -= 1; }
 
 		EndDrawing();
 	}

@@ -36,10 +36,18 @@
 #ifndef ESCLIB_PRIVATE_INPUT_KEYBOARD_H
 #define ESCLIB_PRIVATE_INPUT_KEYBOARD_H
 
+#include "../../../include/esclib.h"
+
 #include <stdbool.h>
 
 void InitKeyboard(void);
 
+void ResetPressedKeys(void);
+int TryMatchSeq(const unsigned char* buf, int i, int n, EscKey* outCode);
+void ProcessRawBuffer(const unsigned char* buf, int n);
+
 void KeyboardStep(bool saveLastState);
+
+void CloseKeyboard(void);
 
 #endif

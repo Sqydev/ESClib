@@ -18,7 +18,7 @@ void WRITETester() {
 
 		WaitForKeyPress();
 
-		char ch[2] = { KeycodeToSingleByte(GetKeyPressed()), '\0' };
+		char ch[2] = { GetKeyPressed(), '\0' };
 
 		DrawChar(ch, x, y, TERMWHITE);
 		x++;

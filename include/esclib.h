@@ -537,7 +537,8 @@ RLAPI void DrawTrianglePro(char* character, int Ax, int Ay, int Bx, int By, int 
 void PressKey(EscKey key);
 bool IsKeyPressed(EscKey key);
 EscKey GetKeyPressed(void);
-void WaitForKeyPress(void);
+EscKey WaitForKeyPress(void);
+void WaitForKeyPressAndRegister(void);
 
 // OPENCL
 
