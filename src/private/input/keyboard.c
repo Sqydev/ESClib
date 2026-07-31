@@ -52,9 +52,8 @@
 typedef struct { const char* seq; int code; } SeqEntry;
 static const SeqEntry SEQ_TABLE[] = {
 	{ "\n", KEY_ENTER },
-    { "\r", KEY_ENTER },
-    { "\t", KEY_TAB },
-    { "\033", KEY_ESCAPE },
+	{ "\r", KEY_ENTER },
+	{ "\t", KEY_TAB },
 
 	{ "\033[11~", KEY_F1 }, { "\033[12~", KEY_F2 },
 	{ "\033[13~", KEY_F3 }, { "\033[14~", KEY_F4 },
@@ -70,6 +69,8 @@ static const SeqEntry SEQ_TABLE[] = {
 	{ "\033OH",  KEY_HOME }, { "\033OF",  KEY_END },
 	{ "\033[A", KEY_UP }, { "\033[B", KEY_DOWN },
 	{ "\033[C", KEY_RIGHT }, { "\033[D", KEY_LEFT },
+
+	{ "\033", KEY_ESCAPE },
 	{ NULL, 0 }
 };
 
@@ -88,41 +89,46 @@ void InitKeyboard(void) {
 	DATA.Input.Keyboard.getKeyPressedScanner = 0;
 }
 
-void KeyboardStep(bool saveLastState) {
-	if(!saveLastState) {
-		for(int i = 0; i < DATA.Input.Keyboard.keysArrTaken; i++) {
-			if(DATA.Input.Keyboard.keysArr[i]) {
-				DATA.Input.Keyboard.keysArr[i] = KEY_NULL;
-			}
+void ResetPressedKeys(void) {
+	for(size_t i = 0; i < DATA.Input.Keyboard.keysArrTaken; i++) {
+		if(DATA.Input.Keyboard.keysArr[i]) {
+			DATA.Input.Keyboard.keysArr[i] = KEY_NULL;
 		}
-
-		DATA.Input.Keyboard.getKeyPressedScanner = 0;
 	}
- 
+	DATA.Input.Keyboard.keysArrTaken = 0;
+	DATA.Input.Keyboard.getKeyPressedScanner = 0;
+}
+
+int TryMatchSeq(const unsigned char* buf, int i, int n, EscKey* outCode) {
+	for(const SeqEntry* entrie = SEQ_TABLE; entrie->seq; entrie++) {
+		int seqlen = (int)strlen(entrie->seq);
+		if(i + seqlen <= n && memcmp(buf + i, entrie->seq, (size_t)seqlen) == 0) {
+			*outCode = entrie->code;
+			return seqlen;
+		}
+	}
+	return 0;
+}
+
+void ProcessRawBuffer(const unsigned char* buf, int n) {
+	int i = 0;
+	while(i < n) {
+		if(iscntrl((unsigned char)buf[i])) {
+			EscKey code;
+			int matchedLen = TryMatchSeq(buf, i, n, &code);
+			if(matchedLen > 0) { PressKey(code); i += matchedLen; continue; }
+		}
+		PressKey(buf[i]);
+		i++;
+	}
+}
+
+void KeyboardStep(bool saveLastState) {
+	if(!saveLastState) { ResetPressedKeys(); }
 	unsigned char buf[64];
 	int n;
 	while((n = (int)read(STDIN_FILENO, buf, sizeof(buf))) > 0) {
-		int i = 0;
-
-		while(i < n) {
-			if(iscntrl((unsigned char)buf[i])) {
-				bool matched = false;
-				for(const SeqEntry* entrie = SEQ_TABLE; entrie->seq; entrie++) {
-					int seqlen = (int)strlen(entrie->seq);
-
-					if(i + seqlen <= n && memcmp(buf + i, entrie->seq, (size_t)seqlen) == 0) {
-						PressKey(entrie->code);
-						i += seqlen;
-						matched = true;
-						break;
-					}
-				}
-				if(matched) { continue; }
-			}
- 
-			PressKey(buf[i]);
-			i++;
-		}
+		ProcessRawBuffer(buf, n);
 	}
 }
 

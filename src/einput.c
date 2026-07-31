@@ -37,6 +37,7 @@
 
 #include "./private/input/keyboard.h"
 
+#include <ctype.h>
 #include <errno.h>
 #include <stdbool.h>
 #include <stdlib.h>
@@ -77,7 +78,32 @@ EscKey GetKeyPressed(void) {
 	return DATA.Input.Keyboard.keysArr[DATA.Input.Keyboard.getKeyPressedScanner++];
 }
 
-void WaitForKeyPress(void) {
+EscKey WaitForKeyPress(void) {
+#if defined(unix) || defined(__unix) || defined(__unix__)
+
+	fd_set readfds;
+	FD_ZERO(&readfds);
+	FD_SET(STDIN_FILENO, &readfds);
+
+	select(STDIN_FILENO + 1, &readfds, NULL, NULL, NULL);
+
+	unsigned char buf[64];
+	int n = (int)read(STDIN_FILENO, buf, sizeof(buf));
+	if(n <= 0) { return KEY_NULL; }
+
+	if(iscntrl((unsigned char)buf[0])) {
+		EscKey code;
+		if(TryMatchSeq(buf, 0, n, &code) > 0) { return code; }
+	}
+
+	return buf[0];
+
+#elif defined(_WIN32) || defined(_WIN64)
+
+#endif
+}
+
+void WaitForKeyPressAndRegister(void) {
 #if defined(unix) || defined(__unix) || defined(__unix__)
 
 	fd_set readfds;

@@ -7,10 +7,10 @@ void SetCursorPosTester() {
 		BeginDrawing();
 		ClearTui((Color){ 0,0,0,0 }, (Color){ 255,255,255,1 });
 
-		if(IsKeyDown(KEY_W)) { SetCursorPosition(GetCursorPos().x, GetCursorPos().y - 1); }
-		if(IsKeyDown(KEY_S)) { SetCursorPosition(GetCursorPos().x, GetCursorPos().y + 1); }
-		if(IsKeyDown(KEY_D)) { SetCursorPosition(GetCursorPos().x + 1, GetCursorPos().y); }
-		if(IsKeyDown(KEY_A)) { SetCursorPosition(GetCursorPos().x - 1, GetCursorPos().y); }
+		if(IsKeyPressed('w')) { SetCursorPosition(GetCursorPos().x, GetCursorPos().y - 1); }
+		if(IsKeyPressed('s')) { SetCursorPosition(GetCursorPos().x, GetCursorPos().y + 1); }
+		if(IsKeyPressed('d')) { SetCursorPosition(GetCursorPos().x + 1, GetCursorPos().y); }
+		if(IsKeyPressed('a')) { SetCursorPosition(GetCursorPos().x - 1, GetCursorPos().y); }
 
 		EndDrawing();
 	}

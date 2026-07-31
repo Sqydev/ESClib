@@ -42,7 +42,7 @@ void InitInput(void) {
 }
 
 void CloseInput(void) {
-	return;
+	CloseKeyboard();
 }
 
 void InputStep(void) {
