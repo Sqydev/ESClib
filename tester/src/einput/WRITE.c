@@ -16,11 +16,10 @@ void WRITETester() {
 	while(1) {
 		BeginDrawing();
 
-		WaitForKeyPress();
+		int ch = WaitForKeyPress();
+		char cha[2] = { ch, '\0' };
 
-		char ch[2] = { GetKeyPressed(), '\0' };
-
-		DrawChar(ch, x, y, TERMWHITE);
+		DrawChar(cha, x, y, TERMWHITE);
 		x++;
 		if(x > GetLastTuiIndex().x) {
 			y++;
@@ -28,7 +27,7 @@ void WRITETester() {
 			if(y > GetLastTuiIndex().y) { y = 0; }
 		}
 
-		if(IsKeyPressed(KEY_ESCAPE)) { break; }
+		if(ch == KEY_ESCAPE) { break; }
 
 		EndDrawing();
 	}
