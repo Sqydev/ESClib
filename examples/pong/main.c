@@ -35,8 +35,8 @@ reset:
 
 		dtc += GetDeltaTime();
 
-		if(IsKeyDown(KEY_W) && playerPos > 0) { playerPos--; }
-		if(IsKeyDown(KEY_S) && playerPos < GetLastTuiIndex().y - PLAYER_HEIGHT) { playerPos++; }
+		if(IsKeyPressed('w') && playerPos > 0) { playerPos--; }
+		if(IsKeyPressed('s') && playerPos < GetLastTuiIndex().y - PLAYER_HEIGHT) { playerPos++; }
 
 		if(dtc > 0.03 * SPEED) {
 			ballPos.x += ballDir.x;
