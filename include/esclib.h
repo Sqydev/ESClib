@@ -471,6 +471,7 @@ RLAPI void DrawCharV(const char* character, Vector2i pos, Color color);
 RLAPI void DrawChar(const char* character, int x, int y, Color color);
 RLAPI void DrawCharExV(const char* character, Vector2i pos, Color* fg, Color* bg);
 RLAPI void DrawCharEx(const char* character, int x, int y, Color* fg, Color* bg);
+RLAPI void DrawCharCore(const char* character, int x, int y, Color* fg, Color* bg, bool isPanel, Panel panel);
 
 RLAPI void DrawTextV(const char* text, Vector2i pos, Color color);
 RLAPI void DrawText(const char* text, int x, int y, Color color);
@@ -478,6 +479,7 @@ RLAPI void DrawTextExV(const char* text, Vector2i pos, Color* fg, Color* bg);
 RLAPI void DrawTextEx(const char* text, int x, int y, Color* fg, Color* bg);
 RLAPI void DrawTextProV(const char* text, Vector2i pos, Vector2i origin, Color* fg, Color* bg, int spaceing, float angle);
 RLAPI void DrawTextPro(const char* text, int x, int y, int originX, int originY, Color* fg, Color* bg, int spaceing, float angle);
+RLAPI void DrawTextCore(const char* text, int x, int y, int originX, int originY, Color* fg, Color* bg, int spaceing, float angle, bool isPanel, Panel panel);
 
 RLAPI void DrawTextfV(const char* text, Vector2i pos, Color color, ...);
 RLAPI void DrawTextf(const char* text, int x, int y, Color color, ...);
@@ -485,13 +487,13 @@ RLAPI void DrawTextfExV(const char* text, Vector2i pos, Color* fg, Color* bg, ..
 RLAPI void DrawTextfEx(const char* text, int x, int y, Color* fg, Color* bg, ...);
 RLAPI void DrawTextfProV(const char* text, Vector2i pos, Vector2i origin, Color* fg, Color* bg, int spaceing, double angle, ...);
 RLAPI void DrawTextfPro(const char* text, int x, int y, int originX, int originY, Color* fg, Color* bg, int spaceing, double angle, ...);
-
 RLAPI void vaDrawTextfV(const char* text, Vector2i pos, Color color, va_list va);
 RLAPI void vaDrawTextf(const char* text, int x, int y, Color color, va_list va);
 RLAPI void vaDrawTextfExV(const char* text, Vector2i pos, Color* fg, Color* bg, va_list va);
 RLAPI void vaDrawTextfEx(const char* text, int x, int y, Color* fg, Color* bg, va_list va);
 RLAPI void vaDrawTextfProV(const char* text, Vector2i pos, Vector2i origin, Color* fg, Color* bg, int spacing, double angle, va_list va);
 RLAPI void vaDrawTextfPro(const char* text, int x, int y, int originX, int originY, Color* fg, Color* bg, int spacing, double angle, va_list va);
+RLAPI void vaDrawTextfCore(const char* text, int x, int y, int originX, int originY, Color* fg, Color* bg, int spacing, double angle, bool isPanel, Panel panel, va_list va);
 
 // ESHAPES
 
@@ -501,6 +503,7 @@ RLAPI void DrawLineExV(char* character, Vector2i pointA, Vector2i pointB, Color*
 RLAPI void DrawLineEx(char* character, int pointAX, int pointAY, int pointBX, int pointBY, Color* fg, Color* bg, int thickness);
 RLAPI void DrawLineProV(char* character, Vector2i pointA, Vector2i pointB, Color* fg, Color* bg, int thickness);
 RLAPI void DrawLinePro(char* character, int pointAX, int pointAY, int pointBX, int pointBY, Color* fg, Color* bg, int thickness);
+RLAPI void DrawLineCore(char* character, int pointAX, int pointAY, int pointBX, int pointBY, Color* fg, Color* bg, int thickness, bool isPanel, Panel panel);
 
 RLAPI void DrawRectangleRec(Rectangle rec, Color color);
 RLAPI void DrawRectangleV(Vector2i pos, Vector2i dimms, Color color);
@@ -511,6 +514,7 @@ RLAPI void DrawRectangleEx(char* character, int x, int y, int width, int height,
 RLAPI void DrawRectangleProRec(char* character, Rectangle rec, Vector2i origin, Color* fg, Color* bg, double rotation, float roundness, bool lines, int thicknessLines, bool aspectRatiofied);
 RLAPI void DrawRectangleProV(char* character, Vector2i pos, Vector2i dimms, Vector2i origin, Color* fg, Color* bg, double rotation, float roundness, bool lines, int thicknessLines, bool aspectRatiofied);
 RLAPI void DrawRectanglePro(char* character, int posX, int posY, int width, int height, int originX, int originY, Color* fg, Color* bg, double rotation, float roundness, bool lines, int thicknessLines, bool aspectRatiofied);
+RLAPI void DrawRectangleCore(char* character, int posX, int posY, int width, int height, int originX, int originY, Color* fg, Color* bg, double rotation, float roundness, bool lines, int thicknessLines, bool aspectRatiofied, bool isPanel, Panel panel);
 
 RLAPI void DrawCircleCir(Circle circle, Color color);
 RLAPI void DrawCircleV(Vector2i centerPos, int radius, Color color);
@@ -521,6 +525,7 @@ RLAPI void DrawCircleEx(char* character, int centerX, int centerY, int radius, C
 RLAPI void DrawCircleProCir(char* character, Circle circle, Vector2d angleSpectrum, Color* fg, Color* bg, bool lines, int thicknessLines, bool aspectRatiofied);
 RLAPI void DrawCircleProV(char* character, Vector2i centerPos, int radius, Vector2d angleSpectrum, Color* fg, Color* bg, bool lines, int thicknessLines, bool aspectRatiofied);
 RLAPI void DrawCirclePro(char* character, int centerX, int centerY, int radius, double startAngle, double endAngle, Color* fg, Color* bg, bool lines, int thicknessLines, bool aspectRatiofied);
+RLAPI void DrawCircleCore(char* character, int centerX, int centerY, int radius, double startAngle, double endAngle, Color* fg, Color* bg, bool lines, int thicknessLines, bool aspectRatiofied, bool isPanel, Panel panel);
 
 RLAPI void DrawTriangleTri(Triangle triangle, Color color);
 RLAPI void DrawTriangleV(Vector2i posA, Vector2i posB, Vector2i posC, Color color);
@@ -531,14 +536,15 @@ RLAPI void DrawTriangleEx(char* character, int Ax, int Ay, int Bx, int By, int C
 RLAPI void DrawTriangleProTri(char* character, Triangle triangle, Vector2i origin, Color* fg, Color* bg, double rotation, bool lines, int thicknessLines, bool aspectRatiofied);
 RLAPI void DrawTriangleProV(char* character, Vector2i posA, Vector2i posB, Vector2i posC, Vector2i origin, Color* fg, Color* bg, double rotation, bool lines, int thicknessLines, bool aspectRatiofied);
 RLAPI void DrawTrianglePro(char* character, int Ax, int Ay, int Bx, int By, int Cx, int Cy, int originX, int originY, Color* fg, Color* bg, double rotation, bool lines, int thicknessLines, bool aspectRatiofied);
+RLAPI void DrawTriangleCore(char* character, int Ax, int Ay, int Bx, int By, int Cx, int Cy, int originX, int originY, Color* fg, Color* bg, double rotation, bool lines, int thicknessLines, bool aspectRatiofied, bool isPanel, Panel panel);
 
 // EINPUT
 
-void PressKey(EscKey key);
-bool IsKeyPressed(EscKey key);
-EscKey GetKeyPressed(void);
-EscKey WaitForKeyPress(void);
-void WaitForKeyPressAndRegister(void);
+RLAPI void PressKey(EscKey key);
+RLAPI bool IsKeyPressed(EscKey key);
+RLAPI EscKey GetKeyPressed(void);
+RLAPI EscKey WaitForKeyPress(void);
+RLAPI void WaitForKeyPressAndRegister(void);
 
 // OPENCL
 
