@@ -246,6 +246,10 @@ typedef struct {
 
 		cl_int (*clEnqueueWriteBuffer)(cl_command_queue, cl_mem, cl_bool, size_t, size_t, const void*, cl_uint, const cl_event*, cl_event*);
 	} OpenCl;
+
+	struct {
+		size_t lastId;
+	} Textures;
 } CoreData;
 
 extern CoreData DATA;
