@@ -71,7 +71,11 @@ char* MergeBraille(const char* a, const char* b) {
     uint32_t merged = 0x2800 | ((cp1 - 0x2800) | (cp2 - 0x2800));
 
     char* out = malloc(4 * sizeof(char));
-    if(!out) { return NULL; }
+    if(!out) {
+		errno = ENOMEM;
+		TraceLog(LogLevel logLevel, const char *message, ...)
+		return NULL;
+	}
 
     out[0] = 0xE0 | ((merged >> 12) & 0x0F);
     out[1] = 0x80 | ((merged >> 6) & 0x3F);

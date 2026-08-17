@@ -373,8 +373,10 @@ RLAPI int AddPanicTask(void (*task)(void));
 // Will return 0 if succesfull -1 if failed
 RLAPI int RemovePanicTask(size_t index);
 
-RLAPI void BeginDrawing(void);
-RLAPI void EndDrawing(void);
+#define BeginDrawing BeginFrame
+#define EndDrawing EndFrame
+RLAPI void BeginFrame(void);
+RLAPI void EndFrame(void);
 
 RLAPI void ClearTui(Color BgColor, Color FgColor);
 
