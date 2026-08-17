@@ -93,31 +93,53 @@ void InitTui(int targetFps, TuiType type) {
 
 	DATA.TuiData.termdimm = GetTerminalDimensionsForReal();
 	DATA.TuiData.termdimmInPixels = GetTerminalDimensionsInPixelsForReal();
-    DATA.TuiData.lastTermIndex.x = DATA.TuiData.termdimm.x - 1;
-    DATA.TuiData.lastTermIndex.y = DATA.TuiData.termdimm.y - 1;
+	DATA.TuiData.lastTermIndex.x = DATA.TuiData.termdimm.x - 1;
+	DATA.TuiData.lastTermIndex.y = DATA.TuiData.termdimm.y - 1;
 
 	DATA.TuiData.tuidimm = DATA.TuiData.termdimm;
 	DATA.TuiData.tuidimmInPixels = DATA.TuiData.termdimmInPixels;
-    DATA.TuiData.lastTuiIndex.x = DATA.TuiData.termdimm.x - 1;
-    DATA.TuiData.lastTuiIndex.y = DATA.TuiData.termdimm.y - 1;
+	DATA.TuiData.lastTuiIndex.x = DATA.TuiData.termdimm.x - 1;
+	DATA.TuiData.lastTuiIndex.y = DATA.TuiData.termdimm.y - 1;
 
 	DATA.TuiData.cellsDimms = GetCellSizeInPixelsForReal();
 	DATA.TuiData.cellsProp = GetCellProportionsForReal();
 
-	DATA.TuiData.initiated = true;
-
 	DATA.Buffers.backbuff = NULL;
 	DATA.Buffers.backbuff = realloc(DATA.Buffers.backbuff, GetBackbuffSize());
+	if(!DATA.Buffers.backbuff) {
+		errno = ENOMEM;
+		UniWriteLen(UNI_WRITE_TARGET_STDERR, "[ESCLIB.InitTui]: ERROR: Backbuffer realloc failed\n");
+		DisableRawMode();
+		SignalsCleanup();
+		CloseInput();
+		return;
+	}
 	DATA.Buffers.backbuffOffset = 0;
 	memset(DATA.Buffers.backbuff, 0, GetBackbuffSize());
 
 	DATA.Buffers.frontbuff = NULL;
 	DATA.Buffers.frontbuff = realloc(DATA.Buffers.frontbuff, GetBackbuffSize());
+	if(!DATA.Buffers.frontbuff) {
+		errno = ENOMEM;
+		UniWriteLen(UNI_WRITE_TARGET_STDERR, "[ESCLIB.InitTui]: ERROR: Frontbuffer realloc failed\n");
+		DisableRawMode();
+		SignalsCleanup();
+		CloseInput();
+		return;
+	}
 	DATA.Buffers.frontbuffOffset = 0;
 	memset(DATA.Buffers.frontbuff, 0, GetBackbuffSize());
 
 	DATA.Buffers.charbuffer = NULL;
 	DATA.Buffers.charbuffer = realloc(DATA.Buffers.charbuffer, GetCharbuffSize());
+	if(!DATA.Buffers.charbuffer) {
+		errno = ENOMEM;
+		UniWriteLen(UNI_WRITE_TARGET_STDERR, "[ESCLIB.InitTui]: ERROR: Charbuffer realloc failed\n");
+		DisableRawMode();
+		SignalsCleanup();
+		CloseInput();
+		return;
+	}
 
 	DATA.Cursor.pos = (Vector2i){ 0, 0 };
 	DATA.Cursor.hidden = false;
@@ -133,6 +155,8 @@ void InitTui(int targetFps, TuiType type) {
 	DATA.System.computeBackend.backend = COMPUTE_ESC;
 	DATA.System.computeBackend.device = DEVICE_CPU;
 	InitOpenCl();
+
+	DATA.TuiData.initiated = true;
 }
 
 void CloseTui(void) {
@@ -153,20 +177,19 @@ void CloseTui(void) {
 	free(DATA.Buffers.charbuffer);
 	DATA.Buffers.charbuffer = NULL;
 
-	if(DATA.Logging.enabled) { CloseInput(); }
+	CloseInput();
 
 	DisableRawMode();
 
 	SignalsCleanup();
 
-	if(DATA.Logging.file) { CloseLoggin(); }
+	if(DATA.Logging.enabled) { CloseLoggin(); }
 
 	UniWriteLen(UNI_WRITE_TARGET_STDOUT, "\033[2J\033[?1049l\033[?7h");
 }
 
-// NOTE: In here becouse I have no idea where else put it :)
-void (**panicTasks)(void) = NULL;
-size_t panicTasksCount = 0;
+static void (**panicTasks)(void) = NULL;
+static size_t panicTasksCount = 0;
 
 void Panic(const char* message, int exitCode) {
 	UniWriteLen(UNI_WRITE_TARGET_STDERR, message);
@@ -182,7 +205,7 @@ void Panic(const char* message, int exitCode) {
 int AddPanicTask(void (*task)(void)) {
 	void (**tmp)(void) = realloc(panicTasks, sizeof(void (*)) * (panicTasksCount + 1));
 	if(!tmp) {
-		UniWriteLen(UNI_WRITE_TARGET_STDERR, "ERROR: Panic Tasks realloc failed somehow\n");
+		UniWriteLen(UNI_WRITE_TARGET_STDERR, "[ESCLIB.AddPanicTask]: ERROR: Panic Tasks realloc failed somehow\n");
 		errno = ENOMEM;
 		return -1;
 	}
@@ -195,7 +218,7 @@ int AddPanicTask(void (*task)(void)) {
 }
 
 int RemovePanicTask(size_t index) {
-	if(index > panicTasksCount) {
+	if(index >= panicTasksCount) {
 		errno = EINVAL;
 		return -1;
 	}
@@ -203,14 +226,17 @@ int RemovePanicTask(size_t index) {
 	panicTasks[index] = NULL;
 
 	while(panicTasksCount > 0 && panicTasks[panicTasksCount - 1] == NULL){
-		void (**tmp)(void) = realloc(panicTasks, sizeof(void (*)) * (panicTasksCount - 1));
+		size_t newCount = panicTasksCount - 1;
+		if(newCount == 0) { free(panicTasks); panicTasks = NULL; panicTasksCount = 0; break; }
+		void (**tmp)(void) = realloc(panicTasks, sizeof(void (*)) * newCount);
+		
 		if(!tmp) {
-			UniWriteLen(UNI_WRITE_TARGET_STDERR, "ERROR: Panic Tasks realloc failed somehow\n");
+			UniWriteLen(UNI_WRITE_TARGET_STDERR, "[ESCLIB.RemovePanicTask]: ERROR: Panic Tasks realloc failed somehow\n");
 			errno = ENOMEM;
 			return -1;
 		}
-
-		panicTasksCount--;
+		panicTasks = tmp;
+		panicTasksCount = newCount;
 	}
 
 	return 0;
@@ -224,6 +250,7 @@ int InitLoggin(char* path, LogLevel logLevel) {
 
 	DATA.Logging.file = fopen(path, "a");
 	if(!DATA.Logging.file) {
+		UniWriteLen(UNI_WRITE_TARGET_STDERR, "[ESCLIB.InitLoggin]: ERROR: Failed to open log file\n");
 		DATA.Logging.enabled = false;
 
 		return -1;
@@ -259,9 +286,9 @@ void CloseLoggin() {
 	if(DATA.Logging.file) { fclose(DATA.Logging.file); }
 }
 
-// TODO: LIBCSITTYFNSINDEPENDENCE
-// memcpy
-void BeginDrawing(void) {
+void BeginFrame(void) {
+	TraceLog(LOG_DEBUG, "[ESCLIB.BeginFrame]: DEBUG: Started new frame");
+
 	SignalsStep();
 
 	InputStep();
@@ -270,7 +297,7 @@ void BeginDrawing(void) {
 }
 
 // TODO: Make here better error handling
-void EndDrawing(void) {
+void EndFrame(void) {
 	RenderFrame();
 
 	DATA.Time.current = GetTime();
@@ -299,6 +326,8 @@ void EndDrawing(void) {
 			DATA.Time.previous = DATA.Time.current;
 		}
 	}
+
+	TraceLog(LOG_DEBUG, "[ESCLIB.EndFrame]: DEBUG: Ended frame");
 }
 
 void ClearTui(Color BgColor, Color FgColor) {
@@ -309,4 +338,5 @@ void ClearTui(Color BgColor, Color FgColor) {
 		DATA.Buffers.backbuff[i].fgColor = FgColor;
 		DATA.Buffers.backbuff[i].bgColor = BgColor;
 	}
+	TraceLog(LOG_DEBUG, "[ESCLIB.ClearTui]: DEBUG: Cleared framebuffer");
 }

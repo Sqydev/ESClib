@@ -72,7 +72,7 @@ Texture LoadTexture(const char* path, TextureType type) {
 
 	if(!path) {
 		errno = EINVAL;
-		TraceLog(LOG_DEBUG, "[ESCLIB.LoadTexture]: Failed to load the texture becouse path is NULL");
+		TraceLog(LOG_DEBUG, "[ESCLIB.LoadTexture]: ERROR Failed to load the texture becouse path is NULL");
 		return texture;
 	}
 
@@ -87,7 +87,7 @@ Texture LoadTexture(const char* path, TextureType type) {
 			data = stbi_load(path, &width, &height, &channels, 1);
 			if(!data) {
 				errno = ENOMEM;
-				TraceLog(LOG_DEBUG, "[ESCLIB.LoadTexture]: Failed to load texture from path %s because of alloc issue", path);
+				TraceLog(LOG_DEBUG, "[ESCLIB.LoadTexture]: ERROR Failed to load texture from path %s because of alloc issue", path);
 				return texture;
 			}
 
@@ -95,7 +95,7 @@ Texture LoadTexture(const char* path, TextureType type) {
 			if(!new_data) {
 				stbi_image_free(data);
 				errno = ENOMEM;
-				TraceLog(LOG_DEBUG, "[ESCLIB.LoadTexture]: Failed to load texture from path %s because of alloc issue", path);
+				TraceLog(LOG_DEBUG, "[ESCLIB.LoadTexture]: ERROR Failed to load texture from path %s because of alloc issue", path);
 				return texture;
 			}
 
@@ -110,7 +110,7 @@ Texture LoadTexture(const char* path, TextureType type) {
 			data = stbi_load(path, &width, &height, &channels, 3);
 			if(!data) {
 				errno = ENOMEM;
-				TraceLog(LOG_DEBUG, "[ESCLIB.LoadTexture]: Failed to load texture from path %s because of alloc issue", path);
+				TraceLog(LOG_DEBUG, "[ESCLIB.LoadTexture]: ERROR Failed to load texture from path %s because of alloc issue", path);
 				return texture;
 			}
 			
@@ -118,7 +118,7 @@ Texture LoadTexture(const char* path, TextureType type) {
 			if(!new_data) {
 				stbi_image_free(data);
 				errno = ENOMEM;
-				TraceLog(LOG_DEBUG, "[ESCLIB.LoadTexture]: Failed to load texture from path %s because of alloc issue", path);
+				TraceLog(LOG_DEBUG, "[ESCLIB.LoadTexture]: ERROR Failed to load texture from path %s because of alloc issue", path);
 				return texture;
 			}
 
@@ -140,7 +140,7 @@ Texture LoadTexture(const char* path, TextureType type) {
 			data = stbi_load(path, &width, &height, &channels, 3);
 			if(!data) {
 				errno = ENOMEM;
-				TraceLog(LOG_DEBUG, "[ESCLIB.LoadTexture]: Failed to load texture from path %s because of alloc issue", path);
+				TraceLog(LOG_DEBUG, "[ESCLIB.LoadTexture]: ERROR Failed to load texture from path %s because of alloc issue", path);
 				return texture;
 			}
 			
@@ -148,7 +148,7 @@ Texture LoadTexture(const char* path, TextureType type) {
 			if(!new_data) {
 				stbi_image_free(data);
 				errno = ENOMEM;
-				TraceLog(LOG_DEBUG, "[ESCLIB.LoadTexture]: Failed to load texture from path %s because of alloc issue", path);
+				TraceLog(LOG_DEBUG, "[ESCLIB.LoadTexture]: ERROR Failed to load texture from path %s because of alloc issue", path);
 				return texture;
 			}
 
@@ -174,7 +174,7 @@ Texture LoadTexture(const char* path, TextureType type) {
 			data = stbi_load(path, &width, &height, &channels, 3);
 			if(!data) {
 				errno = ENOMEM;
-				TraceLog(LOG_DEBUG, "[ESCLIB.LoadTexture]: Failed to load texture from path %s because of alloc issue", path);
+				TraceLog(LOG_DEBUG, "[ESCLIB.LoadTexture]: ERROR Failed to load texture from path %s because of alloc issue", path);
 				return texture;
 			}
 			
@@ -182,7 +182,7 @@ Texture LoadTexture(const char* path, TextureType type) {
 			if(!new_data) {
 				stbi_image_free(data);
 				errno = ENOMEM;
-				TraceLog(LOG_DEBUG, "[ESCLIB.LoadTexture]: Failed to load texture from path %s because of alloc issue", path);
+				TraceLog(LOG_DEBUG, "[ESCLIB.LoadTexture]: ERROR Failed to load texture from path %s because of alloc issue", path);
 				return texture;
 			}
 
@@ -213,7 +213,7 @@ Texture LoadTexture(const char* path, TextureType type) {
 			data = stbi_load(path, &width, &height, &channels, 3);
 			if(!data) {
 				errno = ENOMEM;
-				TraceLog(LOG_DEBUG, "[ESCLIB.LoadTexture]: Failed to load texture from path %s because of alloc issue", path);
+				TraceLog(LOG_DEBUG, "[ESCLIB.LoadTexture]: ERROR Failed to load texture from path %s because of alloc issue", path);
 				return texture;
 			}
 
@@ -221,7 +221,7 @@ Texture LoadTexture(const char* path, TextureType type) {
 			if(!new_data) {
 				stbi_image_free(data);
 				errno = ENOMEM;
-				TraceLog(LOG_DEBUG, "[ESCLIB.LoadTexture]: Failed to load texture from path %s because of alloc issue", path);
+				TraceLog(LOG_DEBUG, "[ESCLIB.LoadTexture]: ERROR Failed to load texture from path %s because of alloc issue", path);
 				return texture;
 			}
 
@@ -234,7 +234,7 @@ Texture LoadTexture(const char* path, TextureType type) {
 		}
 		default: {
 			errno = EINVAL;
-			TraceLog(LOG_DEBUG, "[ESCLIB.LoadTexture]: Couldn't load because type in wrong");
+			TraceLog(LOG_DEBUG, "[ESCLIB.LoadTexture]: ERROR Couldn't load because type in wrong");
 			return texture;
 		}
 	}
