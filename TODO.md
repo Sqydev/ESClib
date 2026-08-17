@@ -11,6 +11,8 @@ Fix circles lines
 REWRITE EGPU.C FROM THE EMPTY ROOM
 Make ~/ handling in CompileKernel
 
+Add fun texture fns, like you can draw on texture and you can draw on texture and fun things like that
+
 Make Vector2 -> Vector2f and Vector2i -> Vector2 or not, think about it
 
 Rewrite makefile or just try out cmake

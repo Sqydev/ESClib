@@ -37,7 +37,7 @@
 
 #include "./private/coredata.h"
 #include "./private/common_utils.h"
-#include "signal.h"
+
 #include <signal.h>
 
 #if defined(unix) || defined(__unix) || defined(__unix__)

@@ -157,17 +157,17 @@ void PatternsGPUTest(void) {
     for (;;) {
         if(IsKeyPressed(KEY_ESCAPE)) { break; }
 
-        if(IsKeyPressed(KEY_M)) {
+        if(IsKeyPressed('m')) {
             int tries = 0;
             do {
                 current_mode = (Mode)((current_mode + 1) % MODE_COUNT);
                 tries++;
             } while(!kernels[current_mode] && tries < MODE_COUNT);
         }
-        if(IsKeyPressed(KEY_P)) {
+        if(IsKeyPressed('p')) {
             current_pat = (Pattern)((current_pat + 1) % PAT_COUNT);
 		}
-        if(IsKeyPressed(KEY_SPACE)) {
+        if(IsKeyPressed(' ')) {
             paused = !paused;
 		}
 

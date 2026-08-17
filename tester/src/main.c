@@ -60,6 +60,8 @@ const TesterEntry testers[] = {
 	{"WFKPT", WaitForKeyPressTester, "WaitForKeyPressTester"},
 
 	{"WT", WRITETester, "WRITETester"},
+
+	{"TL", TextureLoad, "TextureLoad"},
 };
 
 void PrintUsage(const char* prog) {

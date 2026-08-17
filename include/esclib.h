@@ -668,6 +668,10 @@ RLAPI void MoveCursor(int posX, int posY);
 RLAPI void HideCursor(void);
 RLAPI void ShowCursor(void);
 
+// ETEXTURES
+RLAPI Texture LoadTexture(const char* path, TextureType type);
+RLAPI void FreeTexture(Texture* texture);
+
 #ifdef __cplusplus
 }
 #endif
