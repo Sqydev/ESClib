@@ -54,3 +54,5 @@ void SetCursorPosTester();
 void WaitForKeyPressTester();
 
 void WRITETester();
+
+void TextureLoad(void);
