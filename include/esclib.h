@@ -84,7 +84,7 @@ extern "C" {
 #endif
 
 // If trueColor == true, rgb is rgb if trueColor == false than the color == r + g + b. WARNING: Terminals have stupid thing that in trueColor if fg == 0, 0, 255 and bg == 255, 0, 0 than the terminal blends the fg to 255, 0, 255. If anyone knows how to turn this off than PLEASE tell me, but for now just keep that fact in mind
-typedef struct {
+typedef struct Color {
 	unsigned char r;
 	unsigned char g;
 	unsigned char b;
@@ -93,7 +93,7 @@ typedef struct {
 
 
 
-typedef struct {
+typedef struct SBCell {
 	char Char[4];
 	char CharLen;
 
@@ -103,47 +103,47 @@ typedef struct {
 
 
 
-typedef struct {
+typedef struct Vector2 {
 	float x;
 	float y;
 } Vector2;
 
-typedef struct {
+typedef struct Vector2i {
 	int x;
 	int y;
 } Vector2i;
 
-typedef struct {
+typedef struct Vector2d {
 	double x;
 	double y;
 } Vector2d;
 
-typedef struct {
+typedef struct Vector2l {
 	long x;
 	long y;
 } Vector2l;
 
 
 
-typedef struct {
+typedef struct Vector3 {
 	float x;
 	float y;
 	float z;
 } Vector3;
 
-typedef struct {
+typedef struct Vector3i {
 	int x;
 	int y;
 	int z;
 } Vector3i;
 
-typedef struct {
+typedef struct Vector3d {
 	double x;
 	double y;
 	double z;
 } Vector3d;
 
-typedef struct {
+typedef struct Vector3l {
 	long x;
 	long y;
 	long z;
@@ -151,28 +151,28 @@ typedef struct {
 
 
 
-typedef struct {
+typedef struct Vector4 {
 	float x;
 	float y;
 	float z;
 	float w;
 } Vector4;
 
-typedef struct {
+typedef struct Vector4i {
 	int x;
 	int y;
 	int z;
 	int w;
 } Vector4i;
 
-typedef struct {
+typedef struct Vector4d {
 	double x;
 	double y;
 	double z;
 	double w;
 } Vector4d;
 
-typedef struct {
+typedef struct Vector4l {
 	long x;
 	long y;
 	long z;
@@ -181,28 +181,28 @@ typedef struct {
 
 
 
-typedef struct {
+typedef struct Rectangle {
 	int x;
 	int y;
 	int width;
 	int height;
 } Rectangle;
 
-typedef struct {
+typedef struct Rectanglef {
 	float x;
 	float y;
 	float width;
 	float height;
 } Rectanglef;
 
-typedef struct {
+typedef struct Rectangled {
 	double x;
 	double y;
 	double width;
 	double height;
 } Rectangled;
 
-typedef struct {
+typedef struct Rectanglel {
 	long x;
 	long y;
 	long width;
@@ -211,25 +211,25 @@ typedef struct {
 
 
 
-typedef struct {
+typedef struct Circle {
 	int centerX;
 	int centerY;
 	int radius;
 } Circle;
 
-typedef struct {
+typedef struct Circlef {
 	float centerX;
 	float centerY;
 	float radius;
 } Circlef;
 
-typedef struct {
+typedef struct Circled {
 	double centerX;
 	double centerY;
 	double radius;
 } Circled;
 
-typedef struct {
+typedef struct Circlel {
 	long centerX;
 	long centerY;
 	long radius;
@@ -237,25 +237,25 @@ typedef struct {
 
 
 
-typedef struct {
+typedef struct Triangle {
 	Vector2i A;
 	Vector2i B;
 	Vector2i C;
 } Triangle;
 
-typedef struct {
+typedef struct Trianglef {
 	Vector2 A;
 	Vector2 B;
 	Vector2 C;
 } Trianglef;
 
-typedef struct {
+typedef struct Triangled {
 	Vector2d A;
 	Vector2d B;
 	Vector2d C;
 } Triangled;
 
-typedef struct {
+typedef struct Trianglel {
 	Vector2l A;
 	Vector2l B;
 	Vector2l C;
@@ -263,7 +263,7 @@ typedef struct {
 
 
 
-typedef struct {
+typedef struct Panel {
 	int x;
 	int y;
 	int width;
@@ -272,7 +272,28 @@ typedef struct {
 
 
 
-typedef enum {
+typedef enum TextureType {
+	TEXTURE_MONO,
+	TEXTURE_8COLOR,
+    TEXTURE_16COLOR,
+    TEXTURE_256COLOR,
+    TEXTURE_TRUECOLOR,
+} TextureType;
+
+
+typedef struct Texture {
+	void* data;
+	TextureType type;
+
+	size_t id;
+	size_t width;
+	size_t height;
+} Texture;
+typedef Texture Texture2D;
+
+
+
+typedef enum TuiType{
 	TUI_STATIC,
 	TUI_DYNAMIC
 } TuiType;
@@ -280,9 +301,9 @@ typedef enum {
 typedef struct Kernel Kernel;
 
 
-typedef int32_t EscKey;
 
-typedef enum {
+typedef int32_t EscKey;
+typedef enum SpecialKeys {
 	KEY_NULL = 0,
 
 	KEY_ESCAPE    = 0x110001,
@@ -314,7 +335,8 @@ typedef enum {
 } SpecialKeys;
 
 
-typedef enum {
+
+typedef enum LogLevel {
 	LOG_ERROR = 3,
 	LOG_WARNING = 2,
 	LOG_INFO = 1,
