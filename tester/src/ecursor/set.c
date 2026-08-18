@@ -5,7 +5,7 @@ void SetCursorPosTester() {
 
 	while(1) {
 		BeginFrame();
-		ClearTui((Color){ 0,0,0,0 }, (Color){ 255,255,255,1 });
+		ClearTui(TERMBLACK, TERMWHITE);
 
 		if(IsKeyPressed('w')) { SetCursorPosition(GetCursorPos().x, GetCursorPos().y - 1); }
 		if(IsKeyPressed('s')) { SetCursorPosition(GetCursorPos().x, GetCursorPos().y + 1); }

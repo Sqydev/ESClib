@@ -101,11 +101,21 @@ void DrawCharCore(const char* character, int x, int y, Color* fg, Color* bg, boo
 	DATA.Buffers.backbuff[index].CharLen = len;
 	memcpy(DATA.Buffers.backbuff[index].Char, character, len);
 
+	Color newFg;
+	Color newBg;
+
+	if(fg) {
+		newFg = BlendColors(*fg, DATA.Buffers.backbuff[index].fgColor);
+	}
+	if(bg) {
+		newBg = BlendColors(*bg, DATA.Buffers.backbuff[index].bgColor);
+	}
+
 	if(fg != NULL) {
-		DATA.Buffers.backbuff[index].fgColor = *fg;
+		DATA.Buffers.backbuff[index].fgColor = newFg;
 	}
 	if(bg != NULL) {
-		DATA.Buffers.backbuff[index].bgColor = *bg;
+		DATA.Buffers.backbuff[index].bgColor = newBg;
 	}
 
 	for (int i = 1; i < vWidth; i++) {
@@ -118,10 +128,10 @@ void DrawCharCore(const char* character, int x, int y, Color* fg, Color* bg, boo
 		memset(DATA.Buffers.backbuff[nextIndex].Char, 0, 5);
 		
 		if(fg != NULL) {
-			DATA.Buffers.backbuff[nextIndex].fgColor = *fg;
+			DATA.Buffers.backbuff[nextIndex].fgColor = newFg;
 		}
 		if(bg != NULL) {
-			DATA.Buffers.backbuff[nextIndex].bgColor = *bg;
+			DATA.Buffers.backbuff[nextIndex].bgColor = newBg;
 		}
 		
 		if(nextIndex > DATA.Buffers.backbuffOffset) {

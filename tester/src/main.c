@@ -64,6 +64,8 @@ const TesterEntry testers[] = {
 	{"TL", TextureLoad, "TextureLoad"},
 
 	{"DT", DisplayTheToby, "DisplayTheToby"},
+
+	{"CBT", ColorBlendingTester, "ColorBlendingTester"},
 };
 
 void PrintUsage(const char* prog) {

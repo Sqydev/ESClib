@@ -6,9 +6,9 @@ void DrawCircleTester() {
 	float rot = PI / 2;
 	while(1) {
 		BeginFrame();
-		ClearTui((Color){ 0,0,0,0 }, (Color){ 255,255,255,1 });
+		ClearTui(TRUEBLACK, TRUEWHITE);
 
-		DrawCircle((((float)GetTuiDimensions().x / 2) * ECos(rot)) + ((float)GetTuiDimensions().x / 2), GetTuiDimensions().y / 2, 5, (Color){ 255, 255, 255, 1 });
+		DrawCircle((((float)GetTuiDimensions().x / 2) * ECos(rot)) + ((float)GetTuiDimensions().x / 2), GetTuiDimensions().y / 2, 5, TRUEWHITE);
 
 		DrawCircleEx("🔥", (((float)GetTuiDimensions().x / 2) * ECos(rot)) + ((float)GetTuiDimensions().x / 2), GetTuiDimensions().y / 3, 5, NULL, NULL, false, 0);
 

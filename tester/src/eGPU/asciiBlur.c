@@ -113,19 +113,19 @@ void render(unsigned char* buf, int width, int height) {
             int ci = v * (ramp_len - 1) / 255;
             char ch[2] = { ramp[ci], 0 };
             Color fg = val_to_color(v);
-            Color bg = { 0, 0, 0, true };
+            Color bg = { 0, 0, 0, 255, true };
             DrawCharEx(ch, x, y, &fg, &bg);
         }
     }
 
-    Color hud_fg = { 255, 220, 50, true };
-    Color hud_bg = { 20, 20, 40, true };
+    Color hud_fg = { 255, 220, 50, 255, true };
+    Color hud_bg = { 20, 20, 40, 255, true };
     double dt = GetDeltaTime();
     double fps = dt > 0.0 ? 1.0 / dt : 0.0;
     
     DrawTextfEx(" FPS: %4.0f | dt: %.2fms | Mode: %-14s | Pat: %-7s | %s ", 0, height, &hud_fg, &hud_bg, fps, dt * 1000.0, mode_names[current_mode], pat_names[current_pat], paused ? "PAUSED" : "LIVE");
 
-    Color key_fg = { 150, 150, 200, true };
+    Color key_fg = { 150, 150, 200, 255, true };
     DrawTextfEx(" [M] mode  [P] pattern  [SPACE] pause  [ESC] quit ", 0, height + 1, &key_fg, &hud_bg);
 
     EndFrame();

@@ -83,11 +83,13 @@ extern "C" {
 	#define RAD2DEG (180.0f/PI)
 #endif
 
-// If trueColor == true, rgb is rgb if trueColor == false than the color == r + g + b. WARNING: Terminals have stupid thing that in trueColor if fg == 0, 0, 255 and bg == 255, 0, 0 than the terminal blends the fg to 255, 0, 255. If anyone knows how to turn this off than PLEASE tell me, but for now just keep that fact in mind
+// If trueColor == true then it will do normal rgba. If trueColor == false then it will sum rgb and choose 8, 16 or 256 color pallete depending on the number and alpha will become 1 or 0. Also, beware because terminals are wierd with non-trueColor fg on bg
 typedef struct Color {
 	unsigned char r;
 	unsigned char g;
 	unsigned char b;
+	unsigned char a;
+
 	bool trueColor;
 } Color;
 
@@ -345,14 +347,14 @@ typedef enum LogLevel {
 
 
 
-#define TERMWHITE (Color){ 15, 0, 0, 0 }
-#define TERMBLACK (Color){ 0, 0, 0, 0 }
+#define TERMWHITE (Color){ 15, 0, 0, true, false }
+#define TERMBLACK (Color){ 0, 0, 0, true, false }
 
-#define WHITE (Color){ 255, 0, 0, 0 }
-#define BLACK (Color){ 232, 0, 0, 0 }
+#define WHITE (Color){ 255, 0, 0, true, false }
+#define BLACK (Color){ 232, 0, 0, true, false }
 
-#define TRUEWHITE (Color){ 255, 255, 255, 1 }
-#define TRUEBLACK (Color){ 0, 0, 0, 1 }
+#define TRUEWHITE (Color){ 255, 255, 255, 255, true }
+#define TRUEBLACK (Color){ 0, 0, 0, 255, true }
 
 // ECORE
 
@@ -486,6 +488,8 @@ RLAPI Vector2d EDir(double angle);
 
 RLAPI void ESleep(unsigned long sec, unsigned long ms, unsigned long ns);
 RLAPI int GetCharWidth(const char* character);
+
+RLAPI Color BlendColors(Color src, Color dst);
 
 // ETEXT
 

@@ -1,3 +1,5 @@
+Add alpha suppport for textures
+
 FIX TEXTURE_MONO LOADING
 
 Make inputs handle emois. yk, whole unicode and enum to input for which parts of input user wants to themselfs. Yk. ESCINPUT_ALL, ESCINPUT_KEYBOARD itd. MAKE PRESSKEY ALLOCATE NOT 1 BY 1 BUT AFTER 10 CHARS * 2.

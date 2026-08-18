@@ -12,8 +12,8 @@ void BackbuffDump() {
 	int times = 10;
 	int filled = 0;
 	SBCell filler;
-	filler.bgColor = (Color){0,0,0,0};
-	filler.fgColor = (Color){0,0,0,0};
+	filler.bgColor = TRUEBLACK;
+	filler.fgColor = TRUEBLACK;
 	filler.Char[0] = 0;
 	filler.Char[1] = 0;
 	filler.Char[2] = 0;
