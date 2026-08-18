@@ -11,8 +11,8 @@ void EndDrawingTest() {
 
 	int times = 10;
 	SBCell filler;
-	filler.bgColor = (Color){ 0, 0, 0, 0};
-	filler.fgColor = (Color){ 2, 3, 100, 0};
+	filler.bgColor = TRUEBLACK;
+	filler.fgColor = (Color){ 2, 3, 100, 255, true };
 	filler.Char[0] = 'q';
 	filler.Char[1] = 0;
 	filler.Char[2] = 0;
@@ -21,7 +21,7 @@ void EndDrawingTest() {
 
 	BeginFrame();
 
-	ClearTui((Color){ 0,0,0,0 }, (Color){ 255,255,255,1 });
+	ClearTui(TERMBLACK, TERMWHITE);
 
 	for(int i = 0; i < times; i++) {
 		WriteToBackbuff(filler, i, 0);
@@ -59,8 +59,8 @@ void RenderLoopStressTest() {
 		for(size_t i = 0; i < GetBackbuffCellCount(); i++) {
 			WriteToBackbuff(
 				(SBCell){
-        			.bgColor = (Color){ rand() % 255, rand() % 255, rand() % 255, 1 },
-        			.fgColor = (Color){ rand() % 255, rand() % 255, rand() % 255, 1 },
+        			.bgColor = (Color){ rand() % 255, rand() % 255, rand() % 255, 255, true },
+        			.fgColor = (Color){ rand() % 255, rand() % 255, rand() % 255, 255, true },
 					.Char[0] = (rand() % (126 - 32 + 1)) + 32,
 					.CharLen = 1,
     			}, i, 0);

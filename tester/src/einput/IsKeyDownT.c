@@ -7,7 +7,7 @@ void IsKeyDownTester() {
 
 	while(1) {
 		BeginFrame();
-		ClearTui((Color){ 0,0,0,0 }, (Color){ 255,255,255,1 });
+		ClearTui(TRUEBLACK, TRUEWHITE);
 
 		DrawCharEx(" ", pos.x, pos.y, NULL, &WHITE);
 

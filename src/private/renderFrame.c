@@ -46,8 +46,8 @@ void RenderFrame(void) {
 
 	DATA.Buffers.charbufferOffset = 0;
 
-	Color lastFg = {0, 0, 0, false};
-	Color lastBg = {0, 0, 0, false};
+	Color lastFg = {0, 0, 0, 0, false};
+	Color lastBg = {0, 0, 0, 0, false};
 	bool forceColorUpdate = true;
 
 	int cursorX = -1;
@@ -81,7 +81,9 @@ void RenderFrame(void) {
 					}
 					else {
 						int paletteIdx = (int)back->fgColor.r + back->fgColor.g + back->fgColor.b;
-						DATA.Buffers.charbufferOffset += sprintf(DATA.Buffers.charbuffer + DATA.Buffers.charbufferOffset, "\033[38;5;%dm", paletteIdx);
+						if(back->fgColor.a > 0) { DATA.Buffers.charbufferOffset += sprintf(DATA.Buffers.charbuffer + DATA.Buffers.charbufferOffset, "\033[38;5;%dm", paletteIdx); } else {
+							DATA.Buffers.charbufferOffset += sprintf(DATA.Buffers.charbuffer + DATA.Buffers.charbufferOffset, "\033[38;5;0m");
+						}
 					}
 					lastFg = back->fgColor;
 				}
@@ -92,7 +94,9 @@ void RenderFrame(void) {
 					}
 					else {
 						int paletteIdx = (int)back->bgColor.r + back->bgColor.g + back->bgColor.b;
-                        DATA.Buffers.charbufferOffset += sprintf(DATA.Buffers.charbuffer + DATA.Buffers.charbufferOffset, "\033[48;5;%dm", paletteIdx);
+                        if(back->bgColor.a > 0) { DATA.Buffers.charbufferOffset += sprintf(DATA.Buffers.charbuffer + DATA.Buffers.charbufferOffset, "\033[48;5;%dm", paletteIdx); } else {
+							DATA.Buffers.charbufferOffset += sprintf(DATA.Buffers.charbuffer + DATA.Buffers.charbufferOffset, "\033[48;5;0m");
+						}
 					}
 					lastBg = back->bgColor;
 				}
