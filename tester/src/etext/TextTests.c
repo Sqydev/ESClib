@@ -19,7 +19,7 @@ void CharTest() {
 	sleep(1);
 
 	while(1) {
-		BeginDrawing();
+		BeginFrame();
 
 		ClearTui((Color){ 0,0,0,0 }, (Color){ 255, 0, 0, 0});
 
@@ -39,7 +39,7 @@ void CharTest() {
 		DrawChar("A", GetLastTuiIndex().x / 2, GetLastTuiIndex().y / 2.2, (Color){ 255, 255, 255, 1 });
 		DrawChar("🔥", GetLastTuiIndex().x / 2 + 1, GetLastTuiIndex().y / 2.2, (Color){ 255, 255, 255, 1 });
 
-		EndDrawing();
+		EndFrame();
 	}
 
 	CloseTui();
@@ -49,7 +49,7 @@ void TextTest() {
 	InitTui(165, TUI_DYNAMIC);
 
 	while(1) {
-		BeginDrawing();
+		BeginFrame();
 
 		ClearTui((Color){ 0,0,0,0 }, (Color){ 255, 0, 0, 0});
 
@@ -67,7 +67,7 @@ void TextTest() {
 
 		DrawTextPro("A to jest origin 5, 0 z rotacją 45 stopni OGIE🔥ń", 20, 8, 5, 0, &(Color){ 255, 255, 255, 1 }, NULL, 0, 45 * DEG2RAD);
 
-		EndDrawing();
+		EndFrame();
 	}
 
 	CloseTui();
@@ -77,7 +77,7 @@ void TextTestf() {
 	InitTui(165, TUI_DYNAMIC);
 
 	while(1) {
-		BeginDrawing();
+		BeginFrame();
 
 		ClearTui((Color){ 0,0,0,0 }, (Color){ 255, 0, 0, 0});
 
@@ -99,7 +99,7 @@ void TextTestf() {
 
 		DrawTextf("$fg$bgCZARNE$bg $fgBIAŁE $spSPACEING$sp $anAN$anGLE", 50, 21, (Color){ 255, 255, 255, 1 }, (Color){ 0, 0, 0, 0 }, (Color){ 255, 255, 255, 1 }, (Color){ 0, 0, 0, 0 }, (Color){ 255, 255, 255, 1 }, 2, 0, 45 * DEG2RAD, 315 * DEG2RAD);
 
-		EndDrawing();
+		EndFrame();
 	}
 
 	CloseTui();

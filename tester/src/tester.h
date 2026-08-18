@@ -56,3 +56,5 @@ void WaitForKeyPressTester();
 void WRITETester();
 
 void TextureLoad(void);
+
+void DisplayTheToby(void);

@@ -6,15 +6,15 @@ void WRITETester() {
 	int x = 0;
 	int y = 0;
 
-	BeginDrawing();
+	BeginFrame();
 	
 	ClearTui(TERMBLACK, TERMWHITE);
 	HideCursor();
 
-	EndDrawing();
+	EndFrame();
 
 	while(1) {
-		BeginDrawing();
+		BeginFrame();
 
 		int ch = WaitForKeyPress();
 		char cha[2] = { ch, '\0' };
@@ -29,7 +29,7 @@ void WRITETester() {
 
 		if(ch == KEY_ESCAPE) { break; }
 
-		EndDrawing();
+		EndFrame();
 	}
 
 	CloseTui();

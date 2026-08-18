@@ -13,7 +13,7 @@ void MergBrileTester() {
 	InitTui(60, TUI_DYNAMIC);
 
 	while(1) {
-		BeginDrawing();
+		BeginFrame();
 		ClearTui(BLACK, WHITE);
 
 		if(IsKeyPressed(KEY_ENTER)) {
@@ -29,6 +29,6 @@ void MergBrileTester() {
 
 		free(outBrl);
 
-		EndDrawing();
+		EndFrame();
 	}
 }

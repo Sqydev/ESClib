@@ -7,7 +7,7 @@ void StaticTuiTester() {
 	SetTuiDimentions(60, 30);
 
 	while(1) {
-		BeginDrawing();
+		BeginFrame();
 
 		ClearTui((Color){ 0,0,0,0 }, (Color){ 255, 0, 0, 0});
 
@@ -21,7 +21,7 @@ void StaticTuiTester() {
 		DrawChar("⠟", GetLastTuiIndex().x / 2, GetLastTuiIndex().y / 2, (Color){ 255, 255, 255, 1 });
 		DrawChar("🔥", GetLastTuiIndex().x / 2, GetLastTuiIndex().y, (Color){ 255, 255, 255, 1 });
 
-		EndDrawing();
+		EndFrame();
 	}
 
 	CloseTui();

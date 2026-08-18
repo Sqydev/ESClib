@@ -62,6 +62,8 @@ const TesterEntry testers[] = {
 	{"WT", WRITETester, "WRITETester"},
 
 	{"TL", TextureLoad, "TextureLoad"},
+
+	{"DT", DisplayTheToby, "DisplayTheToby"},
 };
 
 void PrintUsage(const char* prog) {

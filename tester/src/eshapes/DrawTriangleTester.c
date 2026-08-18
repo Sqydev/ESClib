@@ -6,7 +6,7 @@ void DrawTriangleTester() {
     double angle = 0.0;
 
     while(1) {
-        BeginDrawing();
+        BeginFrame();
         ClearTui((Color){ 0, 0, 0, 255 }, (Color){ 255, 255, 255, 1 });
 
         angle += 1 * DEG2RAD;
@@ -37,7 +37,7 @@ void DrawTriangleTester() {
 
         DrawTrianglePro("A", Ax2, Ay2, Bx2, By2, Cx2, Cy2, (Ax2 + Bx2 + Cx2) / 3, (Ay2 + By2 + Cy2) / 3, &(Color){255, 255, 255, 255}, NULL, angle, true, 1, true);
 
-        EndDrawing();
+        EndFrame();
     }
 
     CloseTui();

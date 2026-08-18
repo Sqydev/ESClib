@@ -105,7 +105,7 @@ void update_pattern(float time, int width, int height) {
 }
 
 void render(unsigned char* buf, int width, int height) {
-    BeginDrawing();
+    BeginFrame();
 
     for(int y = 0; y < height; y++) {
         for(int x = 0; x < width; x++) {
@@ -128,7 +128,7 @@ void render(unsigned char* buf, int width, int height) {
     Color key_fg = { 150, 150, 200, true };
     DrawTextfEx(" [M] mode  [P] pattern  [SPACE] pause  [ESC] quit ", 0, height + 1, &key_fg, &hud_bg);
 
-    EndDrawing();
+    EndFrame();
 }
 
 static const char* kernel_paths[] = {

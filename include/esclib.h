@@ -282,7 +282,7 @@ typedef enum TextureType {
 
 
 typedef struct Texture {
-	void* data;
+	unsigned char* data;
 	TextureType type;
 
 	size_t id;
@@ -373,8 +373,6 @@ RLAPI int AddPanicTask(void (*task)(void));
 // Will return 0 if succesfull -1 if failed
 RLAPI int RemovePanicTask(size_t index);
 
-#define BeginDrawing BeginFrame
-#define EndDrawing EndFrame
 RLAPI void BeginFrame(void);
 RLAPI void EndFrame(void);
 

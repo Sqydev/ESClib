@@ -19,7 +19,7 @@ void EndDrawingTest() {
 	filler.Char[3] = 0;
 	filler.CharLen = 1;
 
-	BeginDrawing();
+	BeginFrame();
 
 	ClearTui((Color){ 0,0,0,0 }, (Color){ 255,255,255,1 });
 
@@ -27,11 +27,11 @@ void EndDrawingTest() {
 		WriteToBackbuff(filler, i, 0);
 	}
 
-	EndDrawing();
+	EndFrame();
 
 	sleep(5);
 
-	printf("TESTER: Ending EndDrawingTest\n");
+	printf("TESTER: Ending EndFrameTest\n");
 
 	CloseTui();
 }
@@ -54,7 +54,7 @@ void RenderLoopStressTest() {
 	InitTui(a, TUI_DYNAMIC);
 
 	while(1) {
-		BeginDrawing();
+		BeginFrame();
 
 		for(size_t i = 0; i < GetBackbuffCellCount(); i++) {
 			WriteToBackbuff(
@@ -66,7 +66,7 @@ void RenderLoopStressTest() {
     			}, i, 0);
 		}
 
-		EndDrawing();
+		EndFrame();
 	}
 
 	CloseTui();
