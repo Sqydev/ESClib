@@ -4,7 +4,7 @@ void DrawLineTester() {
 	InitTui(60, TUI_DYNAMIC);
 
 	while(1) {
-		BeginDrawing();
+		BeginFrame();
 		ClearTui((Color){ 0,0,0,0 }, (Color){ 255,255,255,1 });
 
 		DrawLine(GetLastTuiIndex().x - GetLastTuiIndex().x / 6, GetLastTuiIndex().y / 2 - GetLastTuiIndex().y / 6, GetLastTuiIndex().x / 6, GetLastTuiIndex().y / 2 - GetLastTuiIndex().y / 6, WHITE, 1);
@@ -19,7 +19,7 @@ void DrawLineTester() {
 
 		DrawLineEx("🔥", GetLastTuiIndex().x / 4, GetLastTuiIndex().y / 2, GetLastTuiIndex().x - GetLastTuiIndex().x / 4, GetLastTuiIndex().y / 2, NULL, NULL, 1);
 
-		EndDrawing();
+		EndFrame();
 	}
 
 	CloseTui();

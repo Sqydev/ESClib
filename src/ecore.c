@@ -108,7 +108,7 @@ void InitTui(int targetFps, TuiType type) {
 	DATA.Buffers.backbuff = realloc(DATA.Buffers.backbuff, GetBackbuffSize());
 	if(!DATA.Buffers.backbuff) {
 		errno = ENOMEM;
-		UniWriteLen(UNI_WRITE_TARGET_STDERR, "[ESCLIB.InitTui]: ERROR: Backbuffer realloc failed\n");
+		TraceLog(LOG_ERROR, "[ESCLIB.InitTui]: ERROR: Backbuffer realloc failed");
 		DisableRawMode();
 		SignalsCleanup();
 		CloseInput();
@@ -121,7 +121,7 @@ void InitTui(int targetFps, TuiType type) {
 	DATA.Buffers.frontbuff = realloc(DATA.Buffers.frontbuff, GetBackbuffSize());
 	if(!DATA.Buffers.frontbuff) {
 		errno = ENOMEM;
-		UniWriteLen(UNI_WRITE_TARGET_STDERR, "[ESCLIB.InitTui]: ERROR: Frontbuffer realloc failed\n");
+		TraceLog(LOG_ERROR, "[ESCLIB.InitTui]: ERROR: Frontbuffer realloc failed");
 		DisableRawMode();
 		SignalsCleanup();
 		CloseInput();
@@ -134,7 +134,7 @@ void InitTui(int targetFps, TuiType type) {
 	DATA.Buffers.charbuffer = realloc(DATA.Buffers.charbuffer, GetCharbuffSize());
 	if(!DATA.Buffers.charbuffer) {
 		errno = ENOMEM;
-		UniWriteLen(UNI_WRITE_TARGET_STDERR, "[ESCLIB.InitTui]: ERROR: Charbuffer realloc failed\n");
+		TraceLog(LOG_ERROR, "[ESCLIB.InitTui]: ERROR: Charbuffer realloc failed");
 		DisableRawMode();
 		SignalsCleanup();
 		CloseInput();
@@ -157,6 +157,8 @@ void InitTui(int targetFps, TuiType type) {
 	InitOpenCl();
 
 	DATA.TuiData.initiated = true;
+
+	TraceLog(LOG_INFO, "Inited succesfully");
 }
 
 void CloseTui(void) {
@@ -186,26 +188,29 @@ void CloseTui(void) {
 	if(DATA.Logging.enabled) { CloseLoggin(); }
 
 	UniWriteLen(UNI_WRITE_TARGET_STDOUT, "\033[2J\033[?1049l\033[?7h");
+
+	TraceLog(LOG_INFO, "[ESCLIB.InitTui]: Closed succesfully");
 }
 
 static void (**panicTasks)(void) = NULL;
 static size_t panicTasksCount = 0;
 
 void Panic(const char* message, int exitCode) {
-	UniWriteLen(UNI_WRITE_TARGET_STDERR, message);
+	TraceLog(LOG_ERROR, message);
 
 	for(size_t i = 0; i < panicTasksCount; i++) {
 		if(panicTasks[i] != NULL) { panicTasks[i](); }
 	}
 
 	CloseTui();
+	UniWriteLen(UNI_WRITE_TARGET_STDERR, message);
 	exit(exitCode);
 }
 
 int AddPanicTask(void (*task)(void)) {
 	void (**tmp)(void) = realloc(panicTasks, sizeof(void (*)) * (panicTasksCount + 1));
 	if(!tmp) {
-		UniWriteLen(UNI_WRITE_TARGET_STDERR, "[ESCLIB.AddPanicTask]: ERROR: Panic Tasks realloc failed somehow\n");
+		TraceLog(LOG_ERROR, "[ESCLIB.AddPanicTask]: ERROR: Panic Tasks realloc failed");
 		errno = ENOMEM;
 		return -1;
 	}
@@ -231,7 +236,7 @@ int RemovePanicTask(size_t index) {
 		void (**tmp)(void) = realloc(panicTasks, sizeof(void (*)) * newCount);
 		
 		if(!tmp) {
-			UniWriteLen(UNI_WRITE_TARGET_STDERR, "[ESCLIB.RemovePanicTask]: ERROR: Panic Tasks realloc failed somehow\n");
+			TraceLog(LOG_ERROR, "[ESCLIB.RemovePanicTask]: ERROR: Panic Tasks realloc failed");
 			errno = ENOMEM;
 			return -1;
 		}
@@ -250,7 +255,7 @@ int InitLoggin(char* path, LogLevel logLevel) {
 
 	DATA.Logging.file = fopen(path, "a");
 	if(!DATA.Logging.file) {
-		UniWriteLen(UNI_WRITE_TARGET_STDERR, "[ESCLIB.InitLoggin]: ERROR: Failed to open log file\n");
+		TraceLog(LOG_ERROR, "[ESCLIB.InitLoggin]: ERROR: Failed to open log file\n");
 		DATA.Logging.enabled = false;
 
 		return -1;

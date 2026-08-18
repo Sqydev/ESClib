@@ -6,15 +6,15 @@ void WaitForKeyPressTester() {
 	int x = 0;
 	int y = 0;
 
-	BeginDrawing();
+	BeginFrame();
 	
 	ClearTui(TERMBLACK, TERMWHITE);
 	HideCursor();
 
-	EndDrawing();
+	EndFrame();
 
 	while(1) {
-		BeginDrawing();
+		BeginFrame();
 
 		WaitForKeyPress();
 
@@ -28,7 +28,7 @@ void WaitForKeyPressTester() {
 
 		if(IsKeyPressed(KEY_ESCAPE)) { break; }
 
-		EndDrawing();
+		EndFrame();
 	}
 
 	CloseTui();

@@ -6,7 +6,7 @@ void DrawRecTester() {
 	InitTui(60, TUI_DYNAMIC);
 
 	while(1) {
-		BeginDrawing();
+		BeginFrame();
 		ClearTui((Color){ 0,0,0,0 }, (Color){ 255,255,255,1 });
 
 		// NOTE: Squere
@@ -30,7 +30,7 @@ void DrawRecTester() {
 		// NOTE: Rec with 45 DEG rotation that is made of 🔥 roundness 50
 	 	DrawRectanglePro("🔥", 100, 20, 20, 10, 10, 5, NULL, NULL, 45 * DEG2RAD, 50, true, 2, true);
 
-		EndDrawing();
+		EndFrame();
 	}
 
 	CloseTui();

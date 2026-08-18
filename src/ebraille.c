@@ -73,7 +73,7 @@ char* MergeBraille(const char* a, const char* b) {
     char* out = malloc(4 * sizeof(char));
     if(!out) {
 		errno = ENOMEM;
-		TraceLog(LogLevel logLevel, const char *message, ...)
+		TraceLog(LOG_DEBUG, "Failed to malloc");
 		return NULL;
 	}
 

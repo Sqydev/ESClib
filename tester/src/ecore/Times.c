@@ -4,8 +4,8 @@ void TestTimes(void) {
 	InitTui(60, TUI_DYNAMIC);
 
 	while(1) {
-		BeginDrawing();
-		EndDrawing();
+		BeginFrame();
+		EndFrame();
 	}
 
 	CloseTui();
