@@ -105,10 +105,12 @@ void DrawCharCore(const char* character, int x, int y, Color* fg, Color* bg, boo
 	Color newBg;
 
 	if(fg) {
-		newFg = BlendColors(*fg, DATA.Buffers.backbuff[index].fgColor);
+		newFg = DATA.Buffers.backbuff[index].fgColor;
+		BlendColors(&newFg, *fg);
 	}
 	if(bg) {
-		newBg = BlendColors(*bg, DATA.Buffers.backbuff[index].bgColor);
+		newBg = DATA.Buffers.backbuff[index].bgColor;
+		BlendColors(&newBg, *bg);
 	}
 
 	if(fg != NULL) {

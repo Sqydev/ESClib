@@ -84,37 +84,14 @@ Texture LoadTexture(const char* path, TextureType type) {
 
 	switch(type) {
 		case TEXTURE_MONO: {
-			data = stbi_load(path, &width, &height, &channels, 1);
+			data = stbi_load(path, &width, &height, &channels, 2);
 			if(!data) {
 				errno = ENOMEM;
 				TraceLog(LOG_DEBUG, "[ESCLIB.LoadTexture]: ERROR Failed to load texture from path %s because of alloc issue", path);
 				return texture;
 			}
 
-			unsigned char* new_data = malloc((size_t)width * height * sizeof(unsigned char));
-			if(!new_data) {
-				stbi_image_free(data);
-				errno = ENOMEM;
-				TraceLog(LOG_DEBUG, "[ESCLIB.LoadTexture]: ERROR Failed to load texture from path %s because of alloc issue", path);
-				return texture;
-			}
-
-			memcpy(new_data, data, (size_t)width * height);
-
-			stbi_image_free(data);
-			data = new_data;
-
-			break;
-		}
-		case TEXTURE_8COLOR: {
-			data = stbi_load(path, &width, &height, &channels, 3);
-			if(!data) {
-				errno = ENOMEM;
-				TraceLog(LOG_DEBUG, "[ESCLIB.LoadTexture]: ERROR Failed to load texture from path %s because of alloc issue", path);
-				return texture;
-			}
-			
-			unsigned char* new_data = malloc((size_t)width * height * sizeof(unsigned char));
+			unsigned char* new_data = malloc((size_t)width * height * sizeof(unsigned char) * 2);
 			if(!new_data) {
 				stbi_image_free(data);
 				errno = ENOMEM;
@@ -123,12 +100,40 @@ Texture LoadTexture(const char* path, TextureType type) {
 			}
 
 			size_t idx = 0;
-			for(size_t i = 0; i < (size_t)width * height * 3; i += 3) {
+			for(size_t i = 0; i < (size_t)width * height * 2; i += 2) {
+				new_data[idx++] = grayscale256(data[i]);
+				new_data[idx++] = data[i + 1] >= 128 ? 255 : 0;
+			}
+
+			stbi_image_free(data);
+			data = new_data;
+
+			break;
+		}
+		case TEXTURE_8COLOR: {
+			data = stbi_load(path, &width, &height, &channels, 4);
+			if(!data) {
+				errno = ENOMEM;
+				TraceLog(LOG_DEBUG, "[ESCLIB.LoadTexture]: ERROR Failed to load texture from path %s because of alloc issue", path);
+				return texture;
+			}
+			
+			unsigned char* new_data = malloc((size_t)width * height * sizeof(unsigned char) * 2);
+			if(!new_data) {
+				stbi_image_free(data);
+				errno = ENOMEM;
+				TraceLog(LOG_DEBUG, "[ESCLIB.LoadTexture]: ERROR Failed to load texture from path %s because of alloc issue", path);
+				return texture;
+			}
+
+			size_t idx = 0;
+			for(size_t i = 0; i < (size_t)width * height * 4; i += 4) {
 				bool r = data[i] >= 128;
 				bool g = data[i + 1] >= 128;
 				bool b = data[i + 2] >= 128;
 
 				new_data[idx++] = r | (g << 1) | (b << 2);
+				new_data[idx++] = data[i + 3] >= 128 ? 255 : 0;
 			}
 
 			stbi_image_free(data);
@@ -137,14 +142,14 @@ Texture LoadTexture(const char* path, TextureType type) {
 			break;
 		}
 		case TEXTURE_16COLOR: {
-			data = stbi_load(path, &width, &height, &channels, 3);
+			data = stbi_load(path, &width, &height, &channels, 4);
 			if(!data) {
 				errno = ENOMEM;
 				TraceLog(LOG_DEBUG, "[ESCLIB.LoadTexture]: ERROR Failed to load texture from path %s because of alloc issue", path);
 				return texture;
 			}
 			
-			unsigned char* new_data = malloc((size_t)width * height * sizeof(unsigned char));
+			unsigned char* new_data = malloc((size_t)width * height * sizeof(unsigned char) * 2);
 			if(!new_data) {
 				stbi_image_free(data);
 				errno = ENOMEM;
@@ -153,16 +158,16 @@ Texture LoadTexture(const char* path, TextureType type) {
 			}
 
 			size_t idx = 0;
-			for(size_t i = 0; i < (size_t)width * height * 3; i += 3) {
+			for(size_t i = 0; i < (size_t)width * height * 4; i += 4) {
 				bool r = data[i] >= 128;
 				bool g = data[i + 1] >= 128;
 				bool b = data[i + 2] >= 128;
 
 				unsigned char base = r | (g << 1) | (b << 2);
-
 				unsigned char brightness = (data[i] + data[i + 1] + data[i + 2]) / 3 >= 128;
 
 				new_data[idx++] = base + (brightness ? 8 : 0);
+				new_data[idx++] = data[i + 3] >= 128 ? 255 : 0;
 			}
 
 			stbi_image_free(data);
@@ -171,14 +176,14 @@ Texture LoadTexture(const char* path, TextureType type) {
 			break;
 		}
 		case TEXTURE_256COLOR: {
-			data = stbi_load(path, &width, &height, &channels, 3);
+			data = stbi_load(path, &width, &height, &channels, 4);
 			if(!data) {
 				errno = ENOMEM;
 				TraceLog(LOG_DEBUG, "[ESCLIB.LoadTexture]: ERROR Failed to load texture from path %s because of alloc issue", path);
 				return texture;
 			}
 			
-			unsigned char* new_data = malloc((size_t)width * height * sizeof(unsigned char));
+			unsigned char* new_data = malloc((size_t)width * height * sizeof(unsigned char) * 2);
 			if(!new_data) {
 				stbi_image_free(data);
 				errno = ENOMEM;
@@ -187,21 +192,18 @@ Texture LoadTexture(const char* path, TextureType type) {
 			}
 
 			size_t idx = 0;
-			for(size_t i = 0; i < (size_t)width * height * 3; i += 3) {
+			for(size_t i = 0; i < (size_t)width * height * 4; i += 4) {
 				unsigned char r = data[i];
 				unsigned char g = data[i + 1];
 				unsigned char b = data[i + 2];
 
 				if(is_grayscale(r, g, b)) {
-    				new_data[idx++] = grayscale256(r);
+					new_data[idx++] = grayscale256(r);
 				}
 				else {
-					r = level256(r);
-					g = level256(g);
-					b = level256(b);
-
-					new_data[idx++] = 16 + 36 * r + 6 * g + b;
+					new_data[idx++] = 16 + 36 * level256(r) + 6 * level256(g) + level256(b);
 				}
+				new_data[idx++] = data[i + 3] >= 128 ? 255 : 0;
 			}
 
 			stbi_image_free(data);
@@ -210,14 +212,14 @@ Texture LoadTexture(const char* path, TextureType type) {
 			break;
 		}
 		case TEXTURE_TRUECOLOR: {
-			data = stbi_load(path, &width, &height, &channels, 3);
+			data = stbi_load(path, &width, &height, &channels, 4);
 			if(!data) {
 				errno = ENOMEM;
 				TraceLog(LOG_DEBUG, "[ESCLIB.LoadTexture]: ERROR Failed to load texture from path %s because of alloc issue", path);
 				return texture;
 			}
 
-			unsigned char* new_data = malloc((size_t)width * height * 3 * sizeof(unsigned char));
+			unsigned char* new_data = malloc((size_t)width * height * sizeof(unsigned char) * 4);
 			if(!new_data) {
 				stbi_image_free(data);
 				errno = ENOMEM;
@@ -225,7 +227,7 @@ Texture LoadTexture(const char* path, TextureType type) {
 				return texture;
 			}
 
-			memcpy(new_data, data, (size_t)width * height * 3);
+			memcpy(new_data, data, (size_t)width * height * 4);
 
 			stbi_image_free(data);
 			data = new_data;
@@ -234,7 +236,7 @@ Texture LoadTexture(const char* path, TextureType type) {
 		}
 		default: {
 			errno = EINVAL;
-			TraceLog(LOG_DEBUG, "[ESCLIB.LoadTexture]: ERROR Couldn't load because type in wrong");
+			TraceLog(LOG_DEBUG, "[ESCLIB.LoadTexture]: ERROR Couldn't load because texture type is wrong");
 			return texture;
 		}
 	}
