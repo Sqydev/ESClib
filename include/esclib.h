@@ -489,7 +489,7 @@ RLAPI Vector2d EDir(double angle);
 RLAPI void ESleep(unsigned long sec, unsigned long ms, unsigned long ns);
 RLAPI int GetCharWidth(const char* character);
 
-RLAPI Color BlendColors(Color src, Color dst);
+RLAPI void BlendColors(Color* dst, Color src);
 
 // ETEXT
 
