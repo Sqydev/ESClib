@@ -238,4 +238,6 @@ void BlendColors(Color* dst, Color src) {
 
 		dst->a = src.a ? 1 : 0;
 	}
+
+	dst->trueColor = src.trueColor;
 }
