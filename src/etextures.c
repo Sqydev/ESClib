@@ -261,3 +261,88 @@ void FreeTexture(Texture* texture) {
 	texture->width = 0;
 	texture->height = 0;
 }
+
+Color GetTexturePixel(Texture* texture, size_t x, size_t y) {
+	if(texture->type == TEXTURE_TRUECOLOR) { return (Color){ texture->data[((y - 1) * texture->width) + x], texture->data[((y - 1) * texture->width) + x + 1], texture->data[((y - 1) * texture->width) + x + 2], texture->data[((y - 1) * texture->width) + x + 3], true}; }
+	return (Color){ texture->data[((y - 1) * texture->width) + x], 0, 0, texture->data[((y - 1) * texture->width) + x + 1], false };
+}
+
+void DrawTextureCore(Texture* texture, char* character, Rectangle rec, Rectangle textureSlice, int originX, int originY, double rotation, Color tint, bool affectFg, bool affectBg, ScalingAlgorithms scaling, bool aspectRatiofied, bool isPanel, Panel panel) {
+	double aspectRatio = aspectRatiofied ? ((GetCellProportions().x > 0 && GetCellProportions().y > 0) ? (double)GetCellProportions().x / (double)GetCellProportions().y : 0.5) : 1.0;
+
+	if(isPanel) { 
+		rec.x += panel.x; 
+		rec.y += panel.y; 
+	}
+
+	double cosA = ECos(rotation);
+	double sinA = ESin(rotation);
+	double widthInPixels = rec.width * aspectRatio;
+	double maxRadius = sqrt(widthInPixels * widthInPixels + rec.height * rec.height) / aspectRatio + 1;
+
+	int startX = rec.x - (int)maxRadius;
+	int endX = rec.x + (int)maxRadius;
+	int startY = rec.y - (int)maxRadius;
+	int endY = rec.y + (int)maxRadius;
+
+	int minBoundX = isPanel ? panel.x : 0;
+	int minBoundY = isPanel ? panel.y : 0;
+	int maxBoundX = isPanel ? panel.x + panel.width - 1 : GetLastTuiIndex().x;
+	int maxBoundY = isPanel ? panel.y + panel.height - 1 : GetLastTuiIndex().y;
+
+	if(isPanel && (endX < panel.x || endY < panel.y || startX >= panel.x + panel.width || startY >= panel.y + panel.height)) {
+		return;
+	}
+
+	if(startX < minBoundX) {
+		startX = minBoundX;
+	}
+	if(startY < minBoundY) {
+		startY = minBoundY;
+	}
+	if(endX >= maxBoundX) {
+		endX = maxBoundX;
+	}
+	if(endY >= maxBoundY) {
+		endY = maxBoundY;
+	}
+
+	double rpx = (double)GetCellSizeInPixels().x * rec.width;
+	double rpy = (double)GetCellSizeInPixels().y * rec.height;
+	
+	int vWidth = GetCharWidth(character);
+
+	for(int y = startY; y <= endY; y++) {
+		for(int x = startX; x <= endX; x++) {
+			if((x - rec.x) % vWidth != 0) {
+				continue;
+			}
+
+			double dx = (x + (vWidth / 2.0) - rec.x) * aspectRatio;
+			double dy = (y + 0.5 - rec.y);
+
+			double ox = (dx * cosA) + (dy * sinA);
+			double oy = -(dx * sinA) + (dy * cosA);
+			double srcX = ox / aspectRatio + originX;
+			double srcY = oy + originY;
+
+			if(srcX < 0.0 || srcX >= (double)rec.width || srcY < 0.0 || srcY >= (double)rec.height) {
+				continue;
+			}
+
+			DrawCharEx(character, x, y, fg, bg);
+		}
+	}
+}
+
+void DrawTexture(Texture* texture, Rectangle rec) {
+	DrawTextureEx(texture, " ", rec, TERMBLANK, false, true);
+}
+
+void DrawTextureEx(Texture* texture, char* character, Rectangle rec, Color tint, bool affectFg, bool affectBg) {
+	DrawTexturePro(texture, character, rec, (Rectangle){ 0, 0, texture->width, texture->height }, 0, 0, 0, tint, affectFg, affectBg, SCALEING_BILINEAR, true);
+}
+
+void DrawTexturePro(Texture* texture, char* character, Rectangle rec, Rectangle textureSlice, int originX, int originY, double rotation, Color tint, bool affectFg, bool affectBg, ScalingAlgorithms scaling, bool aspectRatiofied) {
+	DrawTextureCore(texture, character, rec, textureSlice, originX, originY, rotation, tint, affectFg, affectBg, scaling, aspectRatiofied, false, (Panel){ 0 });
+}

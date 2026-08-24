@@ -105,15 +105,15 @@ typedef struct SBCell {
 
 
 
-typedef struct Vector2 {
-	float x;
-	float y;
-} Vector2;
-
 typedef struct Vector2i {
 	int x;
 	int y;
 } Vector2i;
+
+typedef struct Vector2 {
+	float x;
+	float y;
+} Vector2;
 
 typedef struct Vector2d {
 	double x;
@@ -127,17 +127,17 @@ typedef struct Vector2l {
 
 
 
-typedef struct Vector3 {
-	float x;
-	float y;
-	float z;
-} Vector3;
-
 typedef struct Vector3i {
 	int x;
 	int y;
 	int z;
 } Vector3i;
+
+typedef struct Vector3 {
+	float x;
+	float y;
+	float z;
+} Vector3;
 
 typedef struct Vector3d {
 	double x;
@@ -153,19 +153,19 @@ typedef struct Vector3l {
 
 
 
-typedef struct Vector4 {
-	float x;
-	float y;
-	float z;
-	float w;
-} Vector4;
-
 typedef struct Vector4i {
 	int x;
 	int y;
 	int z;
 	int w;
 } Vector4i;
+
+typedef struct Vector4 {
+	float x;
+	float y;
+	float z;
+	float w;
+} Vector4;
 
 typedef struct Vector4d {
 	double x;
@@ -283,6 +283,13 @@ typedef enum TextureType {
 } TextureType;
 
 
+typedef enum ScalingAlgorithms {
+	SCALEING_NEAREST_NEIGHBOR,
+	SCALEING_BILINEAR,
+	SCALEING_BICUBIC,
+} ScalingAlgorithms;
+
+
 typedef struct Texture {
 	unsigned char* data;
 	TextureType type;
@@ -349,12 +356,15 @@ typedef enum LogLevel {
 
 #define TERMWHITE (Color){ 15, 0, 0, true, false }
 #define TERMBLACK (Color){ 0, 0, 0, true, false }
+#define TERMBLANK (Color){ 0, 0, 0, false, false }
 
 #define WHITE (Color){ 255, 0, 0, true, false }
 #define BLACK (Color){ 232, 0, 0, true, false }
+#define BLANK (Color){ 232, 0, 0, false, false }
 
 #define TRUEWHITE (Color){ 255, 255, 255, 255, true }
 #define TRUEBLACK (Color){ 0, 0, 0, 255, true }
+#define TRUEBLANK (Color){ 0, 0, 0, 0, true }
 
 // ECORE
 
@@ -675,6 +685,11 @@ RLAPI void ShowCursor(void);
 // ETEXTURES
 RLAPI Texture LoadTexture(const char* path, TextureType type);
 RLAPI void FreeTexture(Texture* texture);
+
+RLAPI void DrawTexture(Texture* texture, Rectangle rec);
+RLAPI void DrawTextureEx(Texture* texture, char* character, Rectangle rec, Color tint, bool affectFg, bool affectBg);
+RLAPI void DrawTexturePro(Texture* texture, char* character, Rectangle rec, Rectangle textureSlice, int originX, int originY, double rotation, Color tint, bool affectFg, bool affectBg, ScalingAlgorithms scaling, bool aspectRatiofied);
+RLAPI void DrawTextureCore(Texture* texture, char* character, Rectangle rec, Rectangle textureSlice, int originX, int originY, double rotation, Color tint, bool affectFg, bool affectBg, ScalingAlgorithms scaling, bool aspectRatiofied, bool isPanel, Panel panel);
 
 #ifdef __cplusplus
 }
