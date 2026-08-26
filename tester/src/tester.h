@@ -60,3 +60,5 @@ void TextureLoad(void);
 void DisplayTheToby(void);
 
 void ColorBlendingTester(void);
+
+void DrawTextureTester(void);

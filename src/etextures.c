@@ -39,6 +39,8 @@
 #include "./private/common_utils.h"
 
 #include <errno.h>
+#include <math.h>
+#include <stdbool.h>
 #include <stdlib.h>
 #include <string.h>
 
@@ -263,12 +265,17 @@ void FreeTexture(Texture* texture) {
 }
 
 Color GetTexturePixel(Texture* texture, size_t x, size_t y) {
-	if(texture->type == TEXTURE_TRUECOLOR) { return (Color){ texture->data[((y - 1) * texture->width) + x], texture->data[((y - 1) * texture->width) + x + 1], texture->data[((y - 1) * texture->width) + x + 2], texture->data[((y - 1) * texture->width) + x + 3], true}; }
-	return (Color){ texture->data[((y - 1) * texture->width) + x], 0, 0, texture->data[((y - 1) * texture->width) + x + 1], false };
+	if(texture->type == TEXTURE_TRUECOLOR) {
+		size_t idx = (y * texture->width + x) * 4;
+		return (Color){ texture->data[idx], texture->data[idx + 1], texture->data[idx + 2], texture->data[idx + 3], true};
+	}
+	size_t idx = (y * texture->width + x) * 2;
+	return (Color){ texture->data[idx], 0, 0, texture->data[idx + 1], false };
 }
 
-void DrawTextureCore(Texture* texture, char* character, Rectangle rec, Rectangle textureSlice, int originX, int originY, double rotation, Color tint, bool affectFg, bool affectBg, ScalingAlgorithms scaling, bool aspectRatiofied, bool isPanel, Panel panel) {
+void DrawTextureCore(Texture *texture, char *character, Rectangle rec, Rectangle textureSlice, int originX, int originY, double rotation, Color tint, bool affectFg, bool affectBg, ScalingAlgorithms scaling, bool aspectRatiofied, bool isPanel, Panel panel) {
 	double aspectRatio = aspectRatiofied ? ((GetCellProportions().x > 0 && GetCellProportions().y > 0) ? (double)GetCellProportions().x / (double)GetCellProportions().y : 0.5) : 1.0;
+	if(aspectRatiofied) { rec.width /= aspectRatio; }
 
 	if(isPanel) { 
 		rec.x += panel.x; 
@@ -307,9 +314,6 @@ void DrawTextureCore(Texture* texture, char* character, Rectangle rec, Rectangle
 		endY = maxBoundY;
 	}
 
-	double rpx = (double)GetCellSizeInPixels().x * rec.width;
-	double rpy = (double)GetCellSizeInPixels().y * rec.height;
-	
 	int vWidth = GetCharWidth(character);
 
 	for(int y = startY; y <= endY; y++) {
@@ -318,19 +322,124 @@ void DrawTextureCore(Texture* texture, char* character, Rectangle rec, Rectangle
 				continue;
 			}
 
-			double dx = (x + (vWidth / 2.0) - rec.x) * aspectRatio;
-			double dy = (y + 0.5 - rec.y);
+			double textureScaleX = (double)(rec.width * aspectRatio) / (double)textureSlice.width;
+			double textureScaleY = (double)rec.height / (double)textureSlice.height;
+
+			double originScreenX = (double)originX * textureScaleX;
+			double originScreenY = (double)originY * textureScaleY;
+
+			double dx = (x + (vWidth / 2.0) - rec.x) * aspectRatio - originScreenX;
+			double dy = (y + 0.5 - rec.y) - originScreenY;
 
 			double ox = (dx * cosA) + (dy * sinA);
 			double oy = -(dx * sinA) + (dy * cosA);
-			double srcX = ox / aspectRatio + originX;
-			double srcY = oy + originY;
 
-			if(srcX < 0.0 || srcX >= (double)rec.width || srcY < 0.0 || srcY >= (double)rec.height) {
+			double srcX = (double)originX + ox / textureScaleX;
+			double srcY = (double)originY + oy / textureScaleY;
+
+			if(srcX < 0.0 || srcX >= (double)textureSlice.width || srcY < 0.0 || srcY >= (double)textureSlice.height) {
 				continue;
 			}
 
-			DrawCharEx(character, x, y, fg, bg);
+			double texPixelXf = textureSlice.x + srcX;
+			double texPixelYf = textureSlice.y + srcY;
+
+			Color sampled;
+
+			if(texture->type != TEXTURE_TRUECOLOR || scaling == SCALEING_NEAREST_NEIGHBOR) {
+				long tpx = (long)round(texPixelXf);
+				long tpy = (long)round(texPixelYf);
+				if(tpx < 0) { tpx = 0; }
+				if(tpy < 0) { tpy = 0; }
+				if(tpx >= (long)texture->width) { tpx = (long)texture->width - 1; }
+				if(tpy >= (long)texture->height) { tpy = (long)texture->height - 1; }
+
+				sampled = GetTexturePixel(texture, tpx, tpy);
+			}
+			else if(scaling == SCALEING_BILINEAR) {
+				long x0 = (long)floor(texPixelXf);
+				long y0 = (long)floor(texPixelYf);
+				double fx = texPixelXf - x0;
+				double fy = texPixelYf - y0;
+
+				long x0c = x0;
+				long x1c = x0 + 1;
+				long y0c = y0;
+				long y1c = y0 + 1;
+				if(x0c < 0) { x0c = 0; }
+				if(x1c < 0) { x1c = 0; }
+				if(y0c < 0) { y0c = 0; }
+				if(y1c < 0) { y1c = 0; }
+				if(x0c >= (long)texture->width) { x0c = (long)texture->width - 1; }
+				if(x1c >= (long)texture->width) { x1c = (long)texture->width - 1; }
+				if(y0c >= (long)texture->height) { y0c = (long)texture->height - 1; }
+				if(y1c >= (long)texture->height) { y1c = (long)texture->height - 1; }
+
+				Color c00 = GetTexturePixel(texture, (size_t)x0c, (size_t)y0c);
+				Color c10 = GetTexturePixel(texture, (size_t)x1c, (size_t)y0c);
+				Color c01 = GetTexturePixel(texture, (size_t)x0c, (size_t)y1c);
+				Color c11 = GetTexturePixel(texture, (size_t)x1c, (size_t)y1c);
+
+				double r = c00.r * (1 - fx) * (1 - fy) + c10.r * fx * (1 - fy) + c01.r * (1 - fx) * fy + c11.r * fx * fy;
+				double g = c00.g * (1 - fx) * (1 - fy) + c10.g * fx * (1 - fy) + c01.g * (1 - fx) * fy + c11.g * fx * fy;
+				double b = c00.b * (1 - fx) * (1 - fy) + c10.b * fx * (1 - fy) + c01.b * (1 - fx) * fy + c11.b * fx * fy;
+				double a = c00.a * (1 - fx) * (1 - fy) + c10.a * fx * (1 - fy) + c01.a * (1 - fx) * fy + c11.a * fx * fy;
+
+				sampled = (Color){ (unsigned char)(r + 0.5), (unsigned char)(g + 0.5), (unsigned char)(b + 0.5), (unsigned char)(a + 0.5), true };
+			}
+			else {
+				long x0 = (long)floor(texPixelXf);
+				long y0 = (long)floor(texPixelYf);
+				double fx = texPixelXf - x0;
+				double fy = texPixelYf - y0;
+
+				double sumR = 0.0, sumG = 0.0, sumB = 0.0, sumA = 0.0;
+				const double aCoef = -0.5;
+
+				for(int j = -1; j <= 2; j++) {
+					double ty = fabs((double)j - fy);
+					double wy;
+					if(ty <= 1.0) { wy = (aCoef + 2.0) * ty * ty * ty - (aCoef + 3.0) * ty * ty + 1.0; }
+					else if(ty < 2.0) { wy = aCoef * ty * ty * ty - 5.0 * aCoef * ty * ty + 8.0 * aCoef * ty - 4.0 * aCoef; }
+					else { wy = 0.0; }
+
+					long sy = y0 + j;
+					if(sy < 0) { sy = 0; }
+					if(sy >= (long)texture->height) { sy = (long)texture->height - 1; }
+
+					for(int i = -1; i <= 2; i++) {
+						double tx = fabs((double)i - fx);
+						double wx;
+						if(tx <= 1.0) { wx = (aCoef + 2.0) * tx * tx * tx - (aCoef + 3.0) * tx * tx + 1.0; }
+						else if(tx < 2.0) { wx = aCoef * tx * tx * tx - 5.0 * aCoef * tx * tx + 8.0 * aCoef * tx - 4.0 * aCoef; }
+						else { wx = 0.0; }
+
+						long sx = x0 + i;
+						if(sx < 0) { sx = 0; }
+						if(sx >= (long)texture->width) { sx = (long)texture->width - 1; }
+
+						double w = wx * wy;
+						Color c = GetTexturePixel(texture, (size_t)sx, (size_t)sy);
+
+						sumR += c.r * w;
+						sumG += c.g * w;
+						sumB += c.b * w;
+						sumA += c.a * w;
+
+						sampled = (Color){
+							(unsigned char)fmax(0.0, fmin(255.0, sumR + 0.5)),
+							(unsigned char)fmax(0.0, fmin(255.0, sumG + 0.5)),
+							(unsigned char)fmax(0.0, fmin(255.0, sumB + 0.5)),
+							(unsigned char)fmax(0.0, fmin(255.0, sumA + 0.5)),
+							true
+						};
+					}
+				}
+			}
+
+			BlendColors(&sampled, tint);
+
+			DrawCharEx(character, x, y, affectFg ? &sampled : NULL, affectBg ? &sampled : NULL);
 		}
 	}
 }
