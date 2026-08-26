@@ -210,16 +210,24 @@ int GetCharWidth(const char* character) {
 }
 
 void BlendColors(Color* dst, Color src) {
-	if(dst->trueColor && src.trueColor) {
-		float dstA = (float)dst->a / 255.0f;
-		float srcA = (float)src.a / 255.0f;
+	if(src.a == 0) {
+		return;
+	}
 
-		float outA = dstA + srcA * (1.0f - dstA);
+	if(dst->trueColor && src.trueColor) {
+		float srcA = (float)src.a / 255.0f;
+		float dstA = (float)dst->a / 255.0f;
+
+		float outA = srcA + dstA * (1.0f - srcA);
 
 		if(outA > 0.0f) {
-			dst->r = (unsigned char)((dst->r * dstA + src.r * srcA * (1.0f - dstA)) / outA);
-			dst->g = (unsigned char)((dst->g * dstA + src.g * srcA * (1.0f - dstA)) / outA);
-			dst->b = (unsigned char)((dst->b * dstA + src.b * srcA * (1.0f - dstA)) / outA);
+			float r = (src.r * srcA + dst->r * dstA * (1.0f - srcA)) / outA;
+			float g = (src.g * srcA + dst->g * dstA * (1.0f - srcA)) / outA;
+			float b = (src.b * srcA + dst->b * dstA * (1.0f - srcA)) / outA;
+
+			dst->r = (unsigned char)(r + 0.5f);
+			dst->g = (unsigned char)(g + 0.5f);
+			dst->b = (unsigned char)(b + 0.5f);
 		}
 		else {
 			dst->r = 0;
@@ -227,17 +235,14 @@ void BlendColors(Color* dst, Color src) {
 			dst->b = 0;
 		}
 
-		dst->a = (unsigned char)(outA * 255.0f);
+		dst->a = (unsigned char)(outA * 255.0f + 0.5f);
 	}
 	else {
-		if(src.a != 0) {
-			dst->r = src.r;
-			dst->g = src.g;
-			dst->b = src.b;
-		}
+		dst->r = src.r;
+		dst->g = src.g;
+		dst->b = src.b;
+		dst->a = src.a;
 
-		dst->a = src.a ? 1 : 0;
+		dst->trueColor = dst->trueColor || src.trueColor;
 	}
-
-	dst->trueColor = src.trueColor;
 }

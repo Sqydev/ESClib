@@ -366,6 +366,10 @@ typedef enum LogLevel {
 #define TRUEBLACK (Color){ 0, 0, 0, 255, true }
 #define TRUEBLANK (Color){ 0, 0, 0, 0, true }
 
+
+#define WHOLETEXTURE(texture) (Rectangle){ 0, 0, texture.width, texture.height }
+
+
 // ECORE
 
 RLAPI void InitTui(int targetFps, TuiType type);
@@ -688,7 +692,9 @@ RLAPI void FreeTexture(Texture* texture);
 
 RLAPI void DrawTexture(Texture* texture, Rectangle rec);
 RLAPI void DrawTextureEx(Texture* texture, char* character, Rectangle rec, Color tint, bool affectFg, bool affectBg);
+// If texture.type != true color then it will only do nearest neighbour
 RLAPI void DrawTexturePro(Texture* texture, char* character, Rectangle rec, Rectangle textureSlice, int originX, int originY, double rotation, Color tint, bool affectFg, bool affectBg, ScalingAlgorithms scaling, bool aspectRatiofied);
+// If texture.type != true color then it will only do nearest neighbour
 RLAPI void DrawTextureCore(Texture* texture, char* character, Rectangle rec, Rectangle textureSlice, int originX, int originY, double rotation, Color tint, bool affectFg, bool affectBg, ScalingAlgorithms scaling, bool aspectRatiofied, bool isPanel, Panel panel);
 
 #ifdef __cplusplus
