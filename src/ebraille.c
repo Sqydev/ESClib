@@ -42,11 +42,10 @@
 #include "./private/input/input.h"
 
 #include <errno.h>
-#include <stdlib.h>
 
+#include <stdlib.h>
 #include <stdint.h>
 #include <stdlib.h>
-#include <errno.h>
 
 char* MergeBraille(const char* a, const char* b) {
     if(!a || !b) {
