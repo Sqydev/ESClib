@@ -30,7 +30,7 @@ reset:
 	dtc = 0;
 
 	while(1) {
-		BeginDrawing();
+		BeginFrame();
 		ClearTui(TERMBLACK, TERMWHITE);
 
 		dtc += GetDeltaTime();
@@ -56,7 +56,7 @@ reset:
 
 		DrawCharEx(" ", roundf(ballPos.x), roundf(ballPos.y), &TERMWHITE, &TERMWHITE);
 
-		EndDrawing();
+		EndFrame();
 	}
 
 	CloseTui();
