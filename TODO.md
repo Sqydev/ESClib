@@ -1,6 +1,4 @@
-Add alpha suppport for textures
-
-FIX TEXTURE_MONO LOADING
+Rewrite makefile or just try out cmake
 
 Make inputs handle emois. yk, whole unicode and enum to input for which parts of input user wants to themselfs. Yk. ESCINPUT_ALL, ESCINPUT_KEYBOARD itd. MAKE PRESSKEY ALLOCATE NOT 1 BY 1 BUT AFTER 10 CHARS * 2.
 
@@ -19,4 +17,4 @@ Add fun texture fns, like you can draw on texture and you can draw on texture an
 
 Make Vector2 -> Vector2f and Vector2i -> Vector2 or not, think about it
 
-Rewrite makefile or just try out cmake
+Make fn for drawing text but big
