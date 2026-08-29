@@ -52,7 +52,7 @@ int main() {
 	Color color = (Color){ 255, 255, 255, 1 };
 
 	while(1) {
-		BeginDrawing();
+		BeginFrame();
 
 		elapsedTime += GetDeltaTime();
 		elapsedTimetwu += GetDeltaTime();
@@ -96,7 +96,7 @@ int main() {
 			}
 		}
 
-		EndDrawing();
+		EndFrame();
 	}
 
 	CloseTui();
