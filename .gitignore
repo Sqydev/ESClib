@@ -1,6 +1,6 @@
 .cmake/
 
-#lib
-#tester/lib
+lib
+tester/lib
 
 *.tar
