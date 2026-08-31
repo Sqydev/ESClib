@@ -1,6 +1,6 @@
 #include "../../../include/esclib.h"
 
-void WaitForKeyPressTester() {
+void WaitForKeyPressTester(void) {
 	InitTui(60, TUI_DYNAMIC);
 
 	int x = 0;

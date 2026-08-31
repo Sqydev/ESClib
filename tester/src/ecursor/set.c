@@ -1,6 +1,6 @@
 #include "../../../include/esclib.h"
 
-void SetCursorPosTester() {
+void SetCursorPosTester(void) {
 	InitTui(60, TUI_DYNAMIC);
 
 	while(1) {

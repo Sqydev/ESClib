@@ -18,42 +18,42 @@ void SignalESClibTasksTester_SIGWINCH(void);
 void SignalCustomTasksTester_SIGWINCH(void);
 void SignalBuildInTasksTester_SIGWINCH(void);
 
-void BackbuffDump();
+void BackbuffDump(void);
 
-void EndDrawingTest();
-void RenderLoopStressTest();
+void EndDrawingTest(void);
+void RenderLoopStressTest(void);
 
-void CharTest();
-void TextTest();
-void TextTestf();
+void CharTest(void);
+void TextTest(void);
+void TextTestf(void);
 
-void LoggingTester();
+void LoggingTester(void);
 
-void StaticTuiTester();
+void StaticTuiTester(void);
 
-void DrawRecTester();
+void DrawRecTester(void);
 
-void FuckedUpColorsTest();
+void FuckedUpColorsTest(void);
 
-void FunnyRottatingRec();
+void FunnyRottatingRec(void);
 
-void DrawCircleTester();
+void DrawCircleTester(void);
 
-void DrawLineTester();
+void DrawLineTester(void);
 
-void IsKeyDownTester();
+void IsKeyDownTester(void);
 
 void PatternsGPUTest(void);
 
-void DrawTriangleTester();
+void DrawTriangleTester(void);
 
-void MergBrileTester();
+void MergBrileTester(void);
 
-void SetCursorPosTester();
+void SetCursorPosTester(void);
 
-void WaitForKeyPressTester();
+void WaitForKeyPressTester(void);
 
-void WRITETester();
+void WRITETester(void);
 
 void TextureLoad(void);
 

@@ -1,6 +1,6 @@
 #include "../../../include/esclib.h"
 
-void DrawCircleTester() {
+void DrawCircleTester(void) {
 	InitTui(60, TUI_DYNAMIC);
 
 	float rot = PI / 2;

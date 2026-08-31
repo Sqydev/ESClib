@@ -1,7 +1,7 @@
 #include "../../../include/esclib.h"
 #include <stdio.h>
 
-void FunnyRottatingRec() {
+void FunnyRottatingRec(void) {
 	InitTui(60, TUI_DYNAMIC);
 
 	float rot = 0;

@@ -1,6 +1,6 @@
 #include "../../../include/esclib.h"
 
-void FuckedUpColorsTest() {
+void FuckedUpColorsTest(void) {
 	InitTui(60, TUI_DYNAMIC);
 
 	while(1) {

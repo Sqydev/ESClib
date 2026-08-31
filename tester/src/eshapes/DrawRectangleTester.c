@@ -2,7 +2,7 @@
 
 #include <stdlib.h>
 
-void DrawRecTester() {
+void DrawRecTester(void) {
 	InitTui(60, TUI_DYNAMIC);
 
 	while(1) {

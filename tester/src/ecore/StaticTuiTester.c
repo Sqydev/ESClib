@@ -1,6 +1,6 @@
 #include "../../../include/esclib.h"
 
-void StaticTuiTester() {
+void StaticTuiTester(void) {
 	InitTui(165, TUI_STATIC);
 
 	// Should be cube

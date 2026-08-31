@@ -49,6 +49,9 @@
 	#include <termios.h>
 
 #elif defined(_WIN32) || defined(__WIN64)
+
+	#include <windows.h>
+
 #endif
 
 #define DATA __EsclibCoreData

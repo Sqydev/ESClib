@@ -1,6 +1,6 @@
 #include "../../../include/esclib.h"
 
-void DrawTriangleTester() {
+void DrawTriangleTester(void) {
     InitTui(60, TUI_DYNAMIC);
 
     double angle = 0.0;

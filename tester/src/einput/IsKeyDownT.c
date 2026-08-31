@@ -1,6 +1,6 @@
 #include "../../../include/esclib.h"
 
-void IsKeyDownTester() {
+void IsKeyDownTester(void) {
 	InitTui(60, TUI_DYNAMIC);
 
 	Vector2i pos = (Vector2i){ GetLastTuiIndex().x / 2, GetLastTuiIndex().y / 2 };

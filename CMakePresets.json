@@ -1,0 +1,204 @@
+{
+	"version": 6,
+
+	"configurePresets": [
+
+		{
+			"name": "base",
+			"hidden": true,
+			"generator": "Unix Makefiles"
+		},
+
+
+		{
+			"name": "release",
+			"hidden": true,
+			"inherits": "base",
+
+			"cacheVariables": {
+				"CMAKE_BUILD_TYPE": "Release",
+
+				"ESCLIB_BUILD_STATIC": "ON",
+				"ESCLIB_BUILD_SHARED": "ON",
+				"ESCLIB_BUILD_TESTER": "OFF",
+				"ESCLIB_DEBUG": "OFF"
+			}
+		},
+
+
+		{
+			"name": "local",
+			"inherits": "release",
+
+			"binaryDir":
+				"${sourceDir}/.cmake/release/local",
+
+			"cacheVariables": {
+				"ESCLIB_OUTPUT_DIR":
+					"${sourceDir}/lib/local"
+			}
+		},
+
+
+		{
+			"name": "bleeding",
+			"inherits": "release",
+
+			"binaryDir":
+				"${sourceDir}/.cmake/release/bleeding",
+
+			"cacheVariables": {
+				"ESCLIB_OUTPUT_DIR":
+					"${sourceDir}/lib/bleeding"
+			}
+		},
+
+
+		{
+			"name": "normal",
+			"inherits": "release",
+
+			"binaryDir":
+				"${sourceDir}/.cmake/release/normal",
+
+			"cacheVariables": {
+				"ESCLIB_OUTPUT_DIR":
+					"${sourceDir}/lib/normal"
+			}
+		},
+
+
+		{
+			"name": "stable",
+			"inherits": "release",
+
+			"binaryDir":
+				"${sourceDir}/.cmake/release/stable",
+
+			"cacheVariables": {
+				"ESCLIB_OUTPUT_DIR":
+					"${sourceDir}/lib/stable"
+			}
+		},
+
+
+		{
+			"name": "windows",
+			"inherits": "release",
+
+			"binaryDir":
+				"${sourceDir}/.cmake/release/windows",
+
+			"toolchainFile":
+				"${sourceDir}/cmake/toolchains/windows-x86_64.cmake",
+
+			"cacheVariables": {
+				"ESCLIB_OUTPUT_DIR":
+ 				   "${sourceDir}/lib/windows"
+			}
+		},
+
+
+		{
+			"name": "musl",
+			"inherits": "release",
+		
+			"binaryDir":
+				"${sourceDir}/.cmake/release/musl",
+		
+			"cacheVariables": {
+				"ESCLIB_OUTPUT_DIR":
+					"${sourceDir}/lib/musl"
+			}
+		},
+
+
+		{
+			"name": "debug-base",
+			"hidden": true,
+			"inherits": "base",
+		
+			"cacheVariables": {
+				"CMAKE_BUILD_TYPE": "Debug",
+				"ESCLIB_BUILD_STATIC": "ON",
+				"ESCLIB_BUILD_SHARED": "OFF",
+				"ESCLIB_BUILD_TESTER": "ON",
+				"ESCLIB_DEBUG": "ON"
+			}
+		},
+
+
+		{
+			"name": "debug",
+			"inherits": "debug-base",
+
+			"binaryDir":
+				"${sourceDir}/.cmake/debug",
+
+			"cacheVariables": {
+				"ESCLIB_OUTPUT_DIR":
+					"${sourceDir}/tester/lib/debug"
+			}
+		},
+
+
+		{
+			"name": "tester",
+			"inherits": "release",
+
+			"binaryDir":
+				"${sourceDir}/.cmake/release/tester",
+
+			"cacheVariables": {
+				"ESCLIB_BUILD_SHARED": "OFF",
+				"ESCLIB_BUILD_TESTER": "ON",
+				"ESCLIB_OUTPUT_DIR":
+					"${sourceDir}/tester/lib"
+			}
+		}
+	],
+
+
+	"buildPresets": [
+
+		{
+			"name": "local",
+			"configurePreset": "local"
+		},
+
+		{
+			"name": "bleeding",
+			"configurePreset": "bleeding"
+		},
+
+		{
+			"name": "normal",
+			"configurePreset": "normal"
+		},
+
+		{
+			"name": "stable",
+			"configurePreset": "stable"
+		},
+
+		{
+			"name": "windows",
+			"configurePreset": "windows"
+		},
+
+		{
+			"name": "musl",
+			"configurePreset": "musl"
+		},
+
+		{
+			"name": "debug",
+			"configurePreset": "debug"
+		},
+
+		{
+			"name": "tester",
+			"configurePreset": "tester"
+		}
+	]
+}

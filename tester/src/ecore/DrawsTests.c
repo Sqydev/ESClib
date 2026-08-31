@@ -6,7 +6,7 @@
 #include <stdlib.h>
 #include <unistd.h>
 
-void EndDrawingTest() {
+void EndDrawingTest(void) {
 	InitTui(60, TUI_DYNAMIC);
 
 	int times = 10;
@@ -36,7 +36,7 @@ void EndDrawingTest() {
 	CloseTui();
 }
 
-void RenderLoopStressTest() {
+void RenderLoopStressTest(void) {
 	printf("It's real epilepsy EPILEPSY WARNING\n");
 	printf("Write 63 to continue: ");
 	fflush(stdout);
