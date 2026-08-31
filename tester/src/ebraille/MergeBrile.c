@@ -9,7 +9,7 @@ const char *BrileArray2[brilearraycnt] = { "⠄", "⠅", "⠆", "⠇", "⠈", "�
 
 size_t brilecurr = 0;
 
-void MergBrileTester() {
+void MergBrileTester(void) {
 	InitTui(60, TUI_DYNAMIC);
 
 	while(1) {

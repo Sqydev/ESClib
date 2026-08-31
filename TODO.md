@@ -1,5 +1,3 @@
-Rewrite makefile or just try out cmake
-
 Make inputs handle emois. yk, whole unicode and enum to input for which parts of input user wants to themselfs. Yk. ESCINPUT_ALL, ESCINPUT_KEYBOARD itd. MAKE PRESSKEY ALLOCATE NOT 1 BY 1 BUT AFTER 10 CHARS * 2.
 
 Make logging be like in GUIDELINES.md and remove any Panic() left in error handling of the lib

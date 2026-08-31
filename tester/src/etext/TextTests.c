@@ -3,7 +3,7 @@
 #include <stdio.h>
 #include <unistd.h>
 
-void CharTest() {
+void CharTest(void) {
 	InitTui(165, TUI_DYNAMIC);
 
 	printf("Drawing this in patern:\n");
@@ -45,7 +45,7 @@ void CharTest() {
 	CloseTui();
 }
 
-void TextTest() {
+void TextTest(void) {
 	InitTui(165, TUI_DYNAMIC);
 
 	while(1) {
@@ -73,7 +73,7 @@ void TextTest() {
 	CloseTui();
 }
 
-void TextTestf() {
+void TextTestf(void) {
 	InitTui(165, TUI_DYNAMIC);
 
 	while(1) {

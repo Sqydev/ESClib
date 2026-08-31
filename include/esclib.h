@@ -380,11 +380,11 @@ RLAPI int InitLoggin(char* path, LogLevel logLevel);
 // Log to inited log file
 RLAPI void TraceLog(LogLevel logLevel, const char* message, ...);
 // Close logging file
-RLAPI void CloseLoggin();
+RLAPI void CloseLoggin(void);
 
-// Will do panic thing and safley close the program with exitCode logging the message and doing added tasks(see AddPanicTask())
+// Will do panic thing and safley close the program with exitCode logging the message and doing added tasks(see AddPanicTask(void))
 RLAPI void Panic(const char* message, int exitCode);
-// Will add task to tasks that Panic() does. In order of first -> last(index = 0 -> index = last). Will return index of added task. If failed will return 0
+// Will add task to tasks that Panic(void) does. In order of first -> last(index = 0 -> index = last). Will return index of added task. If failed will return 0
 RLAPI int AddPanicTask(void (*task)(void));
 // Will return 0 if succesfull -1 if failed
 RLAPI int RemovePanicTask(size_t index);
@@ -409,7 +409,7 @@ RLAPI int DisableSignalBuildInTasks(int signal);
 RLAPI int AddSignalTask(int signal, void (*taskFunction)(void), int index);
 // Remove Custom Signal Task From Signal. If index < 0 Than It Will Remove Task From The End. Will Return 0 If Removed Succesfuly And -1 Of Failed
 RLAPI int RemoveSignalTask(int signal, int index);
-// Compress Signal Tasks. By This I Mean If CustomTask = 1,NULL,...,6 Than CompressSignalTasks() Will Make It 1,6 To Reduce Memory Usadge :). If from < 0 Than It Will Compress From The Start And If to < 0 Than It Will Compress To The End Will Return New TaskCount If Compresson Was Succesful And -1 If Failed
+// Compress Signal Tasks. By This I Mean If CustomTask = 1,NULL,...,6 Than CompressSignalTasks(void) Will Make It 1,6 To Reduce Memory Usadge :). If from < 0 Than It Will Compress From The Start And If to < 0 Than It Will Compress To The End Will Return New TaskCount If Compresson Was Succesful And -1 If Failed
 RLAPI int CompressSignalTasks(int signal, int from, int to);
 
 // ESETS
@@ -419,47 +419,47 @@ RLAPI void SetTuiDimentions(int x, int y);
 
 // EGETS
 
-// Returns last index of tui buff. So GetLastTuiIndex().x for TUI with GetTuiDimensions().x == 10 is == 9
+// Returns last index of tui buff. So GetLastTuiIndex(void).x for TUI with GetTuiDimensions(void).x == 10 is == 9
 RLAPI Vector2i GetLastTuiIndex(void);
-// Same as GetLastTuiIndex() but returns pointer to the variable so you don't have to check for resize or smf
+// Same as GetLastTuiIndex(void) but returns pointer to the variable so you don't have to check for resize or smf
 RLAPI Vector2i* GetLastTuiIndexPtr(void);
-// Returns the number of places in TUI. DO NOT confuse with GetLastTuiIndex() becouse 1 is not first place but secound(arrays)
+// Returns the number of places in TUI. DO NOT confuse with GetLastTuiIndex(void) becouse 1 is not first place but secound(arrays)
 RLAPI Vector2i GetTuiDimensions(void);
-// Same as GetTuiDimensions() but returns pointer to the variable so you don't have to check for resize or smf
+// Same as GetTuiDimensions(void) but returns pointer to the variable so you don't have to check for resize or smf
 RLAPI Vector2i* GetTuiDimensionsPtr(void);
-// Same as GetTuiDimensions() but in pixels
+// Same as GetTuiDimensions(void) but in pixels
 RLAPI Vector2i GetTuiDimensionsInPixels(void);
-// Same as GetTuiDimensionsInPixels() but returns pointer to the variable so you don't have to check for resize or smf
+// Same as GetTuiDimensionsInPixels(void) but returns pointer to the variable so you don't have to check for resize or smf
 RLAPI Vector2i* GetTuiDimensionsPtrInPixels(void);
 
-// Returns last index of screen. So GetLastTerminalIndex().x for terminal with GetTerminalDimensions().x == 10 is == 9
+// Returns last index of screen. So GetLastTerminalIndex(void).x for terminal with GetTerminalDimensions(void).x == 10 is == 9
 RLAPI Vector2i GetLastTerminalIndex(void);
-// Same as GetLastTerminalIndex() but returns pointer to the variable so you don't have to check for resize or smf
+// Same as GetLastTerminalIndex(void) but returns pointer to the variable so you don't have to check for resize or smf
 RLAPI Vector2i* GetLastTerminalIndexPtr(void);
-// Returns the number of places in terminal. DO NOT confuse with GetLastTerminalIndex() becouse 1 is not first place but secound(arrays)
+// Returns the number of places in terminal. DO NOT confuse with GetLastTerminalIndex(void) becouse 1 is not first place but secound(arrays)
 RLAPI Vector2i GetTerminalDimensions(void);
-// Same as GetTerminalDimensions() but returns pointer to the variable so you don't have to check for resize or smf
+// Same as GetTerminalDimensions(void) but returns pointer to the variable so you don't have to check for resize or smf
 RLAPI Vector2i* GetTerminalDimensionsPtr(void);
-// Same as GetTerminalDimensions() but in pixels
+// Same as GetTerminalDimensions(void) but in pixels
 RLAPI Vector2i GetTerminalDimensionsInPixels(void);
-// Same as GetTerminalDimensionsInPixels() but returns pointer to the variable so you don't have to check for resize or smf
+// Same as GetTerminalDimensionsInPixels(void) but returns pointer to the variable so you don't have to check for resize or smf
 RLAPI Vector2i* GetTerminalDimensionsPtrInPixels(void);
-// Same as GetTerminalDimensions() but it acualy checks
+// Same as GetTerminalDimensions(void) but it acualy checks
 RLAPI Vector2i GetTerminalDimensionsForReal(void);
-// Same as GetTerminalDimensionsInPixels() but it accualy checks
+// Same as GetTerminalDimensionsInPixels(void) but it accualy checks
 RLAPI Vector2i GetTerminalDimensionsInPixelsForReal(void);
 
 // Returns proportions of the cells
 RLAPI Vector2i GetCellProportions(void);
 // Return size of cells in pixels
 RLAPI Vector2i GetCellSizeInPixels(void);
-// Same as GetCellSizeProportions() but with ptr
+// Same as GetCellSizeProportions(void) but with ptr
 RLAPI Vector2i* GetCellProportionsPtr(void);
-// Same as GetCellSizeInPixels() but with ptr
+// Same as GetCellSizeInPixels(void) but with ptr
 RLAPI Vector2i* GetCellSizeInPixelsPtr(void);
-// GetCellSizeProportions() for reals
+// GetCellSizeProportions(void) for reals
 RLAPI Vector2i GetCellProportionsForReal(void);
-// GetCellSizeInPixels() for reals
+// GetCellSizeInPixels(void) for reals
 RLAPI Vector2i GetCellSizeInPixelsForReal(void);
 
 RLAPI double GetCurrentFrameTime(void);
@@ -491,11 +491,11 @@ RLAPI bool IsCursorHidden(void);
 // Like. If you have a and b. And if you wanna get angle that a in going. Use this
 RLAPI double CalculateAngleOfAGoingToB(Vector2 a, Vector2 b);
 
-// Get sin() FAST. It checks for common angles and if it's f.e PI than it will return 0 without accualy calculating sin(). Will return -2 if error
+// Get sin(void) FAST. It checks for common angles and if it's f.e PI than it will return 0 without accualy calculating sin(void). Will return -2 if error
 RLAPI double ESin(double angle);
-// Get cos() FAST. It checks for common angles and if it's f.e PI than it will return 1 without accualy calculating cos(). Will return -2 if error
+// Get cos(void) FAST. It checks for common angles and if it's f.e PI than it will return 1 without accualy calculating cos(void). Will return -2 if error
 RLAPI double ECos(double angle);
-// Get tan() FAST. It checks for common angles and if it's f.e PI than it will return 0 without accualy calculating tan(). Will return -2 if error
+// Get tan(void) FAST. It checks for common angles and if it's f.e PI than it will return 0 without accualy calculating tan(void). Will return -2 if error
 RLAPI double ETan(double angle);
 // Calculate dir vetor. Nice utility to have. Will return -2, -2 if error
 RLAPI Vector2d EDir(double angle);

@@ -37,7 +37,13 @@
 
 #include "./private/coredata.h"
 
+#if defined(unix) || defined(__unix) || defined(__unix__)
+
 #include <dlfcn.h>
+
+#elif defined(_WIN32) || defined(_WIN64)
+#endif
+
 #include <stdlib.h>
 #include <string.h>
 

@@ -1,6 +1,6 @@
 #include "../../../include/esclib.h"
 
-void DrawLineTester() {
+void DrawLineTester(void) {
 	InitTui(60, TUI_DYNAMIC);
 
 	while(1) {

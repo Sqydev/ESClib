@@ -1,6 +1,6 @@
 #include "../../../include/esclib.h"
 
-void WRITETester() {
+void WRITETester(void) {
 	InitTui(60, TUI_DYNAMIC);
 
 	int x = 0;

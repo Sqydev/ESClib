@@ -1,8 +1,8 @@
 #include "../tester.h"
 
-void CTask1() { printf("Task 1 exec\n"); fflush(stdout); }
-void CTask2() { printf("Task 2 exec\n"); fflush(stdout); }
-void CTask3() { printf("Task 3 exec\n"); fflush(stdout); }
+void CTask1(void) { printf("Task 1 exec\n"); fflush(stdout); }
+void CTask2(void) { printf("Task 2 exec\n"); fflush(stdout); }
+void CTask3(void) { printf("Task 3 exec\n"); fflush(stdout); }
 
 void WaitAndReact(int seconds) {
 	int steps = seconds * 60;

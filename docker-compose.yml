@@ -1,0 +1,70 @@
+services:
+  bleeding:
+    build:
+      context: .
+      dockerfile: docker/bleeding/Dockerfile
+    volumes:
+      - .:/src
+    working_dir: /src
+    command: >
+      sh -c "
+        cmake --preset bleeding &&
+        cmake --build --preset bleeding &&
+        chown -R $(stat -c '%u:%g' CMakeLists.txt) .cmake lib
+      "
+
+  normal:
+    build:
+      context: .
+      dockerfile: docker/normal/Dockerfile
+    volumes:
+      - .:/src
+    working_dir: /src
+    command: >
+      sh -c "
+        cmake --preset normal &&
+        cmake --build --preset normal &&
+        chown -R $(stat -c '%u:%g' CMakeLists.txt) .cmake lib
+      "
+
+  stable:
+    build:
+      context: .
+      dockerfile: docker/stable/Dockerfile
+    volumes:
+      - .:/src
+    working_dir: /src
+    command: >
+      sh -c "
+        cmake --preset stable &&
+        cmake --build --preset stable &&
+        chown -R $(stat -c '%u:%g' CMakeLists.txt) .cmake lib
+      "
+
+  windows:
+    build:
+      context: .
+      dockerfile: docker/windows/Dockerfile
+    volumes:
+      - .:/src
+    working_dir: /src
+    command: >
+      sh -c "
+        cmake --preset windows &&
+        cmake --build --preset windows &&
+        chown -R $(stat -c '%u:%g' CMakeLists.txt) .cmake lib
+      "
+
+  musl:
+    build:
+      context: .
+      dockerfile: docker/musl/Dockerfile
+    volumes:
+      - .:/src
+    working_dir: /src
+    command: >
+      sh -c "
+        cmake --preset musl &&
+        cmake --build --preset musl &&
+        chown -R $(stat -c '%u:%g' CMakeLists.txt) .cmake lib
+      "
