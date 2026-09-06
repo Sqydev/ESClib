@@ -3,7 +3,7 @@
 - We DO NOT exit the program. NEVER
 
 - We log like this: {
-    "[ESCLIB.FUNCTIONNAME]: LOG_LEVEL: Message", so for example: "[ESCLIB.InitTui]: INFO: Detected Wayland"
+    "[ESCLIB.FUNCTIONNAME]: LOGLEVEL: Message", so for example: "[ESCLIB.InitTui]: INFO: Detected Wayland"
 
     Which log level is which: {
         LOG_ERROR - Used in non loop functions(f.e not in DrawChar() but in InitTui()). Is for things that make the function return; but are 100% not intended by the user(malloc fail type things)
