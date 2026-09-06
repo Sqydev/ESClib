@@ -1,6 +1,6 @@
 Make inputs handle emois. yk, whole unicode and enum to input for which parts of input user wants to themselfs. Yk. ESCINPUT_ALL, ESCINPUT_KEYBOARD itd. MAKE PRESSKEY ALLOCATE NOT 1 BY 1 BUT AFTER 10 CHARS * 2.
 
-Add it so you can have small screenBuffers that strech
+Add opt for InitTui that so the framebuff is static and streaches
 
 Make logging be like in GUIDELINES.md and remove any Panic() left in error handling of the lib
 
